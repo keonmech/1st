@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elsinore: A City of Choices</title>
+<meta name="description" content="Rule the city of Elsinore for one year after the tragedy of Hamlet. Every decision answers three questions: Is justice attainable? When is grief positive? How do we face the good and evil within us, and the fate we can't control?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --page: #d9dcd6; --ink: #1d2226; --muted: #5a625f;
+  --night: #16222c; --stone: #9aa5a8; --copper: #5f9e8f; --candle: #e8b04a; --wax: #8e2433; --heather: #6d4b8a;
+  --vellum: #ebe5d3; --vellum-ink: #2a231b; --rule: #c9bea2;
+  --j: #d6a33a; --h: #c9576b; --s: #7c63a8; --o: #4f7d9c; --g: #b8963e; --p: #5b8f63;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --page: #0e151b; --ink: #e3e0d4; --muted: #95a0a4; }
+}
+:root[data-theme="dark"] { --page: #0e151b; --ink: #e3e0d4; --muted: #95a0a4; }
+*, *::before, *::after { box-sizing: inherit; }
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+body { margin: 0; min-height: 100%; background: var(--page); color: var(--ink); font: 17px/1.55 "IM Fell English", Georgia, "Times New Roman", serif; -webkit-text-size-adjust: 100%; }
+[hidden] { display: none !important; }
+button { font: inherit; cursor: pointer; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--candle); outline-offset: 2px; }
+
+.wrap { max-width: 1320px; margin: 0 auto; padding: 10px 12px 28px; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding: 8px 4px 10px; }
+.brand { font-family: "UnifrakturMaguntia", "IM Fell English", serif; font-size: 30px; line-height: 1; margin: 0; letter-spacing: .01em; }
+.when { font-family: "IM Fell English SC", serif; color: var(--muted); font-size: 17px; }
+.bar .spacer { flex: 1; }
+.icon-btn { background: transparent; border: 1px solid var(--rule); color: var(--ink); border-radius: 4px; padding: 4px 10px; font-size: 15px; }
+
+.meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1.4fr)) repeat(3, minmax(0, 1fr)); gap: 6px 14px; padding: 0 4px 10px; }
+.meter { min-width: 0; }
+.meter .lab { display: flex; justify-content: space-between; gap: 6px; font-family: "IM Fell English SC", serif; font-size: 15px; line-height: 1.2; }
+.meter .lab span:last-child { font-variant-numeric: tabular-nums; color: var(--muted); }
+.meter .track { height: 9px; background: color-mix(in srgb, var(--ink) 12%, transparent); border-radius: 2px; overflow: hidden; position: relative; }
+.meter .fill { height: 100%; width: 50%; transition: width .6s ease; }
+.meter.big .track { height: 12px; }
+.meter .eq { font-size: 12px; color: var(--muted); font-style: italic; line-height: 1.2; }
+.meter .sub { height: 4px; margin-top: 2px; background: color-mix(in srgb, var(--ink) 10%, transparent); border-radius: 2px; overflow: hidden; }
+.meter .sub > div { height: 100%; background: #5f6b74; transition: width .6s ease; }
+.meter.flash .track { box-shadow: 0 0 0 2px var(--candle); }
+
+.stage { position: relative; border-radius: 6px; overflow: hidden; background: var(--night); box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+#city { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+
+.decree { position: absolute; right: 14px; bottom: 14px; width: min(440px, 42%); max-height: calc(100% - 28px); overflow-y: auto;
+  background: var(--vellum); color: var(--vellum-ink); border-radius: 3px; padding: 16px 18px 14px; box-shadow: 0 14px 40px rgba(0,0,0,.5);
+  border-top: 6px solid var(--wax); }
+.decree .who { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.decree canvas { width: 58px; height: 58px; border-radius: 50%; flex: none; border: 2px solid var(--rule); background: #c9c1aa; }
+.decree h2 { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 23px; line-height: 1.1; margin: 0; }
+.decree .speaker { font-style: italic; color: #6b5e4c; font-size: 15px; }
+.decree p { margin: .45em 0; }
+.decree blockquote { margin: .6em 0 .8em; padding-left: 12px; border-left: 3px solid var(--wax); font-style: italic; color: #4d4335; }
+.decree blockquote cite { display: block; font-style: normal; font-size: 14px; color: #7a6c58; }
+.choices { display: grid; gap: 8px; margin-top: 8px; }
+.choice { text-align: left; background: #f6f1e3; border: 1px solid var(--rule); border-left: 4px solid #b9ad8d; color: var(--vellum-ink); border-radius: 3px; padding: 8px 10px; line-height: 1.3; }
+.choice:hover { border-left-color: var(--wax); background: #fffaf0; }
+.choice .k { font-family: "IM Fell English SC", serif; color: var(--wax); margin-right: 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.chip { font-size: 13px; padding: 0 6px; border-radius: 10px; background: #e2dac4; color: #4d4335; white-space: nowrap; }
+.chip.good { color: #2d6a3a; } .chip.bad { color: #8e2433; }
+.outcome { background: #f6f1e3; border: 1px solid var(--rule); padding: 8px 10px; border-radius: 3px; }
+.deltas { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+.delta { font-size: 14px; padding: 1px 7px; border-radius: 10px; background: #e2dac4; }
+.delta.pos { color: #2d6a3a; } .delta.neg { color: #8e2433; }
+.primary { display: inline-block; margin-top: 10px; background: var(--wax); color: #fbf3e2; border: 0; border-radius: 3px; padding: 8px 16px; font-size: 17px; }
+.primary:hover { filter: brightness(1.1); }
+.ghost-btn { background: transparent; border: 1px solid var(--rule); color: var(--vellum-ink); border-radius: 3px; padding: 7px 14px; margin-top: 10px; margin-left: 6px; }
+
+.title { position: absolute; inset: 0; display: grid; align-content: center; justify-items: start; padding: 4% 6%; color: #f1ead6;
+  background: linear-gradient(90deg, rgba(10,16,22,.88) 0%, rgba(10,16,22,.55) 55%, rgba(10,16,22,0) 100%); }
+.title h1 { font-family: "UnifrakturMaguntia", serif; font-weight: 400; font-size: clamp(46px, 7.5vw, 100px); line-height: .9; margin: 0; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+.title .lede { font-size: clamp(16px, 2vw, 22px); max-width: 34ch; margin: .5em 0 1em; font-style: italic; }
+.title ol { margin: 0 0 .8em; padding-left: 1.3em; max-width: 46ch; font-size: clamp(13px, 1.3vw, 16px); line-height: 1.35; }
+@media (max-height: 820px) { .title ol { display: none; } }
+.title ol li { margin-bottom: .25em; }
+.title label { font-family: "IM Fell English SC", serif; font-size: 17px; display: block; margin-bottom: 4px; }
+.title input { font: inherit; padding: 7px 10px; border-radius: 3px; border: 1px solid #8a8064; background: rgba(235,229,211,.95); color: #2a231b; width: min(280px, 70vw); }
+.title .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+
+.fate { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(6,10,14,.55); }
+.fate .box { text-align: center; color: #f1ead6; max-width: 420px; padding: 0 16px; }
+.fate svg { width: 150px; height: 150px; filter: drop-shadow(0 8px 20px rgba(0,0,0,.6)); }
+.fate .rolling svg { animation: spin .9s cubic-bezier(.2,.7,.3,1); }
+@keyframes spin { from { transform: rotate(-540deg) scale(.6); } to { transform: rotate(0) scale(1); } }
+.fate h3 { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 26px; margin: .2em 0 .1em; }
+.fate p { margin: .2em 0 .6em; font-style: italic; }
+.fate .fx { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
+.fate .delta { background: rgba(235,229,211,.9); color: #2a231b; }
+
+.banner { position: absolute; left: 50%; top: 14%; transform: translateX(-50%); color: #f1ead6; text-align: center; pointer-events: none; text-shadow: 0 2px 12px rgba(0,0,0,.8); transition: opacity .5s; }
+.banner b { display: block; font-family: "UnifrakturMaguntia", serif; font-weight: 400; font-size: clamp(30px, 5vw, 56px); line-height: 1; }
+.banner span { font-style: italic; font-size: clamp(14px, 1.8vw, 19px); }
+
+.ending { position: absolute; inset: 0; overflow-y: auto; background: rgba(8,12,16,.72); padding: 18px; }
+.ending .sheet { max-width: 760px; margin: 0 auto; background: var(--vellum); color: var(--vellum-ink); border-top: 6px solid var(--wax); padding: 20px 24px; border-radius: 3px; }
+.ending h2 { font-family: "UnifrakturMaguntia", serif; font-weight: 400; font-size: clamp(34px, 5vw, 52px); margin: 0; line-height: 1; }
+.ending .epi { font-size: 18px; font-style: italic; margin: .5em 0 1em; }
+.ending h3 { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 20px; margin: 1em 0 .2em; }
+.ending .q { color: #6b5e4c; font-style: italic; font-size: 15px; margin: 0 0 .3em; }
+.ending ol.chron { font-size: 15px; line-height: 1.4; padding-left: 1.5em; max-height: 240px; overflow-y: auto; background: #f6f1e3; border: 1px solid var(--rule); padding-top: 8px; padding-bottom: 8px; }
+.ending .final { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; margin: .4em 0; }
+.ending .final div { background: #f6f1e3; border: 1px solid var(--rule); padding: 4px 8px; font-size: 15px; }
+
+.help { margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; color: var(--muted); font-size: 15px; }
+.help h4 { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 17px; color: var(--ink); margin: 0 0 2px; }
+.help p { margin: 0; }
+
+.hud2 { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 0 4px 10px; font-size: 15px; color: var(--muted); }
+.hud2 .pill b { color: var(--ink); font-weight: 400; font-variant-numeric: tabular-nums; }
+.hud2 .threat { display: inline-flex; align-items: center; gap: 6px; }
+.mini { display: inline-block; width: 80px; height: 7px; background: color-mix(in srgb, var(--ink) 12%, transparent); border-radius: 2px; overflow: hidden; vertical-align: middle; }
+.mini i { display: block; height: 100%; background: #2f5aa0; }
+.fate-alt { display: block; margin: 10px auto 0; background: transparent; color: #d9e6ec; border: 1px dashed #9fb3bd; border-radius: 3px; padding: 6px 12px; font-size: 15px; }
+.fate-alt:hover { background: rgba(217,230,236,.12); }
+.desk-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 10px; }
+.desk-top h2 { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 23px; margin: 0; }
+.res { display: flex; gap: 12px; font-size: 14px; color: #6b5e4c; }
+.dots i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--wax); margin-left: 3px; vertical-align: middle; }
+.dots i.on { background: var(--wax); }
+.tabs { display: flex; flex-wrap: wrap; gap: 2px; margin: 8px 0 6px; border-bottom: 1px solid var(--rule); }
+.tabb { background: transparent; border: 0; border-bottom: 3px solid transparent; padding: 4px 8px; color: #6b5e4c; font-size: 16px; }
+.tabb.on { color: var(--vellum-ink); border-bottom-color: var(--wax); }
+.badge { display: inline-block; min-width: 18px; padding: 0 5px; border-radius: 9px; background: var(--wax); color: #fbf3e2; font-size: 12px; line-height: 18px; text-align: center; }
+.tabbody .hint { font-size: 14px; color: #6b5e4c; margin: 2px 0 8px; }
+.tabbody .empty { font-style: italic; color: #6b5e4c; }
+.item { background: #f6f1e3; border: 1px solid var(--rule); border-radius: 3px; padding: 7px 10px; margin-bottom: 7px; }
+.item.focus { box-shadow: 0 0 0 2px var(--candle); }
+.item.darkitem { border-left: 4px solid var(--heather); }
+.item p { margin: .2em 0; font-size: 15px; line-height: 1.35; }
+.item-h { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tag { font-size: 12px; padding: 0 6px; border-radius: 9px; background: #e2dac4; color: #4d4335; }
+.tag.ok { background: #d5e6d0; color: #2d6a3a; } .tag.sev2 { background: #f0dcc0; color: #7a4a12; } .tag.sev3 { background: #efcfd2; color: #8e2433; }
+.meta { font-size: 13.5px !important; color: #6b5e4c; font-style: italic; } .meta.warn { color: #8e2433; font-style: normal; } .meta.ok { color: #2d6a3a; }
+.acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+.act { background: #fffaf0; border: 1px solid #b9ad8d; color: var(--vellum-ink); border-radius: 3px; padding: 4px 9px; font-size: 14.5px; }
+.act:hover:not(:disabled) { border-color: var(--wax); }
+.act:disabled { opacity: .45; cursor: not-allowed; }
+.act.subtle { border-style: dashed; }
+.sec { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 18px; margin: 12px 0 2px; border-bottom: 1px solid var(--rule); }
+.ledger { background: #f6f1e3; border: 1px solid var(--rule); border-radius: 3px; padding: 6px 10px; margin-bottom: 8px; font-size: 15px; }
+.ledger div { display: flex; justify-content: space-between; gap: 10px; }
+.ledger b { font-weight: 400; font-variant-numeric: tabular-nums; }
+.ledger .tot { border-top: 1px solid var(--rule); margin-top: 3px; padding-top: 3px; }
+.ledger .tot b { font-weight: 700; }
+.item.adv { display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: start; }
+.item.adv canvas { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--rule); }
+.loy { display: flex; align-items: center; gap: 6px; font-size: 13.5px; color: #6b5e4c; }
+.deskmsg { min-height: 0; }
+.deskmsg p { margin: 6px 0 2px; font-style: italic; }
+.goalbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 0 4px 10px; font-size: 15px; }
+.goalbar .gl { font-family: "IM Fell English SC", serif; color: var(--muted); }
+.goal { padding: 1px 8px; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); color: var(--muted); }
+.goal i { font-style: normal; font-variant-numeric: tabular-nums; opacity: .8; }
+.goal.ok { border-color: #3d7a4a; color: #3d7a4a; background: color-mix(in srgb, #3d7a4a 12%, transparent); }
+.diffs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.diff { background: rgba(235,229,211,.12); color: #f1ead6; border: 1px solid rgba(241,234,214,.4); border-radius: 3px; padding: 5px 12px; font-size: 16px; }
+.diff[aria-checked="true"] { background: var(--candle); color: #2a231b; border-color: var(--candle); }
+.wincard { max-width: 46ch; background: rgba(235,229,211,.12); border-left: 3px solid var(--candle); padding: 6px 10px; margin: 0 0 .8em; font-size: clamp(14px, 1.5vw, 17px); }
+.chk { display: flex !important; align-items: center; gap: 8px; font-family: "IM Fell English", serif !important; margin-bottom: 10px !important; }
+.coach { position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 40; max-width: 380px; background: #1f2a33; color: #f1ead6; border-top: 4px solid var(--candle); border-radius: 4px; padding: 12px 14px; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+.coach h4 { font-family: "IM Fell English SC", serif; font-weight: 400; font-size: 20px; margin: 0 0 4px; }
+.coach p { margin: 0 0 8px; font-size: 15.5px; line-height: 1.4; }
+.coach .cstep { font-size: 13px; color: #b8c2c6; margin: 0; }
+.coach .ghost-btn { color: #d9e6ec; border-color: #6b7a84; }
+.coach-target { outline: 3px solid var(--candle) !important; outline-offset: 3px; border-radius: 4px; position: relative; z-index: 5; }
+.howto { position: fixed; inset: 0; z-index: 45; background: rgba(8,12,16,.72); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+.howto .sheet { max-width: 640px; background: var(--vellum); color: var(--vellum-ink); border-top: 6px solid var(--wax); padding: 18px 22px; border-radius: 3px; }
+.howto h2 { font-family: "UnifrakturMaguntia", serif; font-weight: 400; font-size: 40px; margin: 0 0 .3em; }
+.ending .goals { display: flex; flex-wrap: wrap; gap: 6px; margin: .3em 0 .6em; }
+.ending .goals span { padding: 2px 9px; border-radius: 10px; background: #efcfd2; color: #8e2433; font-size: 15px; }
+.ending .goals span.ok { background: #d5e6d0; color: #2d6a3a; }
+@media (max-width: 900px) {
+  .coach { left: 8px; right: 8px; max-width: none; }
+  .meters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .decree { position: relative; right: auto; bottom: auto; width: auto; max-height: none; margin: 0; border-radius: 0; box-shadow: none; }
+  .stage { overflow: visible; }
+  #city { border-radius: 6px 6px 0 0; }
+  .title { position: absolute; }
+  .title ol { display: none; }
+  .ending { position: fixed; z-index: 20; }
+}
+@media (prefers-reduced-motion: reduce) { .fate .rolling svg { animation: none; } .meter .fill, .meter .sub > div { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <p class="brand">Elsinore</p>
+    <span class="when" id="when">A city waiting for its ruler</span>
+    <span class="spacer"></span>
+    <button class="icon-btn" id="howBtn">How to win</button>
+    <button class="icon-btn" id="soundBtn" aria-pressed="true">Sound on</button>
+  </div>
+
+  <div class="meters" id="meters" aria-live="polite"></div>
+  <div class="hud2" id="hud2"></div>
+  <div class="goalbar" id="goalbar"></div>
+
+  <div class="stage" id="stage">
+    <canvas id="city" width="1280" height="720" aria-label="The city of Elsinore. It changes with every choice you make."></canvas>
+    <div class="banner" id="banner" style="opacity:0"><b id="bannerBig"></b><span id="bannerSmall"></span></div>
+
+    <div class="title" id="title">
+      <h1>Elsinore</h1>
+      <p class="lede">The royal family is dead. The crown passes to you. Rule the city for one year, and every choice will answer for itself.</p>
+      <ol>
+        <li>Is justice attainable in the real world, and is there a timeline for it?</li>
+        <li value="5">When is grief a positive thing, and when does it become negative?</li>
+        <li value="11">How do we deal with the good and evil within us, and with fate we can't handle alone?</li>
+      </ol>
+      <div class="diffs" role="radiogroup" aria-label="Difficulty" id="diffs"></div>
+      <p class="wincard" id="wincard"></p>
+      <label class="chk"><input type="checkbox" id="tutChk" checked> Show me how to play (tutorial)</label>
+      <div class="row">
+        <div><label for="rulerName">Your name</label><input id="rulerName" maxlength="20" placeholder="Prince or princess of Denmark" autocomplete="off"></div>
+        <button class="primary" id="startBtn">Take the crown</button>
+      </div>
+    </div>
+
+    <div class="fate" id="fate" hidden>
+      <div class="box" id="fateBox">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,6 92,36 76,88 24,88 8,36" fill="#ebe5d3" stroke="#2a231b" stroke-width="3"/><polygon points="50,24 72,40 64,68 36,68 28,40" fill="none" stroke="#8e2433" stroke-width="2"/><line x1="50" y1="6" x2="50" y2="24" stroke="#2a231b" stroke-width="2"/><line x1="92" y1="36" x2="72" y2="40" stroke="#2a231b" stroke-width="2"/><line x1="76" y1="88" x2="64" y2="68" stroke="#2a231b" stroke-width="2"/><line x1="24" y1="88" x2="36" y2="68" stroke="#2a231b" stroke-width="2"/><line x1="8" y1="36" x2="28" y2="40" stroke="#2a231b" stroke-width="2"/><text id="dieNum" x="50" y="57" text-anchor="middle" font-family="IM Fell English SC, serif" font-size="22" fill="#2a231b">12</text></svg>
+        <h3 id="fateTitle">Fate rolls the die</h3>
+        <p id="fateText"></p>
+        <div class="fx" id="fateFx"></div>
+        <button class="primary" id="fateBtn" hidden>Accept your fate</button>
+        <button class="fate-alt" id="ghostBtn" hidden>Ask the ghost to roll again (costs Soul, only once)</button>
+      </div>
+    </div>
+
+    <section class="decree" id="decree" hidden aria-live="polite"></section>
+    <div class="ending" id="ending" hidden></div>
+  </div>
+
+  <div class="coach" id="coach" hidden role="dialog" aria-labelledby="coachTitle">
+    <p class="cstep" id="coachStep"></p><h4 id="coachTitle"></h4><p id="coachText"></p>
+    <div><button class="primary" id="coachNext">Next</button><button class="ghost-btn" id="coachSkip">Skip tutorial</button></div>
+  </div>
+  <div class="howto" id="howto" hidden role="dialog" aria-labelledby="howTitle"><div class="sheet">
+    <h2 id="howTitle">How to win</h2>
+    <p><b>Goal:</b> rule Elsinore until the last month and finish with all four goals met. The goals and the length of your reign depend on the difficulty: <b>Apprentice</b> (12 months, easiest goals), <b>Prince</b> (12 months), <b>King</b> (18 months, harder goals and hard dilemmas) and <b>Tragedy</b> (24 months, the hardest goals, only 2 royal actions a month). Meet all four for the best ending, <i>The just and healing crown</i>. The goal bar under the meters shows your progress.</p>
+    <p><b>You lose early</b> if Order, Soul or People reach 0, if the Treasury is still at 0 when a month ends, or if Norway's threat reaches 100 and their invasion breaks through your defenses.</p>
+    <p><b>Each month:</b> fate rolls a 12-sided die, a character from <i>Hamlet</i> brings you a problem, and then you use the royal desk: 3 royal actions plus court hearings, businesses, voyages, buildings, laws, advisors and petitions.</p>
+    <p><b>Tips:</b> Justice slips every month and gets harder to raise the higher it goes, so keep holding fair hearings. Grief fades when people grieve together and turns into buried grief when you rush them. Feed the city: food comes from the seasons, farms, fish and voyages to Poland. Some choices come back months later.</p>
+    <button class="primary" id="howClose">Back to the city</button>
+  </div></div>
+
+  <div class="help">
+    <div><h4>Each month</h4><p>Fate rolls a 12-sided die. A character from <i>Hamlet</i> brings you a problem (press 1, 2 or 3). Then, at the royal desk, you hear court cases, build, pass laws, choose advisors and answer petitions before ending the month.</p></div>
+    <div><h4>Read the city</h4><p>Rain and black banners mean grief, purple fog and crows mean corruption, golden light means a good soul, fires mean disorder, ships mean wealth. A line forms outside the courthouse when cases wait, and Norway's tents appear on the hills as their threat grows.</p></div>
+    <div><h4>Losing the city</h4><p>Your reign ends early if order, the treasury, the soul or the people fall to zero, or if Norway's threat reaches 100 and their invasion breaks through. Advisors you neglect may turn against you.</p></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const W = 1280, H = 720;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a = 0, b = 100) => Math.max(a, Math.min(b, v));
+const clampM = v => Math.max(0, Math.min(999, v));
+function seeded(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const pick = a => a[Math.floor(Math.random() * a.length)];
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* ---------------- Sound ---------------- */
+const sound = {
+  on: true, ctx: null,
+  init() { try { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); } catch (e) {} },
+  tone(f, d, type = 'sine', v = 0.08, delay = 0) {
+    if (!this.on || !this.ctx) return;
+    try { const t = this.ctx.currentTime + delay, o = this.ctx.createOscillator(), g = this.ctx.createGain(); o.type = type; o.frequency.setValueAtTime(f, t);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(this.ctx.destination); o.start(t); o.stop(t + d + 0.05); } catch (e) {}
+  },
+  noise(d, v = 0.1, f = 1200, delay = 0) {
+    if (!this.on || !this.ctx) return;
+    try { const t = this.ctx.currentTime + delay, n = Math.floor(this.ctx.sampleRate * d), b = this.ctx.createBuffer(1, n, this.ctx.sampleRate), data = b.getChannelData(0);
+      for (let i = 0; i < n; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / n); const s = this.ctx.createBufferSource(); s.buffer = b;
+      const fl = this.ctx.createBiquadFilter(); fl.type = 'bandpass'; fl.frequency.value = f; const g = this.ctx.createGain(); g.gain.value = v; s.connect(fl); fl.connect(g); g.connect(this.ctx.destination); s.start(t); } catch (e) {}
+  },
+  bell() { this.tone(220, 2.4, 'sine', 0.09); this.tone(440, 1.6, 'sine', 0.04); this.tone(660, 1.0, 'triangle', 0.02); },
+  dice() { for (let i = 0; i < 6; i++) this.noise(0.05, 0.12, 1800 + i * 200, i * 0.11); },
+  quill() { this.noise(0.12, 0.06, 4200); this.tone(523, 0.25, 'triangle', 0.05, 0.05); },
+  build() { this.noise(0.2, 0.15, 300); this.tone(110, 0.4, 'triangle', 0.08); },
+  good() { this.tone(523, 0.3, 'triangle', 0.06); this.tone(659, 0.4, 'triangle', 0.05, 0.1); this.tone(784, 0.5, 'triangle', 0.05, 0.2); },
+  dark0() { this.tone(196, 0.6, 'sawtooth', 0.04); this.tone(185, 0.8, 'sawtooth', 0.03, 0.1); }
+};
+sound.chaChing = function () { this.tone(1318, 'square', 0.08, 0.04); this.tone(1760, 'square', 0.3, 0.04, 0.09); this.noise(0.12, 0.05, 5000); };
+sound.dark = function () { this.tone(196, 0.6, 'sawtooth', 0.04); this.tone(185, 0.8, 'sawtooth', 0.03, 0.1); };
+try { if (localStorage.getItem('elsinore-city-sound') === 'off') sound.on = false; } catch (e) {}
+function syncSound() { $('soundBtn').textContent = sound.on ? 'Sound on' : 'Sound off'; $('soundBtn').setAttribute('aria-pressed', String(sound.on)); }
+$('soundBtn').addEventListener('click', () => { sound.on = !sound.on; sound.init(); syncSound(); try { localStorage.setItem('elsinore-city-sound', sound.on ? 'on' : 'off'); } catch (e) {} });
+syncSound();
+
+/* ---------------- Stats ---------------- */
+const STATS = [
+  { k: 'j', name: 'Justice', color: 'var(--j)', big: true },
+  { k: 'h', name: 'Heart', color: 'var(--h)', big: true, sub: 'g' },
+  { k: 's', name: 'Soul', color: 'var(--s)', big: true },
+  { k: 'o', name: 'Order', color: 'var(--o)' },
+  { k: 'm', name: 'Treasury', color: 'var(--g)' },
+  { k: 'p', name: 'People', color: 'var(--p)' }
+];
+const LABEL = { j: 'Justice', h: 'Heart', g: 'Grief', b: 'Buried grief', s: 'Soul', o: 'Order', m: 'Treasury', p: 'People', n: 'Norway\'s threat' };
+function buildMeters() {
+  $('meters').innerHTML = STATS.map(st => `<div class="meter${st.big ? ' big' : ''}" id="m-${st.k}"><div class="lab"><span>${st.name}</span><span id="v-${st.k}">50</span></div><div class="track"><div class="fill" id="f-${st.k}" style="background:${st.color}"></div></div>${st.sub ? '<div class="sub" title="Grief"><div id="f-g"></div></div><div class="eq">Gray bar: grief. Question 5</div>' : st.big ? `<div class="eq">${st.k === 'j' ? 'Fairness of the law. Question 1' : 'Good vs. evil within you. Question 11'}</div>` : ''}</div>`).join('');
+}
+buildMeters();
+
+let G = null;
+function newGame(name) {
+  const Df = DIFFS[selDiff];
+  G = {
+    diff: selDiff, months: Df.months, debt: 0,
+    name: name || 'The new ruler', turn: 1, phase: 'fate',
+    st: { j: 45, h: 40, g: 60, b: 0, s: 55, o: 60, m: 60, p: 55 },
+    built: {}, building: {}, laws: {}, lawMonths: {}, docket: [], cid: 0, petitions: [], pid: 0,
+    adv: { horatio: 60, polonius: 50, gertrude: 55, laertes: 45 }, right: null, gone: {}, threat: 12, treaty: false, bribed: false,
+    ap: Df.ap, slots: 1, log: [], fates: [], flags: {}, good: 0, dark: 0, neutral: 0, helped: 0,
+    heardFully: 0, quickRight: 0, quickWrong: 0, expired: 0, dismissed: 0, grievedTogether: 0, pressured: 0, ghostUsed: false, betrayals: [], repelled: 0,
+    deck: shuffle(Object.keys(DILEMMAS).sort(() => Math.random() - 0.5).slice(0, Df.dilemmas).concat(['spies', 'apothecary', 'ophelia', 'laertes', 'graves', 'friends', 'steward', 'landcase', 'bells', 'thief', 'taxman', 'horatio', 'pirates', 'library',
+      'wittenberg', 'oldnorway', 'rites', 'hecuba', 'antic', 'recorder', 'closet', 'pirateprisoner', 'quarantine', 'conscience', 'sparrow', 'drinking', 'lender', 'mousetrap', 'france', 'letters', 'gravemaker', 'bonnet'])),
+    biz: {}, caseUsed: new Set(), petUsed: new Set(), bizEarned: 0, voyages: [], vid: 0, sold: {}, tradeEarned: 0, shipsLost: 0, treasureGold: 0, food: 40, followups: [], hungerMonths: 0, events: [],
+    used: {}, trigger: [], weatherBoost: 0, deskTab: 'court', petitionsAnswered: 0
+  };
+  Object.assign(G.st, Df.start);
+}
+function updateMeters(flash) {
+  for (const st of STATS) {
+    const v = Math.round(G ? G.st[st.k] : 50);
+    $('v-' + st.k).textContent = v; $('f-' + st.k).style.width = Math.min(100, v) + '%';
+    if (flash && flash[st.k]) { const el = $('m-' + st.k); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 900); }
+  }
+  $('f-g').style.width = (G ? G.st.g : 60) + '%';
+  renderGoals();
+  const h2 = $('hud2');
+  if (!G) { h2.innerHTML = ''; return; }
+  const waiting = G.docket.filter(c => c.status === 'waiting').length;
+  h2.innerHTML = `<span class="pill threat"><span>Norway's threat</span><span class="mini"><i style="width:${Math.round(G.threat)}%"></i></span><b>${Math.round(G.threat)}</b></span>
+    <span class="pill">Court: <b>${waiting}</b> waiting${G.docket.length - waiting ? `, <b>${G.docket.length - waiting}</b> in hearings` : ''}</span>
+    <span class="pill">Petitions: <b>${G.petitions.length}</b></span>
+    <span class="pill">Laws: <b>${Object.values(G.laws).filter(Boolean).length}</b> of 3</span>
+    <span class="pill">Right hand: <b>${G.right ? ADVISORS[G.right].name : 'none'}</b></span>
+    <span class="pill">Food: <b>${Math.round(G.food)}</b> (${(() => { const n = foodBreakdown().net; return (n >= 0 ? '+' : '−') + Math.abs(Math.round(n)); })()} a month)</span>
+    <span class="pill">Income: <b>${(() => { const t = incomeBreakdown().total; return (t >= 0 ? '+' : '−') + Math.abs(Math.round(t)); })()}</b> a month</span>`;
+}
+
+/* ---------------- Content ---------------- */
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthOf = t => (2 + t - 1) % 12;
+const seasonOf = t => { const m = monthOf(t); return m === 11 || m <= 1 ? 'winter' : m <= 4 ? 'spring' : m <= 7 ? 'summer' : 'autumn'; };
+
+const PORTRAITS = {
+  gertrude: { skin: '#e8c9ae', hair: '#7a4b2a', hat: 'crown', robe: '#5b2a6e', long: true },
+  ghost: { skin: '#c8d6dc', hair: '#e5edf0', hat: 'helm', robe: '#5d7380', beard: true, ghost: true },
+  polonius: { skin: '#e1bfa2', hair: '#d6d3cc', hat: 'cap', robe: '#2f4a3a', beard: true },
+  apothecary: { skin: '#d9b48e', hair: '#3d2f22', hat: 'hood', robe: '#4a3b2a' },
+  ophelia: { skin: '#f0d6c0', hair: '#b8743a', hat: 'flowers', robe: '#7f9a77', long: true },
+  laertes: { skin: '#dcb894', hair: '#7a5a33', hat: 'none', robe: '#7c1f2b' },
+  player: { skin: '#e6c3a0', hair: '#2b2119', hat: 'jester', robe: '#a0522d' },
+  gravedigger: { skin: '#c99a76', hair: '#5b4a3a', hat: 'cap', robe: '#5a4a38', beard: true },
+  fortinbras: { skin: '#e9c7a6', hair: '#d9b36c', hat: 'helm', robe: '#7c2d12', beard: true },
+  friends: { skin: '#e6c4a2', hair: '#3a2a1e', hat: 'cap', robe: '#3f4c6b' },
+  steward: { skin: '#d4ad8c', hair: '#8a8a8a', hat: 'none', robe: '#4a2b2b', beard: true },
+  horatio: { skin: '#e2c09f', hair: '#4a3420', hat: 'scholar', robe: '#2c3554' },
+  merchant: { skin: '#dcb592', hair: '#5a3a24', hat: 'cap', robe: '#7a5a1e' },
+  guard: { skin: '#d8b08c', hair: '#3a2a1a', hat: 'helm', robe: '#46505a', beard: true },
+  osric: { skin: '#efd2b8', hair: '#d9b36c', hat: 'feather', robe: '#9d2b5b' },
+  captain: { skin: '#c58e66', hair: '#1f1a14', hat: 'tricorn', robe: '#1f2a44', beard: true },
+  scholar: { skin: '#e7c8aa', hair: '#2b2119', hat: 'scholar', robe: '#3b3f2a' },
+  crowd: { skin: '#cfa98a', hair: '#2b2119', hat: 'hood', robe: '#3a3a3a' },
+  conscience: { skin: '#d9c2e6', hair: '#3b2a4a', hat: 'hood', robe: '#2b1f3a', ghost: true }
+};
+
+const CARDS = {
+  funeral: { who: 'gertrude', speaker: 'Queen Gertrude, in mourning', title: 'The old king is buried',
+    text: 'Bells toll across Elsinore. The people line the streets in black. The queen asks how long the city should mourn before you are crowned.',
+    quote: ['Thou know\'st \'tis common: all that lives must die.', 'Gertrude, Act 1, Scene 2'],
+    options: [
+      { label: 'Declare a season of public mourning.', fx: { g: -15, h: -3, m: -4, o: 2 }, tag: 'good', grief: 'together', out: 'Shops close and the city grieves together. It hurts now, but the wound is cleaned instead of hidden.' },
+      { label: 'Hold a coronation feast. The city must move on.', fx: { h: 10, b: 20, m: -8, s: -3 }, tag: 'dark', grief: 'pressure', out: 'The feast is loud and nobody mentions the old king. Grief doesn\'t vanish; it goes underground. (This is Claudius\'s way: "\'tis unmanly grief.")' },
+      { label: 'Plant a memorial garden where everyone can grieve together.', fx: { g: -12, h: 5, m: -12 }, build: 'memorial', tag: 'good', grief: 'together', out: 'Families plant flowers around a statue of the old king. Strangers mourn side by side.' }
+    ] },
+  ghost: { who: 'ghost', speaker: 'The guards on the battlements', title: 'The ghost walks at midnight',
+    text: 'The night watch swear the dead king walks the battlements, crying that he was murdered by someone in his own court.',
+    quote: ['Revenge his foul and most unnatural murder.', 'The Ghost, Act 1, Scene 5'],
+    options: [
+      { label: 'Investigate quietly with Horatio before accusing anyone.', fx: { s: 3 }, tag: 'good', pending: { name: 'The old king\'s death', turns: 2, fx: { j: 15, s: 3, o: 3 }, text: 'Horatio\'s evidence is airtight: the old king was poisoned. The guilty are named in open court.' }, out: 'Horatio begins gathering witnesses and letters. Justice will take time, and proof.' },
+      { label: 'Swear revenge tonight on whoever is guilty.', fx: { o: -8, j: -6, s: -8, h: 3 }, tag: 'dark', quick: true, out: 'Torches and rumors fill the streets. Everyone suspects everyone.' },
+      { label: 'Order the guards never to speak of it.', fx: { o: 5, b: 10, s: -5, j: -5 }, tag: 'dark', grief: 'pressure', out: 'Silence is kept, but the castle feels colder than ever.' }
+    ] },
+  spies: { who: 'polonius', speaker: 'Polonius, Lord Chamberlain', title: 'An ear behind every arras',
+    text: 'Your chamberlain offers a network of spies: servants, guards and gossips who will report every whisper in the city.',
+    quote: ['By indirections find directions out.', 'Polonius, Act 2, Scene 1'],
+    options: [
+      { label: 'Accept. Knowledge is power.', fx: { o: 10, s: -12, j: -5 }, build: 'spytower', tag: 'dark', out: 'A dark tower rises over the rooftops. People start speaking in whispers.' },
+      { label: 'Refuse. A city that spies on itself rots from within.', fx: { s: 8, o: -3 }, tag: 'good', out: 'Polonius sulks, but the market grows louder and more honest.' },
+      { label: 'Allow spies only for court cases, watched by judges.', fx: { o: 5, j: 3, s: -3, m: -5 }, tag: 'neutral', out: 'A careful compromise. Useful, if anyone keeps watching the watchers.' }
+    ] },
+  apothecary: { who: 'apothecary', speaker: 'A traveling mountebank', title: 'The poisoner\'s back room',
+    text: 'A traveling medicine seller is quietly selling poison from a back room, just like the one who sold Laertes the poison for his sword.',
+    quote: ['I bought an unction of a mountebank.', 'Laertes, Act 4, Scene 7'],
+    options: [
+      { label: 'Close the shop and try him fairly.', fx: { j: 6, o: 3, m: -3 }, tag: 'good', out: 'The jury hears the evidence. The poisons are poured into the sea.' },
+      { label: 'Tax his trade. Gold is gold.', fx: { m: 14, s: -10, p: -3 }, tag: 'dark', out: 'The treasury fills. Strange deaths follow.' },
+      { label: 'Buy his strongest poison, just in case.', fx: { s: -15 }, flag: 'poison', tag: 'dark', out: 'The vial sits in your desk. You tell yourself you will never use it.' }
+    ] },
+  ophelia: { who: 'ophelia', speaker: 'A girl in the market', title: 'Flowers for remembrance',
+    text: 'A young woman wanders the market singing and handing out flowers, lost in grief for her murdered father.',
+    quote: ['There\'s rosemary, that\'s for remembrance.', 'Ophelia, Act 4, Scene 5'],
+    options: [
+      { label: 'Open a house of healing for the grieving.', fx: { m: -10, g: -10, h: 8 }, build: 'hospital', tag: 'good', grief: 'together', out: 'Healers and volunteers sit with anyone who needs them. She is the first to be cared for.' },
+      { label: 'Have the guards clear her from the market.', fx: { o: 4, h: -8, s: -6, g: 8 }, tag: 'dark', grief: 'pressure', out: 'The market is quiet again. Everyone saw what you did to someone who was grieving.' },
+      { label: 'Ask her brother and friends to stay by her side.', fx: { h: 5, g: -6 }, tag: 'good', grief: 'together', out: 'She isn\'t cured, but she isn\'t alone. Grief shared is lighter.' }
+    ] },
+  laertes: { who: 'laertes', speaker: 'Laertes, at the gates', title: 'A son demands justice',
+    text: 'Laertes storms the gates with an angry crowd, demanding justice for his murdered father, Polonius.',
+    quote: ['Let come what comes, only I\'ll be revenged most thoroughly for my father.', 'Laertes, Act 4, Scene 5'],
+    options: [
+      { label: 'Promise a public trial for the killer, in front of everyone.', fx: { o: -4 }, tag: 'good', pending: { name: 'The killing of Polonius', turns: 1, fx: { j: 12, o: 5 }, text: 'The trial is held in the open square. Laertes doesn\'t get revenge. He gets the truth.' }, out: 'The crowd grumbles but goes home. They will hold you to your word.' },
+      { label: 'Secretly promise Laertes his private revenge.', fx: { s: -12, o: 8, j: -10 }, tag: 'dark', quick: true, out: 'The crowd cheers. You have just made the same deal Claudius made.' },
+      { label: 'Break up the crowd with soldiers.', fx: { o: 10, h: -8, j: -6 }, tag: 'neutral', quick: true, out: 'Order returns at spear-point. The anger doesn\'t leave; it just goes home.' }
+    ] },
+  players: { who: 'player', speaker: 'The traveling players', title: 'The players arrive',
+    text: 'A company of traveling actors asks permission to perform in the great hall.',
+    quote: ['The play\'s the thing wherein I\'ll catch the conscience of the king.', 'Hamlet, Act 2, Scene 2'],
+    options: [
+      { label: 'Stage a play that shows the city its own wrongs.', fx: { s: 6, j: 4, h: 3, m: -6 }, build: 'theater', tag: 'good', out: 'A wooden theater rises. The audience laughs, then goes quiet, recognizing itself.' },
+      { label: 'A silly comedy so everyone can forget.', fx: { h: 8, b: 8 }, tag: 'neutral', grief: 'pressure', out: 'Everyone laughs. Nobody talks about anything that matters.' },
+      { label: 'Ban plays. They stir up trouble.', fx: { o: 4, h: -6 }, tag: 'dark', out: 'The players leave the city. So does some of its spirit.' }
+    ] },
+  graves: { who: 'gravedigger', speaker: 'The gravedigger', title: 'The churchyard is full',
+    text: 'The gravedigger tosses up an old skull as he works. There is no room left for this year\'s dead.',
+    quote: ['Alas, poor Yorick! I knew him, Horatio.', 'Hamlet, Act 5, Scene 1'],
+    options: [
+      { label: 'Expand the churchyard and build a chapel for mourners.', fx: { m: -8, g: -8, h: 3 }, build: 'chapel', tag: 'good', grief: 'together', out: 'A small chapel goes up by the harbor, its door always open.' },
+      { label: 'Dig up old bones to make room.', fx: { m: 3, h: -6, s: -4 }, tag: 'dark', out: 'It saves money. Families who visit find their ancestors gone.' },
+      { label: 'Let families decide together how to honor their dead.', fx: { h: 6, g: -5, o: -2 }, tag: 'good', grief: 'together', out: 'The meetings are long and emotional, and they bring the neighborhoods closer.' }
+    ] },
+  fortinbras: { who: 'fortinbras', speaker: 'Young Fortinbras of Norway', title: 'An army at the border',
+    text: 'Fortinbras marches an army to the border and asks for safe passage through Denmark.',
+    quote: ['Go, captain, from me greet the Danish king.', 'Fortinbras, Act 4, Scene 4'],
+    options: [
+      { label: 'Sign a peace treaty. No city stands alone.', fx: { m: -6, o: 6, s: 4 }, help: true, tag: 'good', out: 'Norway becomes a friend. When trouble comes, you won\'t face it alone.' },
+      { label: 'Raise an army and build walls.', fx: { m: -15, p: -3, o: 8 }, build: 'walls', tag: 'neutral', out: 'Stone walls ring the city. Safe, expensive and a little lonely.' },
+      { label: 'Bribe his captains to turn back.', fx: { m: -10, s: -8 }, tag: 'dark', out: 'The army turns around. Fortinbras learns that Denmark can be bought.' }
+    ] },
+  friends: { who: 'friends', speaker: 'Rosencrantz and Guildenstern', title: 'Two friends with an offer',
+    text: 'Two old school friends offer to report everything your most loyal friend says behind your back.',
+    quote: ['Were you not sent for?', 'Hamlet, Act 2, Scene 2'],
+    options: [
+      { label: 'Refuse. Friends aren\'t tools.', fx: { s: 6 }, tag: 'good', out: 'They look ashamed. Your friend never learns how close he came to being betrayed.' },
+      { label: 'Accept. Trust no one.', fx: { o: 4, s: -10, h: -3 }, tag: 'dark', out: 'The reports are boring and harmless. The suspicion stays with you anyway.' },
+      { label: 'Ask them to be honest with you instead.', fx: { s: 3, h: 3 }, tag: 'good', out: 'An awkward conversation, then real friendship again.' }
+    ] },
+  steward: { who: 'steward', speaker: 'Claudius\'s old steward', title: 'The usurper\'s servant',
+    text: 'The steward who helped Claudius hide the murder begs for mercy. The people want him punished today.',
+    quote: ['O, my offence is rank, it smells to heaven.', 'Claudius, Act 3, Scene 3'],
+    options: [
+      { label: 'Give him a full and fair trial, however long it takes.', fx: { o: -2 }, tag: 'good', pending: { name: 'Claudius\'s steward', turns: 2, fx: { j: 12, s: 2 }, text: 'After weeks of testimony the court finds him guilty of covering up the murder, and everyone saw that it was fair.' }, out: 'The crowd is impatient. The judges begin hearing witnesses.' },
+      { label: 'Execute him at dawn, without a trial.', fx: { j: -4, o: 5, s: -8 }, tag: 'dark', quick: true, out: 'Quick and final. Nobody will ever know exactly what he did or didn\'t do.' },
+      { label: 'Pardon him. Choose mercy over revenge.', fx: { s: 6, j: -4, h: 3 }, tag: 'good', out: 'Some call it weakness. Others call it the first gentle act this castle has seen in years.' }
+    ] },
+  landcase: { who: 'horatio', speaker: 'Horatio, your adviser', title: 'Two families, one field',
+    text: 'Two families claim the same field. Horatio says you can rule today, or take time to hear every witness.',
+    quote: ['Give every man thy ear, but few thy voice.', 'Polonius, Act 1, Scene 3'],
+    options: [
+      { label: 'Rule today. Quick justice is better than none.', gamble: [{ fx: { j: 5, o: 3 }, out: 'You guessed right. The rightful family keeps its field.' }, { fx: { j: -6, h: -3 }, out: 'You guessed wrong. The wrong family took the field, and everyone knows it.' }], tag: 'neutral', quick: true },
+      { label: 'Hear every witness first.', fx: { o: -2 }, tag: 'good', pending: { name: 'The disputed field', turns: 2, fx: { j: 10, h: 3 }, text: 'The witnesses agree. The rightful family keeps its field, and the other family accepts the ruling.' }, out: 'The hearings begin. Both families are restless, but they are being heard.' },
+      { label: 'Let them sort it out themselves.', fx: { j: -8, o: -4 }, tag: 'dark', out: 'The families fight over the field for years.' }
+    ] },
+  bells: { who: 'merchant', speaker: 'The merchants\' guild', title: 'The mourning bells',
+    text: 'Merchants complain that the mourning bells are bad for business. "It\'s been months. People should be over it."',
+    quote: ['\'Tis unmanly grief.', 'Claudius, Act 1, Scene 2'],
+    options: [
+      { label: 'Ring them as long as the people need.', fx: { m: -5, g: -8, h: 4 }, tag: 'good', grief: 'together', out: 'The bells ring on. Slowly, people need them less.' },
+      { label: 'Silence them. Life goes on.', fx: { m: 8, b: 12 }, tag: 'dark', grief: 'pressure', out: 'Trade picks up. Grief has nowhere to go but inside.' },
+      { label: 'One day of remembrance each year; the bells rest otherwise.', fx: { g: -5, m: 2, h: 3 }, tag: 'neutral', grief: 'together', out: 'A balance: life goes on, and the dead are not forgotten.' }
+    ] },
+  thief: { who: 'guard', speaker: 'Marcellus, captain of the guard', title: 'Bread for her children',
+    text: 'A mother is caught stealing bread for her starving children.',
+    quote: ['Use every man after his desert, and who shall \'scape whipping?', 'Hamlet, Act 2, Scene 2'],
+    options: [
+      { label: 'Pardon her and open a bread line for the poor.', fx: { j: 4, m: -6, s: 6, h: 4 }, tag: 'good', out: 'The bread line is long. So is the line of people thanking you.' },
+      { label: 'Punish her by the letter of the law.', fx: { o: 5, j: 2, h: -4 }, tag: 'neutral', out: 'The law is followed. Whether justice was done is another question.' },
+      { label: 'Make a harsh example of her.', fx: { o: 8, s: -8, j: -6, h: -5 }, tag: 'dark', out: 'Nobody steals bread for a while. Nobody forgets, either.' }
+    ] },
+  taxman: { who: 'osric', speaker: 'Osric, your tax collector', title: 'A share of the skim',
+    text: 'Osric has been skimming gold from the taxes. He offers you a share to keep quiet.',
+    quote: ['Something is rotten in the state of Denmark.', 'Marcellus, Act 1, Scene 4'],
+    options: [
+      { label: 'Arrest him and return the gold to the people.', fx: { j: 8, m: 4, o: 2 }, tag: 'good', out: 'The stolen gold is returned. Trust in the crown goes up.' },
+      { label: 'Take your share.', fx: { m: 15, s: -14, j: -6 }, tag: 'dark', out: 'The coffers fill. Something in you hardens.' },
+      { label: 'Quietly replace him. No scandal.', fx: { j: -2, o: 3 }, tag: 'neutral', out: 'No scandal, and no justice either.' }
+    ] },
+  horatio: { who: 'horatio', speaker: 'Horatio, your oldest friend', title: 'You don\'t have to do this alone',
+    text: 'Horatio offers to stand beside you as steward and share the weight of the crown.',
+    quote: ['Give me that man that is not passion\'s slave, and I will wear him in my heart\'s core.', 'Hamlet, Act 3, Scene 2'],
+    options: [
+      { label: 'Accept his help.', fx: { s: 4 }, build: 'council', help: true, ally: true, tag: 'good', out: 'From now on, bad luck from fate will hit the city only half as hard.' },
+      { label: 'Refuse. A ruler must stand alone.', fx: { o: 3 }, tag: 'neutral', out: 'You face fate alone.' },
+      { label: 'Accept, but have him watched.', fx: { s: -4, o: 2 }, build: 'council', ally: true, help: true, tag: 'dark', out: 'He helps anyway. If he knows you\'re watching him, he never says so.' }
+    ] },
+  pirates: { who: 'captain', speaker: 'A pirate captain', title: 'Thieves of mercy',
+    text: 'Pirates offer to guard your coast in exchange for a share of the treasury. Pirates once rescued Prince Hamlet on his way to England.',
+    quote: ['They have dealt with me like thieves of mercy.', 'Hamlet, Act 4, Scene 6'],
+    options: [
+      { label: 'Hire them.', fx: { m: -6, o: 6, s: -4 }, tag: 'neutral', help: true, out: 'Pirate ships patrol the harbor. Mercy, at a price.' },
+      { label: 'Build your own navy.', fx: { m: -14, o: 4 }, build: 'navy', tag: 'neutral', out: 'A stone fort guards the harbor mouth.' },
+      { label: 'Refuse, and trust the fishermen to warn you.', fx: { o: -2, h: 2 }, tag: 'good', out: 'The fishermen are proud to be trusted.' }
+    ] },
+  library: { who: 'scholar', speaker: 'A scholar from Wittenberg', title: 'A library for Elsinore',
+    text: 'A scholar from Wittenberg, where Hamlet and Horatio studied, asks to found a library in the city.',
+    quote: ['There are more things in heaven and earth, Horatio, than are dreamt of in your philosophy.', 'Hamlet, Act 1, Scene 5'],
+    options: [
+      { label: 'Fund the library.', fx: { m: -12, s: 5, j: 4 }, build: 'library', tag: 'good', out: 'Students crowd the reading room. People begin quoting old laws back to their judges.' },
+      { label: 'Books won\'t feed anyone.', fx: { m: 2 }, tag: 'neutral', out: 'The scholar goes home disappointed.' },
+      { label: 'Fund it, but ban books that criticize the crown.', fx: { m: -12, s: -6, o: 3 }, build: 'library', tag: 'dark', out: 'A library with empty shelves where the honest books should be.' }
+    ] },
+  buried: { who: 'crowd', speaker: 'The streets of Elsinore', title: 'Foul deeds will rise',
+    text: 'The grief you buried has come back. Riots break out, and people shout the old king\'s name in the streets.',
+    quote: ['Foul deeds will rise, though all the earth o\'erwhelm them, to men\'s eyes.', 'Hamlet, Act 1, Scene 2'],
+    onShow: { h: -10, o: -10 },
+    options: [
+      { label: 'Finally hold the mourning the city never had.', fx: { b: -30, g: 10, h: 4, m: -6 }, tag: 'good', grief: 'together', out: 'Hidden grief becomes open grief. It hurts, but now it can heal.' },
+      { label: 'Crush the riots.', fx: { o: 10, b: 5, s: -10, h: -8 }, tag: 'dark', grief: 'pressure', out: 'The streets go quiet. The sorrow underneath does not.' },
+      { label: 'Speak to the crowd and admit you rushed them.', fx: { b: -20, g: 6, h: 6, s: 4 }, tag: 'good', grief: 'together', out: 'Your voice cracks. For the first time, the people believe you.' }
+    ] },
+  poison: { who: 'conscience', speaker: 'Your own conscience', title: 'The vial in your desk',
+    text: 'A rival lord stands in your way. The poison you bought is still in your desk.',
+    quote: ['Thoughts black, hands apt, drugs fit, and time agreeing.', 'Lucianus, Act 3, Scene 2'],
+    options: [
+      { label: 'Pour it into the river.', fx: { s: 12 }, tag: 'good', out: 'The vial sinks. You feel lighter than you have in months.' },
+      { label: 'Use it.', fx: { s: -25, o: 5, j: -10 }, tag: 'dark', out: 'The rival dies in his sleep. You have become the thing Hamlet hunted.' },
+      { label: 'Keep it... for now.', fx: { s: -4 }, tag: 'dark', out: 'The vial goes back in the drawer.' }
+    ] },
+  wittenberg: { who: 'student', speaker: 'A crowd of students', title: 'Back to Wittenberg',
+    text: 'The city\'s brightest young people want to leave to study at Wittenberg, as Hamlet once begged to.',
+    quote: ['For your intent in going back to school in Wittenberg, it is most retrograde to our desire.', 'Claudius, Act 1, Scene 2'],
+    options: [
+      { label: 'Let them go, and wish them well.', fx: { p: -2, s: 4, h: 2 }, tag: 'good', out: 'They leave with your blessing. Some will come back wiser.' },
+      { label: 'Forbid them to leave, as Claudius did.', fx: { o: 3, h: -5, s: -3 }, tag: 'dark', out: 'They stay, and they resent you for it.' },
+      { label: 'Pay for scholarships, if they promise to return.', fx: { m: -8, j: 3, s: 2 }, tag: 'good', out: 'A year from now, Elsinore will have its own doctors and lawyers.' }
+    ] },
+  oldnorway: { who: 'fortinbras', speaker: 'An envoy from old King Norway', title: 'A letter from Norway',
+    text: 'The sick old King of Norway writes that he will try to restrain his warlike nephew Fortinbras, if Denmark pays tribute.',
+    quote: ['Impotent and bedrid, scarcely hears of this his nephew\'s purpose.', 'Claudius, Act 1, Scene 2'],
+    options: [
+      { label: 'Pay the tribute.', fx: { m: -10 }, threat: -20, tag: 'neutral', out: 'Gold sails north. The border is quiet, for now.' },
+      { label: 'Send ambassadors to talk instead.', fx: { m: -3, s: 2 }, threat: -10, tag: 'good', help: true, out: 'Talks begin. Slower than gold, but more honest.' },
+      { label: 'Tear up the letter.', fx: { o: 2 }, threat: 12, tag: 'dark', out: 'Your court cheers. Fortinbras will hear about this.' }
+    ] },
+  rites: { who: 'priest', speaker: 'The village priest', title: 'Maimed rites',
+    text: 'A young woman drowned in the brook. The priest refuses her a full funeral because some say she took her own life.',
+    quote: ['Lay her i\' th\' earth, and from her fair and unpolluted flesh may violets spring!', 'Laertes, Act 5, Scene 1'],
+    options: [
+      { label: 'Order a full funeral, with every rite.', fx: { g: -6, h: 4, o: -1 }, tag: 'good', grief: 'together', out: 'The whole street follows her coffin. Her family can finally grieve.' },
+      { label: 'Respect the priest\'s judgment.', fx: { o: 2, h: -4, g: 4 }, tag: 'neutral', out: 'The family buries her quickly, almost in secret.' },
+      { label: 'Hold a quiet burial so nobody makes a fuss.', fx: { b: 8 }, tag: 'dark', grief: 'pressure', out: 'No fuss is made. The grief goes nowhere.' }
+    ] },
+  hecuba: { who: 'player', speaker: 'An actor in the square', title: 'Weeping for Hecuba',
+    text: 'An actor sobs over a made-up queen while real widows pass by unnoticed. A crowd asks why the city cries for stories but not for its own dead.',
+    quote: ['What\'s Hecuba to him, or he to Hecuba, that he should weep for her?', 'Hamlet, Act 2, Scene 2'],
+    options: [
+      { label: 'Ask the actors to stage a play honoring this year\'s dead.', fx: { m: -5, g: -6, h: 5 }, tag: 'good', grief: 'together', out: 'For one night, the whole city cries together, and feels better for it.' },
+      { label: 'Tell the crowd that crying is for actors.', fx: { b: 6, h: -2 }, tag: 'dark', grief: 'pressure', out: 'People laugh nervously and walk on.' },
+      { label: 'Say nothing. It\'s only a play.', fx: {}, tag: 'neutral', out: 'The moment passes.' }
+    ] },
+  antic: { who: 'noble', speaker: 'A nobleman on trial', title: 'An antic disposition',
+    text: 'A nobleman accused of theft suddenly starts acting mad. His lawyer says a madman can\'t be tried.',
+    quote: ['To put an antic disposition on.', 'Hamlet, Act 1, Scene 5'],
+    options: [
+      { label: 'Have doctors examine him before the trial continues.', fx: { o: -1 }, tag: 'good', pending: { name: 'The "mad" nobleman', turns: 1, fx: { j: 8 }, text: 'The doctors find he is faking. The trial goes on, fairly.' }, out: 'The doctors begin their examination.' },
+      { label: 'Try him anyway. Madness is no excuse.', fx: { j: 2, s: -2 }, tag: 'neutral', quick: true, out: 'He is convicted. Whether he was really mad, nobody knows.' },
+      { label: 'Let him go. Nobles deserve the benefit of the doubt.', fx: { j: -8, o: -3 }, tag: 'dark', out: 'He stops being mad the moment he walks free.' }
+    ] },
+  recorder: { who: 'courtier', speaker: 'A smiling courtier', title: 'You would play upon me',
+    text: 'A courtier praises everything you do, then quietly asks you to sign papers he has prepared.',
+    quote: ['You would play upon me, you would seem to know my stops.', 'Hamlet, Act 3, Scene 2'],
+    options: [
+      { label: 'Read every page before signing.', fx: { j: 4, s: 2 }, tag: 'good', patient: true, out: 'Page nine would have given him your harbor. You don\'t sign.' },
+      { label: 'Sign. He\'s been so loyal.', fx: { m: -8, s: -4, o: 2 }, tag: 'dark', out: 'He thanks you warmly and buys a very large house.' },
+      { label: 'Hand him a recorder and ask him to play it.', fx: { h: 2, s: 1 }, tag: 'good', out: 'He can\'t. "Why, look you now, how unworthy a thing you make of me." He leaves red-faced.' }
+    ] },
+  closet: { who: 'gertrude', speaker: 'Queen Gertrude', title: 'A mother\'s regret',
+    text: 'The old queen asks your forgiveness for marrying Claudius so soon after her husband died.',
+    quote: ['O Hamlet, thou hast cleft my heart in twain.', 'Gertrude, Act 3, Scene 4'],
+    options: [
+      { label: 'Forgive her, and grieve the old king together.', fx: { g: -6, h: 5, s: 3 }, tag: 'good', grief: 'together', out: 'You both cry for the first time since the funeral.' },
+      { label: 'Speak daggers to her, as Hamlet did.', fx: { h: -4, s: -2, j: 2 }, tag: 'neutral', out: 'The truth is said. The wound is reopened.' },
+      { label: 'Send her away from court.', fx: { o: 2, h: -5, s: -4 }, tag: 'dark', out: 'She leaves quietly. The castle feels emptier.' }
+    ] },
+  pirateprisoner: { who: 'captain', speaker: 'A captured pirate', title: 'In the grapple',
+    text: 'A captured pirate claims his crew once rescued Prince Hamlet from a ship bound for England, and begs for mercy.',
+    quote: ['In the grapple I boarded them.', 'Hamlet\'s letter, Act 4, Scene 6'],
+    options: [
+      { label: 'Give him a fair trial, considering his good deed.', fx: {}, tag: 'good', pending: { name: 'The pirate who saved a prince', turns: 1, fx: { j: 6, s: 3 }, text: 'The court weighs his crimes and his kindness. He gets a lighter sentence, and the whole city agrees it was fair.' }, out: 'The trial is set.' },
+      { label: 'Hang him. Pirates are pirates.', fx: { o: 4, s: -4 }, tag: 'dark', quick: true, out: 'Quick justice, or quick revenge? Hard to tell.' },
+      { label: 'Free him if he joins your navy.', fx: { o: -1, m: 3 }, tag: 'neutral', out: 'He knows these waters better than anyone.' }
+    ] },
+  quarantine: { who: 'healer', speaker: 'The city\'s healers', title: 'Desperate remedies',
+    text: 'Healers say a sickness is spreading by the harbor and ask to close the docks for a month.',
+    quote: ['Diseases desperate grown by desperate appliance are relieved, or not at all.', 'Claudius, Act 4, Scene 3'],
+    options: [
+      { label: 'Close the docks. Lives before trade.', fx: { m: -10, p: 2, s: 3 }, tag: 'good', out: 'Trade stops. The sickness stops with it.' },
+      { label: 'Keep the docks open.', fx: { m: 4, p: -6, g: 8 }, tag: 'dark', out: 'Money keeps flowing. So does the sickness.' },
+      { label: 'Ask Norway\'s doctors for help.', fx: { m: -4, p: 1 }, threat: -5, help: true, tag: 'good', out: 'Norwegian doctors arrive. Fate is easier to face with help.' }
+    ] },
+  conscience: { who: 'soldier', speaker: 'An old soldier', title: 'Conscience makes cowards',
+    text: 'A soldier confesses he can\'t sleep. He still sees the men he killed in the old king\'s wars.',
+    quote: ['Thus conscience does make cowards of us all.', 'Hamlet, Act 3, Scene 1'],
+    options: [
+      { label: 'Start a circle where old soldiers can talk about it together.', fx: { g: -5, h: 4, m: -3 }, tag: 'good', grief: 'together', out: 'Twenty soldiers come to the first meeting. None of them had told anyone before.' },
+      { label: 'Tell him a real soldier doesn\'t dwell on it.', fx: { b: 6, o: 1 }, tag: 'dark', grief: 'pressure', out: 'He salutes and walks away. He still can\'t sleep.' },
+      { label: 'Give him a quiet post at the library.', fx: { h: 2, m: -2 }, tag: 'good', out: 'Books, it turns out, are good company.' }
+    ] },
+  sparrow: { who: 'astrologer', speaker: 'A court astrologer', title: 'The fall of a sparrow',
+    text: 'An astrologer warns that the stars predict disaster this year, and offers to read your fortune for a price.',
+    quote: ['There\'s a special providence in the fall of a sparrow.', 'Hamlet, Act 5, Scene 2'],
+    options: [
+      { label: 'Prepare for anything: stock the granaries.', fx: { m: -6 }, gift: 'granary', tag: 'good', out: 'Whatever fate brings, the city will have food.' },
+      { label: 'Pay him to tell you the future.', fx: { m: -5, s: -2 }, tag: 'dark', out: 'He tells you exactly what you hoped to hear.' },
+      { label: '"The readiness is all." Send him away.', fx: { s: 2, o: 1 }, tag: 'good', out: 'You can\'t control fate, only how ready you are for it.' }
+    ] },
+  drinking: { who: 'noble', speaker: 'The lords of the court', title: 'A custom more honored in the breach',
+    text: 'The court wants to revive the old tradition of drinking all night and firing cannons with every toast.',
+    quote: ['It is a custom more honoured in the breach than the observance.', 'Hamlet, Act 1, Scene 4'],
+    options: [
+      { label: 'Allow it. The court needs cheer.', fx: { h: 4, o: -4, b: 4 }, tag: 'neutral', grief: 'pressure', out: 'The cannons boom all night. Nobody sleeps.' },
+      { label: 'Ban it.', fx: { o: 3, h: -3 }, tag: 'neutral', out: 'The lords grumble, but the city sleeps soundly.' },
+      { label: 'Turn it into one honest feast for the whole city.', fx: { m: -6, h: 5, g: -3 }, tag: 'good', out: 'Nobles and fishermen share one long table.' }
+    ] },
+  lender: { who: 'polonius', speaker: 'The merchants\' guild', title: 'Neither a borrower nor a lender',
+    text: 'Craftsmen ask the crown for loans to open new shops. Polonius warns against lending at all.',
+    quote: ['Neither a borrower nor a lender be.', 'Polonius, Act 1, Scene 3'],
+    options: [
+      { label: 'Lend at fair rates to honest craftsmen.', fx: { m: -10, h: 3 }, gift: 'bakery', tag: 'good', out: 'A new bakery opens on the main street, and it will pay taxes for years.' },
+      { label: 'Lend at crushing rates.', fx: { m: 6, s: -6, h: -3 }, gift: 'lender', tag: 'dark', out: 'A royal moneylender opens its doors. The profits are large, and so is the misery.' },
+      { label: 'Take Polonius\'s advice. No loans.', fx: { m: 2 }, tag: 'neutral', out: 'The treasury is safe. The craftsmen wait.' }
+    ] },
+  mousetrap: { who: 'player', speaker: 'The players', title: 'Catch the conscience',
+    text: 'The players offer to stage a scene that copies a crime, so you can watch a suspect\'s face during the show.',
+    quote: ['I\'ll observe his looks; I\'ll tent him to the quick.', 'Hamlet, Act 2, Scene 2'],
+    options: [
+      { label: 'Use the play, then hold a real trial with real evidence.', fx: { m: -4 }, tag: 'good', pending: { name: 'The play that caught a thief', turns: 1, fx: { j: 9 }, text: 'The suspect flinched during the play, and the trial found proof to match.' }, out: 'The suspect squirms in the front row.' },
+      { label: 'If he flinches, he\'s guilty. That\'s enough.', fx: { j: -4, o: 3 }, tag: 'neutral', quick: true, out: 'He flinched. Was it guilt, or just nerves?' },
+      { label: 'Skip the play. Torture gets answers faster.', fx: { o: 4, s: -10, j: -6 }, tag: 'dark', out: 'You get a confession. It isn\'t worth much.' }
+    ] },
+  france: { who: 'laertes', speaker: 'Laertes', title: 'Leave to return to France',
+    text: 'Laertes asks permission to return to his life in Paris. Without him, your guard is weaker.',
+    quote: ['My dread lord, your leave and favour to return to France.', 'Laertes, Act 1, Scene 2'],
+    options: [
+      { label: 'Let him go with your blessing.', fx: { o: -2, s: 2 }, adv: { laertes: 10 }, tag: 'good', out: 'He promises to come back if Denmark ever needs him.' },
+      { label: 'Order him to stay.', fx: { o: 2 }, adv: { laertes: -15 }, tag: 'dark', out: 'He stays, angrily.' },
+      { label: 'Ask him to stay one more season, as a favor.', fx: {}, adv: { laertes: 4 }, tag: 'neutral', out: 'He agrees, for now.' }
+    ] },
+  letters: { who: 'polonius', speaker: 'Polonius', title: 'Private letters',
+    text: 'Polonius has seized a young man\'s love letters and wants to read them aloud at court to expose a scandal.',
+    quote: ['Doubt thou the stars are fire, doubt that the sun doth move.', 'Hamlet\'s letter, Act 2, Scene 2'],
+    options: [
+      { label: 'Return the letters unread.', fx: { s: 5 }, adv: { polonius: -5 }, tag: 'good', out: 'Some things belong only to the people who wrote them.' },
+      { label: 'Let him read them aloud.', fx: { o: 2, s: -6, h: -2 }, adv: { polonius: 6 }, tag: 'dark', out: 'The court laughs. The young man never comes back.' },
+      { label: 'Read them yourself, privately.', fx: { s: -2 }, tag: 'neutral', out: 'Nothing scandalous. You feel a little ashamed.' }
+    ] },
+  gravemaker: { who: 'gravedigger', speaker: 'The builders\' guild', title: 'Who builds stronger?',
+    text: 'The builders strike for better pay. Every construction site in the city stops.',
+    quote: ['What is he that builds stronger than either the mason, the shipwright, or the carpenter?', 'Gravedigger, Act 5, Scene 1'],
+    options: [
+      { label: 'Pay them fairly.', fx: { m: -8, h: 2 }, tag: 'good', out: 'Hammers ring out again by the afternoon.' },
+      { label: 'Refuse. They\'ll come back when they\'re hungry.', fx: { m: 2, h: -3 }, delay: 1, tag: 'neutral', out: 'Every building in progress falls a month behind.' },
+      { label: 'Send soldiers to force them back to work.', fx: { o: 2, s: -6, h: -4 }, tag: 'dark', out: 'The work continues, sullenly.' }
+    ] },
+  bonnet: { who: 'osric', speaker: 'A flattering courtier', title: 'Put your bonnet to its right use',
+    text: 'A courtier who agrees with everything you say asks to be made a royal judge.',
+    quote: ['Put your bonnet to his right use; \'tis for the head.', 'Hamlet, Act 5, Scene 2'],
+    options: [
+      { label: 'Give the post to the best-qualified candidate instead.', fx: { j: 4 }, tag: 'good', out: 'The new judge has disagreed with you twice already. Good.' },
+      { label: 'Appoint him. Loyalty matters.', fx: { j: -6, o: 2, s: -3 }, tag: 'dark', out: 'He rules exactly the way he thinks you want.' },
+      { label: 'Test him with a hard case first.', fx: { j: 2 }, tag: 'good', patient: true, out: 'He fails. At least now you know.' }
+    ] },
+  finale: { who: 'horatio', speaker: 'Horatio, at year\'s end', title: 'The rest is silence',
+    text: 'A year has passed. Fortinbras\'s ambassadors wait in the hall to see what kind of city you have made. How will your reign be remembered?',
+    quote: ['Absent thee from felicity awhile, and in this harsh world draw thy breath in pain, to tell my story.', 'Hamlet, Act 5, Scene 2'],
+    options: [
+      { label: 'Hand power to a council elected by the citizens.', fx: { j: 6, s: 6, o: -2 }, tag: 'good', out: 'For the first time, Elsinore will choose its own rulers.' },
+      { label: 'Crown yourself ruler for life.', fx: { o: 5, s: -6 }, tag: 'dark', out: 'The crown is yours forever. So is the weight.' },
+      { label: 'Ask Horatio to tell your story truthfully, good and bad.', fx: { s: 4, h: 4 }, tag: 'good', out: 'Horatio writes it all down: the wise choices and the cruel ones.' }
+    ] }
+};
+
+const FATES = [
+  { n: 1, name: 'Plague in the lower town', text: 'Sickness spreads through the crowded streets by the harbor.', fx: { p: -8, g: 12, h: -4 } },
+  { n: 2, name: 'Pirates raid the harbor', text: 'Sails on the horizon, then fire on the docks.', fx: { m: -10, o: -5 } },
+  { n: 3, name: 'A poor harvest', text: 'The fields give little this year.', fx: { m: -8, h: -5 } },
+  { n: 4, name: 'A storm off the sea', text: 'Wind and waves batter the docks all night.', fx: { m: -6, p: -2 }, storm: true },
+  { n: 5, name: 'The ghost walks again', text: 'The watch report a figure in armor on the battlements.', fx: { g: 6 }, trigger: 'ghost' },
+  { n: 6, name: 'Traveling players arrive', text: 'A cart of actors rolls through the gate.', fx: { h: 6 }, trigger: 'players' },
+  { n: 7, name: 'Calm seas', text: 'A quiet month. Fate leaves the city alone.', fx: {} },
+  { n: 8, name: 'A good harvest', text: 'The barns are full.', fx: { m: 10, h: 4 } },
+  { n: 9, name: 'A trade ship docks', text: 'Spices, cloth and silver from the south.', fx: { m: 12 } },
+  { n: 10, name: 'A wedding in the town', text: 'The whole street dances until dawn.', fx: { h: 8, g: -5 } },
+  { n: 11, name: 'Norway\'s army is sighted', text: 'Scouts see banners on the border.', fx: { o: -6 }, trigger: 'fortinbras' },
+  { n: 12, name: 'Help from a stranger', text: 'Travelers stop to rebuild a bridge and tend the sick. Not every battle is fought alone.', fx: { o: 5, h: 5 }, help: true }
+];
+
+
+/* ---------------- Systems content ---------------- */
+const BUILDINGS = {
+  memorial: { name: 'Memorial garden', cost: 12, months: 1, eq: 5, desc: 'A place where the whole city can grieve together. Grief −4 a month.', up: { g: -4 } },
+  chapel: { name: 'Chapel', cost: 8, months: 1, eq: 5, desc: 'Its door is always open to mourners. Grief −2 a month.', up: { g: -2 } },
+  hospital: { name: 'House of healing', cost: 14, months: 2, eq: 5, desc: 'Grief −3 and People +1 a month. Halves the damage of plague.', up: { g: -3, p: 1 } },
+  theater: { name: 'Theater', cost: 12, months: 2, eq: 5, desc: 'Plays help people face what they feel. Heart +2 and buried grief −1 a month.', up: { h: 2, b: -1 } },
+  courthouse: { name: 'Grand courthouse', cost: 12, months: 1, eq: 1, desc: 'One extra court hearing every month, and Justice +0.5 a month.', up: { j: 0.5 } },
+  library: { name: 'Library', cost: 14, months: 2, eq: 1, desc: 'People learn the law. Soul +1 and Justice +0.5 a month.', up: { s: 1, j: 0.5 } },
+  granary: { name: 'Granary', cost: 10, months: 1, eq: 11, desc: 'Prepares for bad luck. Halves losses from harvests, storms and plague.', up: {} },
+  breadhall: { name: 'Bread hall', cost: 10, months: 1, eq: 11, desc: 'Feeds the poor. Heart +2, Soul +0.5, Treasury −1 a month.', up: { h: 2, s: 0.5, m: -1 } },
+  market: { name: 'Market hall', cost: 12, months: 1, desc: 'Trade grows. Treasury +3 a month.', up: { m: 3 } },
+  walls: { name: 'City walls', cost: 18, months: 2, desc: 'Order +1 a month. Norway\'s threat grows more slowly, and the walls help if they invade.', up: { o: 1 } },
+  navy: { name: 'Harbor fort', cost: 16, months: 2, desc: 'Stops pirate raids completely. Treasury +1 a month.', up: { m: 1 } },
+  spytower: { name: 'Spy tower', cost: 10, months: 1, eq: 11, dark: true, desc: 'Order +2 but Soul −2 a month. Your spies make every quick ruling correct.', up: { o: 2, s: -2 } }
+};
+const LAWS = {
+  bells: { name: 'Mourning bells', eq: 5, desc: 'The bells ring for the dead. Grief −2, Treasury −1 a month.', fx: { g: -2, m: -1 }, grief: 'together' },
+  festival: { name: 'Festival days', eq: 5, desc: 'Cheer the city up. Heart +2 a month, but buried grief +2 a month.', fx: { h: 2, b: 2 }, grief: 'pressure' },
+  opencourt: { name: 'Open court', eq: 1, desc: 'Anyone may watch trials. Justice +1, Order −1 a month, and people wait longer before losing patience.', fx: { j: 1, o: -1 } },
+  dole: { name: 'Bread dole', eq: 11, desc: 'Feeds the poor. Heart +1, Soul +0.5, Treasury −2 and Food −2 a month.', fx: { h: 1, s: 0.5, m: -2 }, tag: 'good' },
+  curfew: { name: 'Curfew', desc: 'Order +3, Heart −2 a month.', fx: { o: 3, h: -2 } },
+  taxes: { name: 'Heavy taxes', desc: 'Treasury +4, Heart −2, People −1 a month.', fx: { m: 4, h: -2, p: -1 } },
+  pardons: { name: 'Day of pardons', eq: 11, desc: 'Mercy over punishment. Soul +1, Justice −1, Order −1 a month.', fx: { s: 1, j: -1, o: -1 }, tag: 'good' },
+  informers: { name: 'Paid informers', eq: 11, needs: 'spytower', desc: 'Order +2, Soul −1 a month. Needs a spy tower.', fx: { o: 2, s: -1 }, tag: 'dark' },
+  soundtoll: { name: 'The Sound Toll', desc: 'Tax every ship that sails past the castle through the narrow strait. Treasury +5 a month, but Norway\'s threat +1 a month. (The real castle at Elsinore, Kronborg, collected this toll for over 400 years.)', fx: { m: 5 }, threat: 1 }
+};
+const VOYAGES = {
+  norway: { name: 'Norway', cost: 8, months: 1, min: 11, max: 15, risk: 0.05, desc: 'A short, safe trip for timber and furs. Good for relations.', threat: -2 },
+  england: { name: 'England', cost: 10, months: 2, min: 17, max: 25, risk: 0.15, desc: 'Wool and tin. Hamlet\'s ship to England was attacked by pirates.' },
+  wittenberg: { name: 'Wittenberg', cost: 12, months: 2, min: 15, max: 21, risk: 0.1, desc: 'Books and printing presses from Hamlet\'s old university. Soul +2 on return.', fx: { s: 2 } },
+  france: { name: 'France', cost: 14, months: 2, min: 22, max: 32, risk: 0.2, desc: 'Wine and silk from Paris, where Laertes studied.' },
+  poland: { name: 'Poland', cost: 16, months: 3, min: 30, max: 42, risk: 0.25, food: 25, desc: 'A long, dangerous voyage for amber and grain. Fortinbras marched his army there.' }
+};
+const TREASURES = {
+  armor: { name: 'The old king\'s armor', gold: 20, desc: 'The armor his ghost still wears. Selling it hurts the grieving city: Grief +4, Heart −3.', fx: { g: 4, h: -3 }, grief: 'pressure' },
+  pearl: { name: 'Claudius\'s jeweled cup', gold: 18, desc: 'The cup that held the poisoned pearl. Good riddance: Soul +2.', fx: { s: 2 }, tag: 'good' },
+  jewels: { name: 'Gertrude\'s wedding jewels', gold: 15, desc: 'Gertrude will not forgive you easily.', fx: { h: -1 }, adv: { gertrude: -12 } },
+  hunting: { name: 'The royal hunting forest', gold: 25, desc: 'Sold to loggers. People −2, Heart −2.', fx: { p: -2, h: -2 } },
+  secrets: { name: 'Polonius\'s book of secrets', gold: 14, desc: 'Years of gossip and blackmail. Buyers will use it: Soul −4.', fx: { s: -4 }, tag: 'dark', adv: { polonius: 8 } },
+  bells: { name: 'Yorick\'s jester bells', gold: 6, desc: '"A fellow of infinite jest." Heart −1.', fx: { h: -1 } }
+};
+const shipsMax = () => 1 + (G.biz.shipyard || 0) + (G.built.navy ? 1 : 0);
+Object.assign(CARDS, {
+  ophelia_well: { who: 'ophelia', speaker: 'Ophelia, months later', title: 'Ophelia, healing',
+    text: 'Because people stayed with her through her grief, Ophelia is well again. She asks how she can help others who are grieving.',
+    quote: ['We know what we are, but know not what we may be.', 'Ophelia, Act 4, Scene 5'],
+    options: [
+      { label: 'Ask her to lead grief circles for the city.', fx: { g: -8, h: 4 }, tag: 'good', grief: 'together', out: 'Who better to help the grieving than someone who survived it?' },
+      { label: 'Give her a place at court.', fx: { h: 3 }, adv: { gertrude: 6 }, tag: 'good', out: 'Gertrude is overjoyed to have her near.' },
+      { label: 'Let her live quietly. She has earned peace.', fx: { h: 2, s: 1 }, tag: 'neutral', out: 'She plants a garden by the brook.' }
+    ] },
+  ophelia_drowned: { who: 'crowd', speaker: 'The whole city', title: 'A willow grows aslant a brook',
+    text: 'The girl you had removed from the market has been found drowned in the brook. People are asking who failed her.',
+    quote: ['There is a willow grows aslant a brook.', 'Gertrude, Act 4, Scene 7'],
+    onShow: { g: 10, h: -6 },
+    options: [
+      { label: 'Hold a full funeral, and admit the crown failed her.', fx: { g: -6, s: 4, h: 3 }, tag: 'good', grief: 'together', out: 'Your apology is hard to hear and harder to say. The city respects it.' },
+      { label: 'Call it an accident. Accidents happen.', fx: { b: 8, s: -4 }, tag: 'dark', grief: 'pressure', out: 'Nobody believes you, but nobody says so.' },
+      { label: 'Plant a memorial garden by the willow.', fx: { m: -8, g: -8 }, gift: 'memorial', tag: 'good', grief: 'together', out: 'Flowers grow where she fell: rosemary for remembrance.' }
+    ] },
+  laertes_plot: { who: 'laertes', speaker: 'A whisper from the barracks', title: 'A point with this contagion',
+    text: 'You promised Laertes private revenge. Now he plans a "friendly" fencing match against his enemy, with a poisoned blade.',
+    quote: ['I\'ll touch my point with this contagion.', 'Laertes, Act 4, Scene 7'],
+    options: [
+      { label: 'Stop the match and confront him.', fx: { j: 4, s: 4 }, adv: { laertes: -6 }, tag: 'good', out: 'The blade is seized. Laertes is furious, but no one dies.' },
+      { label: 'Let it happen. It solves a problem.', fx: { s: -12, o: 3 }, tag: 'dark', out: 'A man dies in a "fencing accident." You knew.' },
+      { label: 'Warn his target in secret.', fx: { s: 2 }, adv: { laertes: -10 }, tag: 'neutral', out: 'The match is called off. Laertes suspects you.' }
+    ] },
+  laertes_thanks: { who: 'laertes', speaker: 'Laertes', title: 'Exchange forgiveness',
+    text: 'Laertes thanks you for giving his father a fair trial instead of revenge. He offers to serve the city.',
+    quote: ['Exchange forgiveness with me, noble Hamlet.', 'Laertes, Act 5, Scene 2'],
+    options: [
+      { label: 'Make him captain of the city guard.', fx: { o: 6 }, threat: -8, adv: { laertes: 10 }, tag: 'good', help: true, out: 'The guard has never been better trained.' },
+      { label: 'Ask him to help heal the city instead.', fx: { h: 3, g: -3 }, adv: { laertes: 5 }, tag: 'good', grief: 'together', out: 'A grieving son teaches others how to grieve.' },
+      { label: 'Thank him, and change nothing.', fx: {}, adv: { laertes: 3 }, tag: 'neutral', out: 'He bows and leaves.' }
+    ] },
+  ghost_rest: { who: 'ghost', speaker: 'The battlements, at midnight', title: 'Remember me',
+    text: 'The murder has been proven in court. The ghost appears one last time, calm now, and begins to fade.',
+    quote: ['Adieu, adieu, adieu! Remember me.', 'The Ghost, Act 1, Scene 5'],
+    options: [
+      { label: 'Promise to remember him, and let him go.', fx: { g: -10, h: 4 }, tag: 'good', grief: 'together', out: 'The battlements are only stone and wind now.' },
+      { label: 'Build a shrine on the battlements.', fx: { m: -8, s: 3, g: -6 }, tag: 'good', out: 'Sailors salute it as they pass.' },
+      { label: 'Say nothing. Some things are better left alone.', fx: { g: -3 }, tag: 'neutral', out: 'He fades without a word.' }
+    ] },
+  ghost_hungers: { who: 'ghost', speaker: 'The battlements, at midnight', title: 'Bear it not',
+    text: 'You swore revenge without proof. Now the ghost returns every night, demanding more blood.',
+    quote: ['If thou hast nature in thee, bear it not.', 'The Ghost, Act 1, Scene 5'],
+    options: [
+      { label: 'Refuse. Revenge is not justice.', fx: { s: 8, g: 4 }, tag: 'good', out: 'The ghost screams, then goes silent. Your conscience is clear.' },
+      { label: 'Hunt down every suspect.', fx: { o: -6, s: -10, j: -6 }, tag: 'dark', quick: true, out: 'Doors are kicked in all night. Most of the arrested are innocent.' },
+      { label: 'Ask the priest to bless the battlements.', fx: { m: -4, g: -2 }, tag: 'neutral', out: 'The haunting quiets, for now.' }
+    ] },
+  spy_scandal: { who: 'crowd', speaker: 'The town square', title: 'Method in\'t',
+    text: 'Your spies were caught reading the private letters of honest citizens. A crowd demands answers.',
+    quote: ['Though this be madness, yet there is method in\'t.', 'Polonius, Act 2, Scene 2'],
+    options: [
+      { label: 'Shut down the spy tower.', fx: { s: 6, o: -4 }, unbuild: 'spytower', tag: 'good', out: 'The tower is boarded up. People speak freely again.' },
+      { label: 'Deny everything.', fx: { s: -6, j: -4 }, tag: 'dark', out: 'Nobody believes you.' },
+      { label: 'Punish the spies, but keep the tower.', fx: { j: 2, o: -2 }, tag: 'neutral', out: 'A few spies lose their jobs. The tower stays.' }
+    ] },
+  steward_names: { who: 'steward', speaker: 'Claudius\'s old steward', title: 'Murder most foul',
+    text: 'Grateful for his fair trial, the steward names three courtiers who helped Claudius hide the murder.',
+    quote: ['Murder most foul, as in the best it is.', 'The Ghost, Act 1, Scene 5'],
+    options: [
+      { label: 'Give each of them a fair trial.', fx: {}, tag: 'good', cases: 2, out: 'Two new cases go before the court.' },
+      { label: 'Arrest them all tonight.', fx: { o: 4, j: -6 }, tag: 'dark', quick: true, out: 'Fast, but one of them turns out to be innocent.' },
+      { label: 'Let it go. The city needs peace.', fx: { j: -4, o: 2 }, tag: 'neutral', out: 'The guilty keep their places at court.' }
+    ] }
+});
+CARDS.ophelia.options[0].follow = CARDS.ophelia.options[2].follow = { card: 'ophelia_well', after: 3 };
+CARDS.ophelia.options[1].follow = { card: 'ophelia_drowned', after: 2 };
+CARDS.laertes.options[1].follow = { card: 'laertes_plot', after: 2 };
+CARDS.laertes.options[0].follow = { card: 'laertes_thanks', after: 3 };
+CARDS.ghost.options[0].follow = { card: 'ghost_rest', after: 3 };
+CARDS.ghost.options[1].follow = { card: 'ghost_hungers', after: 2 };
+CARDS.spies.options[0].follow = { card: 'spy_scandal', after: 3 };
+CARDS.steward.options[0].follow = { card: 'steward_names', after: 3 };
+
+const CITY_EVENTS = [
+  { name: 'A fire in the lower town', text: 'Flames tear through the wooden houses by the harbor.', fx: { p: -2, m: -5, h: -2 } },
+  { name: 'A market boom', text: 'Traders from three countries crowd the market.', fx: { m: 8 } },
+  { name: 'A crime wave', text: 'Thieves work the streets every night.', fx: { o: -4, j: -3 } },
+  { name: 'Midsummer festival', text: 'Bonfires burn on the beach for St. John\'s Eve.', fx: { h: 5 }, months: [5] },
+  { name: 'The harbor freezes', text: 'Ice locks the harbor. Ships at sea are delayed a month.', fx: { m: -3 }, months: [0, 1, 11], delay: 1 },
+  { name: 'A wandering preacher', text: 'He tells the mourners that grief is love with nowhere to go. Many weep, and feel lighter.', fx: { g: -4 } },
+  { name: 'Rats in the grain stores', text: 'Rats eat through the city\'s food.', food: -10 },
+  { name: 'A great catch of herring', text: 'The fishing fleet comes home heavy.', food: 10 },
+  { name: 'Rumors of a plot at court', text: 'Whispers say someone is conspiring against you.', fx: { o: -3 }, adv: { polonius: 4, horatio: -2 } },
+  { name: 'A royal wedding in Norway', text: 'Norway is busy celebrating instead of planning war.', threat: -6 },
+  { name: 'A visiting scholar\'s lecture', text: 'Crowds come to hear a lecture on the law.', fx: { j: 2 } },
+  { name: 'A sickness among the cattle', text: 'Farmers lose half their herds.', food: -8, fx: { h: -2 } }
+];
+const DIFFS = {
+  easy: { name: 'Apprentice', months: 12, ap: 4, goals: { j: 55, s: 55, g: 45, b: 25 }, bad: 0.8, threat: 3, jDecay: 0.5, food: 0.9, tax: 1.1, caseExtra: 0, patience: 0, goodCost: 0, dilemmas: 0, ghost: 10, start: {},
+    blurb: '12 months, 4 royal actions, gentler fate. Goals: Justice 55+, Soul 55+, Grief 45 or less, Buried grief under 25.' },
+  normal: { name: 'Prince', months: 12, ap: 3, goals: { j: 60, s: 60, g: 40, b: 20 }, bad: 1, threat: 4, jDecay: 1, food: 1, tax: 1, caseExtra: 0, patience: 0, goodCost: 0, dilemmas: 3, ghost: 10, start: {},
+    blurb: '12 months, 3 royal actions. Goals: Justice 60+, Soul 60+, Grief 40 or less, Buried grief under 20.' },
+  hard: { name: 'King', months: 18, ap: 3, goals: { j: 65, s: 65, g: 35, b: 15 }, bad: 1.3, threat: 5.5, jDecay: 1.5, food: 1.15, tax: 0.95, caseExtra: 0.4, patience: 1, goodCost: 2, dilemmas: 8, ghost: 15, start: { m: 50, o: 55 },
+    blurb: '18 months. Harsher fate, faster Norway, impatient courts, and doing the right thing costs gold. Hard dilemmas with no clean answer. Goals: Justice 65+, Soul 65+, Grief 35 or less, Buried grief under 15.' },
+  tragic: { name: 'Tragedy', months: 24, ap: 2, goals: { j: 70, s: 70, g: 30, b: 10 }, bad: 1.6, threat: 6.5, jDecay: 2, food: 1.3, tax: 0.9, caseExtra: 0.8, patience: 1, goodCost: 4, dilemmas: 12, ghost: 20, start: { m: 45, o: 50, h: 35, g: 65 },
+    blurb: 'Two full years with only 2 royal actions a month. Everything goes wrong more often, and every dilemma hurts. Goals: Justice 70+, Soul 70+, Grief 30 or less, Buried grief under 10. Very few rulers survive.' }
+};
+const D = () => DIFFS[(G && G.diff) || selDiff];
+let selDiff = 'normal';
+try { const sd = localStorage.getItem('elsinore-diff'); if (sd && DIFFS[sd]) selDiff = sd; } catch (e) {}
+const DILEMMAS = {
+  grainorguns: { who: 'soldier', speaker: 'Your quartermaster', title: 'Grain or soldiers',
+    text: 'The winter stores can feed the city or the army, but not both. Norway is watching.',
+    quote: ['The time is out of joint.', 'Hamlet, Act 1, Scene 5'],
+    options: [
+      { label: 'Feed the people. The army will have to manage.', fx: { o: -4, h: 2 }, food: 15, threat: 12, tag: 'neutral', out: 'Bellies are full. The soldiers grumble, and Norway notices.' },
+      { label: 'Feed the army. The city will have to manage.', fx: { h: -6, p: -2 }, food: -10, threat: -10, tag: 'neutral', out: 'The border is safe. The bread lines are long.' },
+      { label: 'Split it, and satisfy no one.', fx: { h: -2, o: -2 }, food: 5, threat: 4, tag: 'neutral', out: 'Half measures, half complaints.' }
+    ] },
+  battalions: { who: 'healer', speaker: 'The healers', title: 'Not single spies, but battalions',
+    text: 'Sickness has broken out in the harbor district. Sealing it off will save the city, but it traps the healthy in with the sick.',
+    quote: ['When sorrows come, they come not single spies, but in battalions.', 'Claudius, Act 4, Scene 5'],
+    options: [
+      { label: 'Seal the district.', fx: { p: -4, g: 6, s: -4, o: 2 }, tag: 'neutral', out: 'The sickness stops at the barricades. So do the people trapped behind them.' },
+      { label: 'Leave it open and hope.', fx: { p: -7, g: 5 }, tag: 'neutral', out: 'The sickness spreads up the hill.' },
+      { label: 'Send healers in, whatever it costs.', fx: { m: -14, p: -2, s: 4 }, tag: 'good', out: 'Brave and expensive. Some healers do not come back.' }
+    ] },
+  cruelkind: { who: 'horatio', speaker: 'The captain of the guard', title: 'Cruel to be kind',
+    text: 'Your oldest friend is accused of selling secrets to Norway. The evidence is strong.',
+    quote: ['I must be cruel only to be kind.', 'Hamlet, Act 3, Scene 4'],
+    options: [
+      { label: 'Put him on trial like anyone else.', fx: { h: -4 }, tag: 'neutral', pending: { name: 'Your friend\'s treason', turns: 2, fx: { j: 8 }, text: 'The court finds your friend guilty. Justice was done, and it broke your heart.' }, adv: { horatio: -4 }, out: 'You can\'t look at him as the guards lead him away.' },
+      { label: 'Let him slip away abroad, quietly.', fx: { s: -4, j: -6, h: 2 }, tag: 'neutral', out: 'He escapes. Nobody believes the official story.' },
+      { label: 'Judge him yourself, today.', gamble: [{ fx: { j: 3, h: -3 }, out: 'You find him guilty. You were right, and it hurts anyway.' }, { fx: { j: -8, s: -4 }, out: 'You find him guilty. A month later the real traitor is caught.' }], tag: 'neutral', quick: true }
+    ] },
+  grainship: { who: 'captain', speaker: 'A lookout on the walls', title: 'The grain ship',
+    text: 'A ship carrying the city\'s grain is under pirate attack within sight of the harbor.',
+    quote: ['There\'s a divinity that shapes our ends, rough-hew them how we will.', 'Hamlet, Act 5, Scene 2'],
+    options: [
+      { label: 'Send soldiers in boats. Some won\'t come back.', fx: { p: -3, g: 4 }, food: 15, tag: 'neutral', out: 'The grain is saved. Three families will grieve.' },
+      { label: 'Let the ship go.', fx: { m: -6 }, food: -10, tag: 'neutral', out: 'You watch it burn from the walls.' },
+      { label: 'Pay the pirates a ransom.', fx: { m: -14, s: -3 }, food: 15, tag: 'neutral', out: 'The pirates sail off richer, and they will be back.' }
+    ] },
+  mercy: { who: 'crowd', speaker: 'The court', title: 'To die, to sleep',
+    text: 'A man ended his dying brother\'s suffering, at his brother\'s own request. The law calls it murder.',
+    quote: ['To die, to sleep; no more.', 'Hamlet, Act 3, Scene 1'],
+    options: [
+      { label: 'Follow the law. Murder is murder.', fx: { j: 4, h: -5, g: 3 }, tag: 'neutral', out: 'The law is upheld. The city is quiet and uneasy.' },
+      { label: 'Pardon him.', fx: { s: 4, j: -6, o: -3 }, tag: 'neutral', out: 'Mercy, but now the law means less.' },
+      { label: 'Exile him.', fx: { j: -1, h: -2, s: 1 }, tag: 'neutral', out: 'Neither punishment nor mercy. He leaves at dawn.' }
+    ] },
+  disjoint: { who: 'fortinbras', speaker: 'A messenger from the border', title: 'Disjoint and out of frame',
+    text: 'Norway is massing troops while the city is still in mourning. Raising an army means ending the mourning early.',
+    quote: ['Our state to be disjoint and out of frame.', 'Claudius, Act 1, Scene 2'],
+    options: [
+      { label: 'End the mourning and call up the troops.', fx: { b: 12, o: 3 }, threat: -15, grief: 'pressure', tag: 'neutral', out: 'The bells go silent and the drums begin.' },
+      { label: 'Keep mourning, and negotiate from weakness.', fx: { m: -12, g: -4 }, threat: -6, tag: 'neutral', out: 'You pay to buy time.' },
+      { label: 'Ask only for volunteers.', fx: { p: -2, o: -2 }, threat: -6, tag: 'neutral', out: 'Fewer come than you hoped.' }
+    ] },
+  oldsins: { who: 'scholar', speaker: 'The royal archivist', title: 'A thing of nothing',
+    text: 'Old letters prove the beloved old king also committed crimes. The city still worships his memory.',
+    quote: ['The King is a thing... of nothing.', 'Hamlet, Act 4, Scene 2'],
+    options: [
+      { label: 'Publish the truth.', fx: { j: 6, g: 6, h: -6, o: -4 }, tag: 'neutral', out: 'Grief turns into confusion and anger. But it is the truth.' },
+      { label: 'Burn the letters.', fx: { s: -6, b: 6 }, tag: 'dark', out: 'The ashes go cold. The secret stays with you.' },
+      { label: 'Show the court, but not the people.', fx: { j: 2, s: -2 }, tag: 'neutral', out: 'A secret shared by a few is still a secret.' }
+    ] },
+  treadheel: { who: 'gertrude', speaker: 'Queen Gertrude', title: 'Upon another\'s heel',
+    text: 'The trials over her husband\'s murder are making the old queen ill with grief. She begs you to stop them.',
+    quote: ['One woe doth tread upon another\'s heel.', 'Gertrude, Act 4, Scene 7'],
+    options: [
+      { label: 'Continue the trials. The truth matters.', fx: { j: 6, g: 4 }, adv: { gertrude: -12 }, tag: 'neutral', out: 'The trials go on. Gertrude stops speaking to you.' },
+      { label: 'Pause them, for her sake.', fx: { j: -6, g: -4 }, adv: { gertrude: 8 }, tag: 'neutral', out: 'She thanks you. The guilty breathe easier.' },
+      { label: 'Close the court for a month of mourning.', fx: { j: -4, g: -6, o: -3 }, tag: 'neutral', grief: 'together', out: 'The whole city stops to grieve. Cases pile up.' }
+    ] },
+  kin: { who: 'fortinbras', speaker: 'Norway\'s ambassador', title: 'More than kin',
+    text: 'Norway offers a huge loan to fix the treasury, but wants rights to your harbor and a share of every month\'s taxes.',
+    quote: ['A little more than kin, and less than kind.', 'Hamlet, Act 1, Scene 2'],
+    options: [
+      { label: 'Take the loan: +40 gold now, −3 gold every month after.', fx: { m: 40 }, debt: 3, tag: 'neutral', out: 'The treasury overflows. Norway now owns a piece of Elsinore.' },
+      { label: 'Refuse.', fx: { o: -1 }, threat: 3, tag: 'neutral', out: 'The ambassador leaves, offended.' },
+      { label: 'Ask for a smaller loan: +15 now, −1 every month.', fx: { m: 15 }, debt: 1, threat: 2, tag: 'neutral', out: 'Norway agrees, grudgingly.' }
+    ] },
+  pieceofwork: { who: 'scholar', speaker: 'The city council', title: 'What a piece of work is a man',
+    text: 'A fire destroyed the school and part of the city wall. There is money to rebuild only one.',
+    quote: ['What a piece of work is a man!', 'Hamlet, Act 2, Scene 2'],
+    options: [
+      { label: 'Rebuild the school.', fx: { m: -14, s: 4, h: 3 }, threat: 5, tag: 'neutral', out: 'The children are back in class. The wall stays broken.' },
+      { label: 'Rebuild the wall.', fx: { m: -14, h: -3 }, threat: -8, tag: 'neutral', out: 'Safe, but the children have nowhere to learn.' },
+      { label: 'Rebuild neither. Save the money.', fx: { h: -4 }, tag: 'neutral', out: 'Both lie in ruins a little longer.' }
+    ] },
+  calumny: { who: 'polonius', speaker: 'Your right-hand advisor', title: 'Thou shalt not escape calumny',
+    text: 'Your closest advisor confesses that years ago, before your reign, he took bribes.',
+    quote: ['Be thou as chaste as ice, as pure as snow, thou shalt not escape calumny.', 'Hamlet, Act 3, Scene 1'],
+    options: [
+      { label: 'Dismiss him.', fx: { j: 5 }, fireRight: true, tag: 'neutral', out: 'Honest, and lonely.' },
+      { label: 'Keep him. It was long ago.', fx: { s: -4, j: -2 }, tag: 'neutral', out: 'He is grateful, and you wonder what else he hasn\'t told you.' },
+      { label: 'Keep him, but make him repay every coin.', fx: { m: 8, j: 2 }, tag: 'neutral', out: 'A compromise that satisfies nobody completely.' }
+    ] },
+  muddied: { who: 'crowd', speaker: 'The angry crowd', title: 'The people muddied',
+    text: 'A mob blames a foreign healer for the plague. They want him punished, and they will riot if he isn\'t.',
+    quote: ['The people muddied, thick and unwholesome in their thoughts and whispers.', 'Claudius, Act 4, Scene 5'],
+    options: [
+      { label: 'Defend the healer publicly.', fx: { o: -8, s: 6, j: 4 }, tag: 'good', out: 'Stones fly at the castle gates. The healer lives.' },
+      { label: 'Punish him to calm the mob.', fx: { o: 8, s: -10, j: -8 }, tag: 'dark', out: 'The riot ends. An innocent man suffers.' },
+      { label: 'Hide him and let things cool down.', fx: { o: -3, s: 2 }, tag: 'neutral', out: 'He slips away by night. The anger slowly fades.' }
+    ] }
+};
+Object.assign(CARDS, DILEMMAS);
+
+const GOALS = [
+  { k: 'j', get label() { return `Justice ${D().goals.j}+`; }, test: S => S.j >= D().goals.j },
+  { k: 's', get label() { return `Soul ${D().goals.s}+`; }, test: S => S.s >= D().goals.s },
+  { k: 'g', get label() { return `Grief ${D().goals.g} or less`; }, test: S => S.g <= D().goals.g },
+  { k: 'b', get label() { return `Buried grief under ${D().goals.b}`; }, test: S => S.b < D().goals.b }
+];
+const allGoals = S => GOALS.every(gl => gl.test(S));
+function foodBreakdown() {
+  if (!G) return { prod: 0, cons: 0, net: 0 };
+  const season = seasonOf(G.turn);
+  let prod = { spring: 4, summer: 6, autumn: 12, winter: 1 }[season] + (G.biz.farm || 0) * 3 + (G.biz.fishmarket || 0) * (season === 'winter' ? 1 : 2);
+  let cons = G.st.p / 8 * D().food + (G.laws.dole ? 2 : 0);
+  return { prod, cons, net: prod - cons };
+}
+const foodCap = () => 80 + (G.built.granary ? 120 : 0);
+
+const ADVISORS = {
+  horatio: { name: 'Horatio', who: 'horatio', perk: 'Bad luck from fate hits half as hard, and you get one extra court hearing each month.', likes: 'Likes honest, patient choices. Hates cruelty.' },
+  polonius: { name: 'Polonius', who: 'polonius', perk: 'Order +2 a month and quick rulings are right more often, but Soul −1 a month.', likes: 'Likes clever schemes. Dislikes "soft" choices.' },
+  gertrude: { name: 'Gertrude', who: 'gertrude', perk: 'Grief −2 and Heart +1 a month.', likes: 'Likes letting the city grieve. Hates pressure to move on.' },
+  laertes: { name: 'Laertes', who: 'laertes', perk: 'Norway\'s threat −3 and Order +1 a month.', likes: 'Likes quick, decisive action. Hates waiting.' }
+};
+const BETRAYALS = {
+  horatio: { text: 'Even Horatio leaves the court. He will not serve a ruler like this.', fx: { s: -5, h: -5 } },
+  polonius: { text: 'Polonius sells your secrets to Norway.', fx: { o: -5 }, threat: 20 },
+  gertrude: { text: 'Gertrude withdraws from court in grief and anger.', fx: { h: -8, g: 6 } },
+  laertes: { text: 'Laertes raises a mob against you, just as he did against Claudius.', fx: { o: -12 } }
+};
+const CASES = [
+  { name: 'A stolen horse', sev: 1, desc: 'A farmer swears his neighbor stole his horse.' },
+  { name: 'Polonius\'s estate', sev: 2, desc: 'Distant cousins fight over the dead chamberlain\'s house.' },
+  { name: 'The sailor accused of piracy', sev: 2, desc: 'A sailor says he was captured by pirates, not one of them.' },
+  { name: 'The poisoned well', sev: 3, desc: 'Three families fell sick after drinking from the same well.' },
+  { name: 'A duel between nobles', sev: 2, desc: 'Two young lords fought with sharpened foils, like Hamlet and Laertes.' },
+  { name: 'The maid who spied for Claudius', sev: 2, desc: 'A maid is accused of carrying secrets to the old king.' },
+  { name: 'The gravedigger\'s bones', sev: 1, desc: 'Families say the gravedigger sold old bones to a medicine seller.' },
+  { name: 'A broken contract', sev: 1, desc: 'A merchant refused to pay for a ship\'s cargo.' },
+  { name: 'The tavern brawl', sev: 1, desc: 'A fight over the old king\'s memory left a man badly hurt.' },
+  { name: 'The forged royal letter', sev: 3, desc: 'A letter with the royal seal ordered a man\'s arrest, like the one meant for Hamlet. Nobody remembers writing it.' },
+  { name: 'The cheated widow', sev: 2, desc: 'A widow says her husband\'s brother stole her land, the way Claudius took a crown.' },
+  { name: 'The sleeping guard', sev: 1, desc: 'A guard slept on watch the night the ghost appeared.' }
+];
+const PETITIONS = [
+  { who: 'crowd', text: 'A widow asks for help to bury her husband.', a: { label: 'Pay for the funeral.', fx: { m: -3, g: -3, h: 2 }, grief: 'together', tag: 'good' }, b: { label: 'Tell her to be strong and move on.', fx: { b: 3, h: -1 }, grief: 'pressure', tag: 'dark' } },
+  { who: 'crowd', text: 'A boy says the ghost told him to burn the castle down.', a: { label: 'Send a healer to his family.', fx: { m: -2, h: 1 }, tag: 'good' }, b: { label: 'Lock him up.', fx: { o: 1, h: -2, s: -1 }, tag: 'dark' } },
+  { who: 'merchant', text: 'A merchant offers a heavy purse in exchange for lower taxes.', a: { label: 'Refuse the bribe.', fx: { s: 2 }, tag: 'good' }, b: { label: 'Take it.', fx: { m: 6, s: -4, j: -1 }, tag: 'dark' } },
+  { who: 'crowd', text: 'The town\'s children ask for a festival day.', a: { label: 'Grant it.', fx: { m: -3, h: 3, b: 1 }, tag: 'neutral' }, b: { label: 'Not while the city mourns.', fx: { h: -1, g: -1 }, tag: 'neutral' } },
+  { who: 'captain', text: 'A fisherman lost his boat in the last storm.', a: { label: 'Buy him a new one.', fx: { m: -4, h: 2, p: 1 }, tag: 'good' }, b: { label: 'The sea takes what it takes.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'guard', text: 'A soldier reports that his captain takes bribes.', a: { label: 'Open a court case.', fx: {}, tag: 'good', addCase: { name: 'The bribed captain', sev: 2, desc: 'A guard captain is accused of taking bribes.' } }, b: { label: 'Ignore it.', fx: { s: -2, o: -1 }, tag: 'dark' } },
+  { who: 'gertrude', text: 'A mother has worn black for a year. Her neighbors mock her for it.', a: { label: 'Defend her right to grieve as long as she needs.', fx: { h: 2, g: -1 }, grief: 'together', tag: 'good' }, b: { label: 'Agree that it\'s been long enough.', fx: { b: 3 }, grief: 'pressure', tag: 'dark' } },
+  { who: 'fortinbras', text: 'A family from Norway asks to settle in Elsinore.', a: { label: 'Welcome them.', fx: { p: 2 }, threat: -4, tag: 'good' }, b: { label: 'Turn them away.', fx: { o: 1 }, threat: 3, tag: 'neutral' } },
+  { who: 'apothecary', text: 'The apothecary\'s apprentice offers you "something for your enemies."', a: { label: 'Report him to the court.', fx: { j: 2 }, tag: 'good' }, b: { label: 'Slip it into your pocket.', fx: { s: -5 }, flag: 'poison', tag: 'dark' } },
+  { who: 'friends', text: 'Two brothers stopped speaking after their father died. One asks you to help.', a: { label: 'Bring them together to talk.', fx: { h: 2, g: -2 }, grief: 'together', tag: 'good' }, b: { label: 'Family business isn\'t the crown\'s business.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'guard', text: 'A guard confesses he lied in court last month.', a: { label: 'Reopen the case.', fx: { j: 3, o: -1 }, tag: 'good' }, b: { label: 'Keep it quiet.', fx: { s: -3, j: -2 }, tag: 'dark' } },
+  { who: 'scholar', text: 'A street preacher shouts that fate has already doomed the city.', a: { label: 'Let him speak.', fx: { o: -1, s: 1 }, tag: 'good' }, b: { label: 'Silence him.', fx: { o: 2, s: -2, h: -1 }, tag: 'dark' } }
+];
+const FATE_GUARD = { 1: ['hospital', 'granary'], 2: ['navy'], 3: ['granary'], 4: ['granary'] };
+const PORTRAITS_MORE = {
+  student: { skin: '#efd2b8', hair: '#6b4423', hat: 'scholar', robe: '#3b3f6b' },
+  priest: { skin: '#e2c09f', hair: '#9a9a9a', hat: 'hood', robe: '#1d1d22' },
+  noble: { skin: '#e8c9ae', hair: '#3a2a1e', hat: 'feather', robe: '#5b2a2a', beard: true },
+  courtier: { skin: '#efd2b8', hair: '#c9a66b', hat: 'cap', robe: '#5b6e2a' },
+  healer: { skin: '#d9b48e', hair: '#5a3a24', hat: 'hood', robe: '#e4e0d4' },
+  soldier: { skin: '#c99a76', hair: '#6b6b6b', hat: 'helm', robe: '#46505a', beard: true },
+  astrologer: { skin: '#e2c09f', hair: '#d6d3cc', hat: 'jester', robe: '#2b2f6e', beard: true }
+};
+Object.assign(PORTRAITS, PORTRAITS_MORE);
+const BUSINESSES = {
+  bakery: { name: 'Bakery', icon: 'bread', cost: 8, base: 2, color: '#c98f5f', desc: 'Fresh bread every morning. Heart +0.3 per level.', fx: { h: 0.3 } },
+  fishmarket: { name: 'Fish market', icon: 'fish', cost: 10, base: 3, color: '#4f7d9c', desc: 'Herring from the Sound. Pirate raids hurt it.', fx: {} },
+  weavers: { name: 'Weavers\' workshop', icon: 'cloth', cost: 12, base: 3, color: '#7c63a8', desc: 'Wool and linen for half of Denmark. People +0.3 per level.', fx: { p: 0.3 } },
+  brewery: { name: 'Brewery', icon: 'mug', cost: 12, base: 4, color: '#b8963e', desc: 'Danish ale. Heart +0.5 but Order −0.5 per level.', fx: { h: 0.5, o: -0.5 } },
+  inn: { name: 'Inn and tavern', icon: 'inn', cost: 12, base: 3, color: '#8e3b2e', eq: 5, desc: 'Where neighbors meet to celebrate and to mourn. Grief −0.5 per level.', fx: { g: -0.5 } },
+  smithy: { name: 'Smithy', icon: 'anvil', cost: 14, base: 3, color: '#5a625f', desc: 'Tools and swords. Order +0.3 and Norway\'s threat −1 per level.', fx: { o: 0.3 }, threat: -1 },
+  press: { name: 'Printing press', icon: 'book', cost: 16, base: 2, color: '#2c3554', eq: 1, desc: 'Law books for everyone. Justice +0.5 and Soul +0.3 per level.', fx: { j: 0.5, s: 0.3 } },
+  shipyard: { name: 'Shipyard', icon: 'ship', cost: 20, base: 5, color: '#6b4a2e', desc: 'Builds trading ships. Big income, slow to pay back.', fx: {} },
+  lender: { name: 'Moneylender', icon: 'coin', cost: 10, base: 5, color: '#6d4b8a', eq: 11, dark: true, desc: 'Profits from people\'s debts. Soul −0.7 and Heart −0.5 per level.', fx: { s: -0.7, h: -0.5 } },
+  mine: { name: 'Silver mine', icon: 'pick', cost: 24, base: 7, color: '#9aa5a8', eq: 11, dark: true, desc: 'Rich but deadly work. People −0.7 and Soul −0.3 per level.', fx: { p: -0.7, s: -0.3 } }
+};
+BUSINESSES.farm = { name: 'Farmstead', icon: 'wheat', cost: 8, base: 1, color: '#9a8a3a', desc: 'Grows grain for the city. Food +3 and Treasury +1 per level.', fx: {} };
+const bizUpCost = (k, lvl) => Math.round(BUSINESSES[k].cost * (lvl === 0 ? 1 : lvl === 1 ? 1.5 : 2));
+function incomeBreakdown() {
+  if (!G) return { taxes: 0, biz: 0, other: 0, total: 0 };
+  const S = G.st, B = G.built;
+  const taxes = S.p / 12 * D().tax - 1;
+  let biz = 0; for (const k in G.biz) biz += BUSINESSES[k].base * G.biz[k];
+  let other = -(G.debt || 0) - (B.walls ? 1 : 0) - (seasonOf(G.turn) === 'winter' ? 1 : 0);
+  for (const k in B) if (BUILDINGS[k] && BUILDINGS[k].up.m) other += BUILDINGS[k].up.m;
+  for (const k in G.laws) if (G.laws[k] && LAWS[k].fx.m) other += LAWS[k].fx.m;
+  return { taxes, biz, other, total: taxes + biz + other };
+}
+CASES.push(
+  { name: 'The counterfeit coins', sev: 2, desc: 'Fake silver coins are turning up in the market.' },
+  { name: 'The runaway apprentice', sev: 1, desc: 'A blacksmith\'s apprentice ran off with his tools.' },
+  { name: 'The haunted house sale', sev: 1, desc: 'A buyer wants his money back because the house is "haunted."' },
+  { name: 'The burned barn', sev: 2, desc: 'A barn burned down and two neighbors blame each other.' },
+  { name: 'The noble\'s debt', sev: 2, desc: 'A lord refuses to pay a tailor for a year of clothes.' },
+  { name: 'The false witness', sev: 3, desc: 'A man was hanged last year. Now the witness says he lied.' },
+  { name: 'The smuggled wine', sev: 1, desc: 'Barrels of untaxed wine were found in a cellar.' },
+  { name: 'The poisoned dog', sev: 1, desc: 'A neighbor is accused of poisoning a noisy dog.' },
+  { name: 'The stolen crown jewel', sev: 3, desc: 'A pearl from the royal treasury is missing, like the "union" Claudius dropped in Hamlet\'s cup.' },
+  { name: 'The fishing rights', sev: 2, desc: 'Two villages both claim the same stretch of coast.' },
+  { name: 'The duel of honor', sev: 2, desc: 'A young man killed his sister\'s suitor in a duel.' },
+  { name: 'The ship that never arrived', sev: 2, desc: 'Merchants say a captain sold their cargo and sank his own ship.' }
+);
+PETITIONS.push(
+  { who: 'merchant', text: 'A baker whose shop burned down asks for help to rebuild.', a: { label: 'Pay to rebuild it.', fx: { m: -6, h: 2 }, gift: 'bakery', tag: 'good' }, b: { label: 'Fires happen.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'captain', text: 'A sailor wants to name his new ship after the old king.', a: { label: 'Allow it, and attend the launch.', fx: { g: -2, h: 2 }, grief: 'together', tag: 'good' }, b: { label: 'It\'s time to stop living in the past.', fx: { b: 2 }, grief: 'pressure', tag: 'dark' } },
+  { who: 'student', text: 'A farmer\'s daughter wants to study law.', a: { label: 'Pay for her studies.', fx: { m: -3, j: 2, s: 1 }, tag: 'good' }, b: { label: 'The law is for nobles.', fx: { s: -2 }, tag: 'dark' } },
+  { who: 'soldier', text: 'An old soldier asks for the pension he was promised.', a: { label: 'Pay what he was promised.', fx: { m: -4, j: 2 }, tag: 'good' }, b: { label: 'The treasury is too tight.', fx: { j: -2, h: -1 }, tag: 'dark' } },
+  { who: 'friends', text: 'Two young people from feuding families ask permission to marry.', a: { label: 'Bless the marriage.', fx: { h: 3, o: -1 }, tag: 'good' }, b: { label: 'Their families must agree first.', fx: { o: 1, h: -1 }, tag: 'neutral' } },
+  { who: 'player', text: 'A street singer mocks you in a popular song.', a: { label: 'Laugh, and ask for an encore.', fx: { h: 2, s: 2 }, tag: 'good' }, b: { label: 'Arrest him.', fx: { o: 1, s: -3, h: -2 }, tag: 'dark' } },
+  { who: 'crowd', text: 'A farmer asks to bury his old dog in the churchyard.', a: { label: 'Allow it. Grief is grief.', fx: { h: 1, g: -1 }, grief: 'together', tag: 'good' }, b: { label: 'The churchyard is for people.', fx: {}, tag: 'neutral' } },
+  { who: 'crowd', text: 'Children orphaned by sickness need a home.', a: { label: 'Open an orphanage.', fx: { m: -6, h: 3, s: 3, p: 1 }, tag: 'good' }, b: { label: 'Let the church handle it.', fx: { s: -2 }, tag: 'neutral' } },
+  { who: 'gravedigger', text: 'The gravedigger asks for a raise. "Business is good, sadly."', a: { label: 'Give him his raise.', fx: { m: -2, h: 1 }, tag: 'good' }, b: { label: 'Refuse.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'noble', text: 'A lord demands a servant be whipped for looking at him rudely.', a: { label: 'Refuse. That\'s not a crime.', fx: { j: 2, s: 2, o: -1 }, tag: 'good' }, b: { label: 'Do as the lord asks.', fx: { o: 1, s: -4, j: -3 }, tag: 'dark' } },
+  { who: 'captain', text: 'A captain offers to smuggle goods past the tax collectors and split the profit.', a: { label: 'Refuse and warn the customs house.', fx: { j: 2, s: 1 }, tag: 'good' }, b: { label: 'Take the deal.', fx: { m: 7, s: -4, j: -2 }, tag: 'dark' } },
+  { who: 'crowd', text: 'A man swears the ghost told him where treasure is buried.', a: { label: 'Let him dig, at his own cost.', fx: { h: 1 }, tag: 'neutral' }, b: { label: 'Pay a crew to dig.', fx: { m: -3 }, gamble: true, tag: 'neutral' } },
+  { who: 'crowd', text: 'Villagers ask for a bridge so they can reach the market.', a: { label: 'Build it.', fx: { m: -6, p: 2 }, tag: 'good' }, b: { label: 'They can walk.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'healer', text: 'A healer asks permission to study the dead to understand the plague.', a: { label: 'Allow it, with families\' consent.', fx: { p: 2, s: 1 }, tag: 'good' }, b: { label: 'Forbid it. The dead should rest.', fx: { g: 1 }, tag: 'neutral' } },
+  { who: 'captain', text: 'Fishermen ask for a lighthouse after the last wreck.', a: { label: 'Build one.', fx: { m: -6, p: 1, h: 1 }, tag: 'good' }, b: { label: 'Sailors should know the coast.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'fortinbras', text: 'A Norwegian merchant wants to open a shop in Elsinore.', a: { label: 'Welcome him.', fx: { m: 2 }, threat: -3, tag: 'good' }, b: { label: 'No foreign shops.', fx: { o: 1 }, threat: 2, tag: 'neutral' } },
+  { who: 'gertrude', text: 'A widow asks to keep wearing black at court, though the year of mourning is over.', a: { label: 'She may grieve as long as she needs.', fx: { h: 1, g: -1 }, grief: 'together', tag: 'good' }, b: { label: 'Court has rules.', fx: { b: 2 }, grief: 'pressure', tag: 'dark' } },
+  { who: 'merchant', text: 'The innkeepers ask to stay open past curfew.', a: { label: 'Allow it.', fx: { h: 2, o: -2, m: 2 }, tag: 'neutral' }, b: { label: 'Rules are rules.', fx: { o: 1, h: -1 }, tag: 'neutral' } }
+);
+
+
+/* ---------------- Tutorial & goals ---------------- */
+const TUT = {
+  welcome: { target: 'goalbar', title: 'Welcome to Elsinore', get text() { return `You rule this city for ${D().months} months on ${D().name} difficulty. To beat the game, finish the last month with all four goals in the goal bar checked: ${GOALS.map(g => g.label).join(', ')}.` + ' Your reign ends early if Order, Treasury, Soul or People hit zero, or if Norway invades and wins.'; }, _x: ' Your reign ends early if Order, Treasury, Soul or People hit zero, or if Norway invades and wins.' },
+  meters: { target: 'meters', title: 'Your three questions', text: 'The three big bars are your essential questions. Justice is question 1. Heart, with the gray grief bar under it, is question 5. Soul, the struggle between good and evil, is question 11. The small bars keep the city alive.' },
+  hud: { target: 'hud2', title: 'Watch these too', text: 'Norway\'s threat grows every month. Waiting court cases lose patience. Food runs out if you don\'t grow or buy it. Income shows how much gold you\'ll get next month.' },
+  fate: { target: 'fateBox', title: 'Fate rolls the die', text: 'Every month starts with a 12-sided die, like the one from your class. Good and bad luck both happen. Once per game, you can beg the ghost to roll again, but it costs Soul.' },
+  card: { target: 'decree', title: 'A problem for the crown', text: 'Someone from Hamlet needs a decision. The tags under each answer hint at what will go up or down. Some choices come back months later with consequences.' },
+  desk: { target: 'decree', title: 'The royal desk', text: 'Now you run the city. You get 3 royal actions a month (the red dots) plus court hearings. Each tab is a different job.' },
+  court: { target: 'tab-court', title: 'Court (question 1)', text: 'A full hearing is fair but slow. Ruling today is fast but often wrong. Cases left waiting lose patience, and at zero the families take revenge themselves. Justice is hard to keep high: it slips every month, and the higher it is, the harder it is to raise.' },
+  trade: { target: 'tab-trade', title: 'Trade', text: 'Make money with businesses, trade voyages and selling treasures. Keep an eye on food: farms, fish and voyages to Poland feed the city.' },
+  tabs: { target: 'tabsrow', title: 'Build, Laws, Advisors, Petitions', text: 'Build places to grieve and protect against fate. Pass up to 3 laws. Pick a right-hand advisor, and don\'t let anyone\'s loyalty fall too low. Answer petitions, or click the speech bubbles over the houses.' },
+  end: { target: 'endMonthBtn', title: 'End the month', text: 'When you\'re done, end the month. Buildings grow, laws take effect, trials finish and new problems arrive. Good luck, ruler of Elsinore.' }
+};
+const tut = { on: false, seen: {}, queue: [] };
+try { tut.done = localStorage.getItem('elsinore-tutorial') === 'done'; } catch (e) { tut.done = false; }
+function tutShow(...keys) {
+  if (!tut.on) return;
+  for (const k of keys) if (!tut.seen[k] && !tut.queue.includes(k)) tut.queue.push(k);
+  if (!$('coach').hidden) return; tutNext(true);
+}
+function tutNext(first) {
+  document.querySelectorAll('.coach-target').forEach(el => el.classList.remove('coach-target'));
+  if (!first && tut.cur) tut.seen[tut.cur] = true;
+  const k = tut.queue.shift(); tut.cur = k;
+  if (!k) { $('coach').hidden = true; return; }
+  const T = TUT[k], el = $(T.target);
+  $('coachTitle').textContent = T.title; $('coachText').textContent = T.text;
+  $('coachStep').textContent = `Tutorial ${Object.keys(TUT).indexOf(k) + 1} of ${Object.keys(TUT).length}`;
+  $('coachNext').textContent = k === 'end' ? 'Got it' : 'Next';
+  $('coach').hidden = false;
+  if (el) { el.classList.add('coach-target'); if (window.innerWidth <= 900) el.scrollIntoView({ block: 'nearest' }); }
+  if (k === 'end') { tut.on = false; try { localStorage.setItem('elsinore-tutorial', 'done'); } catch (e) {} }
+}
+$('coachNext').addEventListener('click', () => tutNext(false));
+$('coachSkip').addEventListener('click', () => { tut.on = false; tut.queue = []; $('coach').hidden = true; document.querySelectorAll('.coach-target').forEach(el => el.classList.remove('coach-target')); try { localStorage.setItem('elsinore-tutorial', 'done'); } catch (e) {} });
+function renderGoals() {
+  const S = G ? G.st : { j: 45, s: 55, g: 60, b: 0 };
+  $('goalbar').innerHTML = `<span class="gl">To win (${D().name}, ${D().months} months):</span>` + GOALS.map(gl => { const ok = gl.test(S); return `<span class="goal ${ok ? 'ok' : ''}">${ok ? '✓' : '○'} ${gl.label} <i>(${Math.round(S[gl.k])})</i></span>`; }).join('');
+}
+$('howBtn').addEventListener('click', () => { $('howto').hidden = false; $('howClose').focus(); });
+$('howClose').addEventListener('click', () => { $('howto').hidden = true; });
+
+/* ---------------- Core helpers ---------------- */
+function applyFx(fx, mult = 1) {
+  const changed = {};
+  for (const k in fx) { if (!(k in G.st)) continue; const before = G.st[k]; let v = fx[k] * mult; if (k === 'j' && v > 0) v *= Math.max(0.15, 1 - G.st.j / 110); G.st[k] = (k === 'm' ? clampM : clamp)(G.st[k] + v); const d = Math.round(G.st[k] - before); if (d) changed[k] = d; }
+  return changed;
+}
+function addThreat(n) { const b = G.threat; G.threat = clamp(G.threat + n); return Math.round(G.threat - b); }
+function deltaHTML(ch, threat) {
+  let s = Object.entries(ch).map(([k, d]) => { const good = k === 'g' || k === 'b' ? d < 0 : d > 0; return `<span class="delta ${good ? 'pos' : 'neg'}">${LABEL[k]} ${d > 0 ? '+' : ''}${d}</span>`; }).join('');
+  if (threat) s += `<span class="delta ${threat < 0 ? 'pos' : 'neg'}">Norway's threat ${threat > 0 ? '+' : ''}${threat}</span>`;
+  return s;
+}
+function showBanner(big, small, ms = 2200) {
+  $('bannerBig').textContent = big; $('bannerSmall').textContent = small || '';
+  const b = $('banner'); b.style.opacity = 1; clearTimeout(b._t); b._t = setTimeout(() => { b.style.opacity = 0; }, ms);
+}
+function setWhen() { $('when').textContent = G ? `${MONTHS[monthOf(G.turn)]}, month ${G.turn} of ${G.months} · ${D().name}` : 'A city waiting for its ruler'; }
+function react(o) {
+  const add = (k, v) => { if (!G.gone[k]) G.adv[k] = clamp(G.adv[k] + v); };
+  if (o.tag === 'good') { add('horatio', 4); add('polonius', -2); }
+  if (o.tag === 'dark') { add('horatio', -6); add('polonius', 3); }
+  if (o.grief === 'together') add('gertrude', 5); if (o.grief === 'pressure') add('gertrude', -6);
+  if (o.quick) { add('laertes', 4); add('horatio', -1); }
+  if (o.patient) { add('laertes', -2); add('horatio', 2); }
+  if (o.tag) G[o.tag === 'good' ? 'good' : o.tag === 'dark' ? 'dark' : 'neutral']++;
+  if (o.grief === 'together') G.grievedTogether++; if (o.grief === 'pressure') G.pressured++;
+}
+function giveGift(k) {
+  if (BUSINESSES[k]) { G.biz[k] = Math.max(1, G.biz[k] || 0); G.bizOpened = G.bizOpened || {}; G.bizOpened[k] = performance.now(); }
+  else if (BUILDINGS[k]) { G.built[k] = performance.now(); delete G.building[k]; }
+}
+function newCase(tpl, extra) {
+  const c = Object.assign({ id: ++G.cid, status: 'waiting', patience: Math.max(1, 2 + tpl.sev + (G.laws.opencourt ? 1 : 0) - D().patience) }, tpl, extra || {});
+  G.docket.push(c); return c;
+}
+function spawnCases(n) {
+  for (let i = 0; i < n; i++) {
+    let pool = CASES.filter(c => !G.caseUsed.has(c.name));
+    if (!pool.length) { G.caseUsed = new Set(G.docket.map(c => c.name)); pool = CASES.filter(c => !G.caseUsed.has(c.name)); }
+    if (pool.length) { const c = pick(pool); G.caseUsed.add(c.name); newCase(c); }
+  }
+}
+function spawnPetitions(n) {
+  for (let i = 0; i < n; i++) {
+    let pool = PETITIONS.map((_, k) => k).filter(k => !G.petUsed.has(k));
+    if (!pool.length) { G.petUsed = new Set(G.petitions.map(p => p.tpl)); pool = PETITIONS.map((_, k) => k).filter(k => !G.petUsed.has(k)); }
+    const idx = pick(pool); G.petUsed.add(idx);
+    const h = pick(HOUSES.filter(h => h.y >= 560)); G.petitions.push({ id: ++G.pid, tpl: idx, x: h.x, y: h.y - h.h - h.w * 0.55 - 14 });
+  }
+}
+
+/* ---------------- Month flow ---------------- */
+function renderDiffs() {
+  $('diffs').innerHTML = Object.entries(DIFFS).map(([k, v]) => `<button class="diff" role="radio" aria-checked="${k === selDiff}" data-diff="${k}">${v.name}</button>`).join('');
+  $('diffs').querySelectorAll('.diff').forEach(b => b.addEventListener('click', () => { selDiff = b.dataset.diff; try { localStorage.setItem('elsinore-diff', selDiff); } catch (e) {} renderDiffs(); renderGoals(); }));
+  $('wincard').innerHTML = `<b>${DIFFS[selDiff].name}:</b> ${DIFFS[selDiff].blurb}`;
+}
+renderDiffs();
+function startGame() {
+  sound.init();
+  newGame($('rulerName').value.trim());
+  $('title').hidden = true; spawnCases(1); spawnPetitions(2); updateMeters(); setWhen();
+  tut.on = $('tutChk').checked; tut.seen = {}; tut.queue = []; if (tut.on) tutShow('welcome', 'meters', 'hud');
+  sound.bell();
+  showBanner('Long live ' + G.name, 'Your reign begins in a city still dressed in black.', 2600);
+  setTimeout(beginTurn, reduceMotion ? 300 : 1800);
+}
+$('startBtn').addEventListener('click', startGame);
+$('rulerName').addEventListener('keydown', e => { if (e.key === 'Enter') startGame(); });
+
+function fatePreview(F) {
+  const guard = FATE_GUARD[F.n] || [], guarded = guard.some(k => G.built[k]);
+  const block = F.n === 2 && G.built.navy;
+  const bad = Object.entries(F.fx).reduce((a, [k, v]) => a + (k === 'g' || k === 'b' ? -v : v), 0) < 0;
+  const half = bad && (G.flags.ally || G.right === 'horatio');
+  let mult = block ? 0 : (guarded ? 0.5 : 1) * (half ? 0.5 : 1) * (bad ? D().bad : 1);
+  return { mult, notes: [block ? 'Your harbor fort drives the pirates off.' : guarded ? 'You prepared for this: the damage is halved.' : '', half && !block ? 'Horatio shares the burden, so the blow lands softer.' : ''].filter(Boolean) };
+}
+function beginTurn() {
+  G.phase = 'fate'; setWhen(); $('decree').hidden = true;
+  rollFate(false);
+}
+function rollFate(isGhost) {
+  const roll = 1 + (Math.random() * 12 | 0), F = FATES[roll - 1]; G.pendingFate = F;
+  const box = $('fateBox'); $('fate').hidden = false;
+  $('fateTitle').textContent = isGhost ? 'The ghost rolls the die again' : 'Fate rolls the die'; $('fateText').textContent = ''; $('fateFx').innerHTML = ''; $('fateBtn').hidden = true; $('ghostBtn').hidden = true;
+  box.classList.remove('rolling'); void box.offsetWidth; box.classList.add('rolling'); sound.dice();
+  let n = 0; const iv = setInterval(() => { $('dieNum').textContent = 1 + (Math.random() * 12 | 0); if (++n > 8) clearInterval(iv); }, 90);
+  setTimeout(() => {
+    clearInterval(iv); $('dieNum').textContent = roll;
+    const pv = fatePreview(F), threat = F.n === 11 ? Math.round(10 * (G.built.walls ? 0.5 : 1)) : 0;
+    $('fateTitle').textContent = `${roll}: ${F.name}`;
+    $('fateText').textContent = F.text + (pv.notes.length ? ' ' + pv.notes.join(' ') : '');
+    const preview = {}; for (const k in F.fx) preview[k] = Math.round(F.fx[k] * pv.mult);
+    $('fateFx').innerHTML = deltaHTML(Object.fromEntries(Object.entries(preview).filter(([, v]) => v)), threat);
+    $('fateBtn').hidden = false; $('fateBtn').textContent = 'Accept your fate'; $('fateBtn').focus(); tutShow('fate');
+    const unlucky = Object.entries(preview).reduce((a, [k, v]) => a + (k === 'g' || k === 'b' ? -v : v), 0) < 0;
+    if (!G.ghostUsed && !isGhost && unlucky) $('ghostBtn').hidden = false;
+    if (F.n === 1 || F.n === 4) sound.bell();
+  }, reduceMotion ? 200 : 950);
+}
+$('fateBtn').addEventListener('click', () => {
+  const F = G.pendingFate, pv = fatePreview(F);
+  const ch = applyFx(F.fx, pv.mult); let th = 0;
+  if (F.n === 11) th = addThreat(10 * (G.built.walls ? 0.5 : 1));
+  if (F.help) G.helped++;
+  if (F.trigger && !G.used[F.trigger]) G.trigger.push(F.trigger);
+  G.fates.push(F.n); G.weatherBoost = F.storm ? 1 : 0;
+  const fFood = { 3: -12, 8: 15, 4: -4, 1: -4 }[F.n]; if (fFood) G.food = Math.max(0, Math.min(foodCap(), G.food + fFood * (fFood < 0 && G.built.granary ? 0.5 : 1)));
+  G.log.push(`${MONTHS[monthOf(G.turn)]}: fate rolled ${F.n}, ${F.name.toLowerCase()}.`);
+  updateMeters(ch); $('fate').hidden = true;
+  if (checkCollapse()) return;
+  showCard(nextCard());
+});
+$('ghostBtn').addEventListener('click', () => {
+  G.ghostUsed = true; const ch = applyFx({ s: -D().ghost }); updateMeters(ch); sound.dark();
+  G.log.push(`${MONTHS[monthOf(G.turn)]}: you begged the ghost to change your fate, and paid for it with your soul.`);
+  G.dark++; rollFate(true);
+});
+
+function nextCard() {
+  if (G.turn === 1) return 'funeral';
+  if (G.turn === G.months) return 'finale';
+  if (G.st.b >= 30 && !G.used.buried) return 'buried';
+  if (G.flags.poison && !G.used.poison && G.turn >= 5) return 'poison';
+  const due = G.followups.find(f => f.turn <= G.turn && !G.used[f.card]); if (due) { G.followups = G.followups.filter(f => f !== due); return due.card; }
+  while (G.trigger.length) { const t = G.trigger.shift(); if (!G.used[t]) return t; }
+  while (G.deck.length) { const c = G.deck.shift(); if (!G.used[c]) return c; }
+  return pick(['ghost', 'players', 'fortinbras'].filter(c => !G.used[c])) || 'thief';
+}
+
+function drawPortrait(cv, who) {
+  const P = PORTRAITS[who] || PORTRAITS.crowd, g = cv.getContext('2d'), s = cv.width / 58;
+  g.setTransform(s, 0, 0, s, 0, 0); g.clearRect(0, 0, 58, 58);
+  const bg = g.createRadialGradient(29, 22, 4, 29, 29, 34); bg.addColorStop(0, P.ghost ? '#dfe8ee' : '#efe6cf'); bg.addColorStop(1, P.ghost ? '#7d8f9a' : '#b9ab88'); g.fillStyle = bg; g.fillRect(0, 0, 58, 58);
+  g.globalAlpha = P.ghost ? 0.82 : 1;
+  g.fillStyle = P.robe; g.beginPath(); g.ellipse(29, 60, 24, 18, 0, 0, Math.PI * 2); g.fill();
+  if (P.long) { g.fillStyle = P.hair; g.fillRect(15, 18, 28, 30); }
+  g.fillStyle = P.skin; g.beginPath(); g.ellipse(29, 28, 11, 13, 0, 0, Math.PI * 2); g.fill();
+  g.fillStyle = P.hair; g.beginPath(); g.ellipse(29, 19, 12, 7, 0, Math.PI, 0); g.fill(); g.fillRect(17, 17, 4, 9); g.fillRect(37, 17, 4, 9);
+  if (P.beard) { g.beginPath(); g.ellipse(29, 37, 9, 6, 0, 0, Math.PI); g.fill(); }
+  g.fillStyle = '#2a231b'; g.fillRect(24, 27, 3, 2); g.fillRect(32, 27, 3, 2); g.fillStyle = '#8b4a3c'; g.fillRect(26, 34, 7, 1.5);
+  const hat = { crown() { g.fillStyle = '#d4a52c'; g.fillRect(18, 12, 22, 5); for (const x of [18, 27, 36]) { g.beginPath(); g.moveTo(x, 12); g.lineTo(x + 2, 6); g.lineTo(x + 4, 12); g.fill(); } },
+    helm() { g.fillStyle = P.ghost ? '#aebfc8' : '#7a858c'; g.beginPath(); g.ellipse(29, 18, 13, 9, 0, Math.PI, 0); g.fill(); g.fillRect(16, 17, 26, 3); g.fillRect(28, 6, 2, 6); },
+    cap() { g.fillStyle = '#2a2a2a'; g.beginPath(); g.ellipse(29, 16, 12, 5, 0, Math.PI, 0); g.fill(); },
+    hood() { g.fillStyle = P.robe; g.beginPath(); g.moveTo(14, 36); g.quadraticCurveTo(29, -4, 44, 36); g.lineTo(40, 36); g.quadraticCurveTo(29, 8, 18, 36); g.fill(); },
+    flowers() { ['#e7a6c0', '#f3e59a', '#c7d9ef', '#e7a6c0'].forEach((c, i) => { g.fillStyle = c; g.beginPath(); g.arc(19 + i * 7, 14 + (i % 2) * 2, 2.6, 0, Math.PI * 2); g.fill(); }); },
+    jester() { g.fillStyle = '#a33b4a'; g.beginPath(); g.moveTo(17, 17); g.lineTo(10, 6); g.lineTo(29, 13); g.lineTo(48, 6); g.lineTo(41, 17); g.fill(); g.fillStyle = '#e8b04a'; g.beginPath(); g.arc(10, 6, 2, 0, 7); g.arc(48, 6, 2, 0, 7); g.fill(); },
+    scholar() { g.fillStyle = '#1e1b2e'; g.fillRect(17, 12, 24, 4); g.fillRect(21, 8, 16, 5); },
+    feather() { g.fillStyle = '#9d2b5b'; g.fillRect(16, 13, 26, 4); g.fillStyle = '#f2c4d6'; g.beginPath(); g.moveTo(38, 13); g.quadraticCurveTo(50, 2, 46, 14); g.fill(); },
+    tricorn() { g.fillStyle = '#1b1b1b'; g.beginPath(); g.moveTo(13, 17); g.lineTo(29, 6); g.lineTo(45, 17); g.fill(); g.fillStyle = '#e8e2d0'; g.fillRect(27, 10, 4, 3); } };
+  if (hat[P.hat]) hat[P.hat]();
+  g.globalAlpha = 1;
+}
+function chipsFor(o) {
+  if (o.gamble) return '<span class="chip">Justice: a gamble</span>';
+  const fx = o.fx || {}, out = [];
+  for (const k of ['j', 'h', 'g', 'b', 's', 'o', 'm', 'p']) if (fx[k]) { const v = fx[k], good = (k === 'g' || k === 'b') ? v < 0 : v > 0; out.push(`<span class="chip ${good ? 'good' : 'bad'}">${LABEL[k]} ${v > 0 ? '▲' : '▼'}</span>`); }
+  if (o.threat) out.push(`<span class="chip ${o.threat < 0 ? 'good' : 'bad'}">Norway ${o.threat > 0 ? '▲' : '▼'}</span>`);
+  if (o.pending) out.push(`<span class="chip">A hearing: ${o.pending.turns} month${o.pending.turns > 1 ? 's' : ''}</span>`);
+  if (o.food) out.push(`<span class="chip ${o.food > 0 ? 'good' : 'bad'}">Food ${o.food > 0 ? '▲' : '▼'}</span>`);
+  if (o.debt) out.push(`<span class="chip bad">Debt</span>`);
+  if (o.tag === 'good' && D().goodCost) out.push(`<span class="chip bad">Costs ${D().goodCost} gold</span>`);
+  if (o.build) out.push(`<span class="chip">Builds the ${BUILDINGS[o.build] ? BUILDINGS[o.build].name.toLowerCase() : 'council hall'}</span>`);
+  return out.join('');
+}
+function showCard(id) {
+  const C = CARDS[id]; G.used[id] = true; G.phase = 'decide'; G.card = id;
+  let pre = '';
+  if (C.onShow) { const ch = applyFx(C.onShow); updateMeters(ch); pre = `<div class="deltas">${deltaHTML(ch)}</div>`; sound.dark(); }
+  const d = $('decree'); d.hidden = false;
+  d.innerHTML = `<div class="who"><canvas width="116" height="116" id="portrait"></canvas><div><h2>${C.title}</h2><div class="speaker">${C.speaker}</div></div></div>
+    <p>${C.text}</p>${pre}<blockquote>“${C.quote[0]}”<cite>${C.quote[1]}</cite></blockquote>
+    <div class="choices" role="group" aria-label="Your decision">${C.options.map((o, i) => `<button class="choice" data-i="${i}"><span class="k">${i + 1}.</span>${o.label}<div class="chips">${chipsFor(o)}</div></button>`).join('')}</div>`;
+  drawPortrait($('portrait'), C.who); tutShow('card');
+  d.querySelectorAll('.choice').forEach(b => b.addEventListener('click', () => choose(+b.dataset.i)));
+  d.scrollTop = 0; d.querySelector('.choice').focus({ preventScroll: true });
+  if (window.innerWidth <= 900) d.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+function choose(i) {
+  if (G.phase !== 'decide') return;
+  G.phase = 'outcome';
+  const C = CARDS[G.card], o = C.options[i];
+  let fx = o.fx || {}, out = o.out;
+  if (o.gamble) { const r = Math.random() < 0.5 ? o.gamble[0] : o.gamble[1]; fx = r.fx; out = r.out; }
+  const ch = applyFx(fx); let th = 0;
+  if (G.card === 'fortinbras') { if (i === 0) { G.treaty = true; th = addThreat(-30); } else if (i === 1) th = addThreat(-15); else { G.bribed = true; th = addThreat(-20); } }
+  if (o.build) { G.built[o.build] = performance.now(); delete G.building[o.build]; sound.build(); }
+  if (o.flag) G.flags[o.flag] = true;
+  if (o.threat) th = addThreat(o.threat);
+  if (o.gift) giveGift(o.gift);
+  if (o.adv) for (const k in o.adv) if (!G.gone[k]) G.adv[k] = clamp(G.adv[k] + o.adv[k]);
+  if (o.delay) for (const k in G.building) G.building[k] += o.delay;
+  if (o.follow) G.followups.push({ card: o.follow.card, turn: G.turn + o.follow.after });
+  if (o.unbuild) delete G.built[o.unbuild];
+  if (o.cases) spawnCases(o.cases);
+  if (o.ally) G.flags.ally = true;
+  if (o.help) G.helped++;
+  if (o.pending) { newCase({ name: o.pending.name, sev: 2, desc: 'An investigation ordered by the crown.' }, { status: 'hearing', left: o.pending.turns, fx: o.pending.fx, text: o.pending.text }); }
+  if (o.tag === 'good' && D().goodCost) Object.assign(ch, (() => { const c2 = applyFx({ m: -D().goodCost }); return c2.m ? { m: (ch.m || 0) + c2.m } : {}; })());
+  if (o.food) G.food = Math.max(0, Math.min(foodCap(), G.food + o.food));
+  if (o.debt) G.debt += o.debt;
+  if (o.fireRight && G.right) { G.adv[G.right] = clamp(G.adv[G.right] - 20); G.log.push(`${MONTHS[monthOf(G.turn)]}: you dismissed ${ADVISORS[G.right].name} as your right hand.`); G.right = null; }
+  react(Object.assign({}, o, { patient: !!o.pending }));
+  if (o.tag === 'good') sound.good(); else if (o.tag === 'dark') sound.dark(); else sound.quill();
+  G.log.push(`${MONTHS[monthOf(G.turn)]}: ${C.title}. You chose: "${o.label}"`);
+  updateMeters(ch);
+  const d = $('decree');
+  d.querySelector('.choices').outerHTML = `<div class="outcome"><p><b>${o.label}</b></p><p>${out}</p><div class="deltas">${deltaHTML(ch, th)}</div></div>
+    <button class="primary" id="toDesk">${G.turn === G.months ? 'See how your reign is judged' : 'Go to the royal desk'}</button>`;
+  $('toDesk').addEventListener('click', () => { if (G.turn === G.months) { finish(null); return; } if (checkCollapse()) return; openDesk(G.docket.some(c => c.status === 'waiting') ? 'court' : 'build'); });
+  $('toDesk').focus({ preventScroll: true });
+}
+
+/* ---------------- The royal desk ---------------- */
+const TABS = [['court', 'Court'], ['trade', 'Trade'], ['build', 'Build'], ['laws', 'Laws'], ['advisors', 'Advisors'], ['petitions', 'Petitions']];
+function openDesk(tab) { G.phase = 'desk'; G.deskTab = tab || G.deskTab; renderDesk(); $('decree').hidden = false; tutShow('desk', 'court', 'trade', 'tabs', 'end'); }
+function dots(n, max) { return Array.from({ length: max }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join(''); }
+function renderDesk(focusId) {
+  const d = $('decree'), tab = G.deskTab;
+  const waiting = G.docket.filter(c => c.status === 'waiting').length;
+  const badge = { court: waiting, petitions: G.petitions.length };
+  let body = '';
+  if (tab === 'court') {
+    body = `<p class="hint">Each month you can hold <b>${G.slots}</b> full hearing${G.slots === 1 ? '' : 's'}. A fair hearing takes time; ruling today is quick but risky. Every case left waiting loses patience, and Justice slips a little each month.</p>`;
+    if (!G.docket.length) body += '<p class="empty">The court is empty this month.</p>';
+    for (const c of G.docket) {
+      const sevTxt = ['', 'Minor', 'Serious', 'Grave'][c.sev];
+      body += `<div class="item${c.id === focusId ? ' focus' : ''}"><div class="item-h"><b>${c.name}</b><span class="tag sev${c.sev}">${sevTxt}</span></div><p>${c.desc}</p>`;
+      if (c.status === 'waiting') {
+        body += `<p class="meta ${c.patience <= 1 ? 'warn' : ''}">Patience: ${c.patience} month${c.patience === 1 ? '' : 's'} before they take justice into their own hands.</p>
+          <div class="acts"><button class="act" data-act="hear" data-id="${c.id}" ${G.slots ? '' : 'disabled'}>Hold a full hearing</button><button class="act" data-act="rule" data-id="${c.id}">Rule today</button><button class="act subtle" data-act="dismiss" data-id="${c.id}">Dismiss</button></div>`;
+      } else body += `<p class="meta">Hearing in progress: a verdict in ${c.left} month${c.left === 1 ? '' : 's'}.</p>`;
+      body += '</div>';
+    }
+  } else if (tab === 'build') {
+    body = `<p class="hint">Building costs one royal action and gold, and takes time to finish. Some buildings prepare the city for bad luck from fate.</p>`;
+    for (const [k, B] of Object.entries(BUILDINGS)) {
+      const done = G.built[k], doing = G.building[k];
+      const can = !done && !doing && G.ap > 0 && G.st.m >= B.cost;
+      body += `<div class="item${k === focusId ? ' focus' : ''}${B.dark ? ' darkitem' : ''}"><div class="item-h"><b>${B.name}</b>${B.eq ? `<span class="tag">Q${B.eq}</span>` : ''}</div><p>${B.desc}</p>
+        ${done ? '<p class="meta ok">Built.</p>' : doing ? `<p class="meta">Under construction: ${doing} month${doing === 1 ? '' : 's'} left.</p>` : `<div class="acts"><button class="act" data-act="build" data-id="${k}" ${can ? '' : 'disabled'}>Build for ${B.cost} gold (${B.months} month${B.months > 1 ? 's' : ''})</button></div>`}</div>`;
+    }
+  } else if (tab === 'trade') {
+    const inc = incomeBreakdown(), f = v => `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(1).replace('.0', '')}`;
+    body = `<p class="hint">Businesses pay into the treasury every month. Opening or expanding one costs one royal action. Each business can grow to level 3, and every level multiplies its income and its side effects.</p>
+      <div class="ledger"><div><span>Taxes from the people</span><b>${f(inc.taxes)}</b></div><div><span>Businesses</span><b>${f(inc.biz)}</b></div><div><span>Buildings, laws and winter</span><b>${f(inc.other)}</b></div><div class="tot"><span>Next month's income</span><b>${f(inc.total)}</b></div></div>`;
+    const fb = foodBreakdown(), price = seasonOf(G.turn) === 'winter' ? 12 : 8;
+    body += `<h3 class="sec">Food</h3><div class="ledger"><div><span>Grain in store</span><b>${Math.round(G.food)} of ${foodCap()}</b></div><div><span>Grown and caught (${seasonOf(G.turn)})</span><b>+${fb.prod.toFixed(0)}</b></div><div><span>Eaten by the people${G.laws.dole ? ' and the bread dole' : ''}</span><b>−${fb.cons.toFixed(0)}</b></div><div class="tot"><span>Next month</span><b>${fb.net >= 0 ? '+' : '−'}${Math.abs(fb.net).toFixed(0)}</b></div></div>
+      <p class="hint">If the food runs out, people go hungry: People, Heart and Order all fall. Autumn brings the harvest; winter brings almost nothing. A granary stores more and protects against bad harvests.</p>
+      <div class="acts"><button class="act" data-act="grain" ${G.st.m >= price && G.food < foodCap() ? '' : 'disabled'}>Buy 10 grain for ${price} gold</button></div>`;
+    const atSea = G.voyages.length, room = shipsMax() - atSea;
+    body += `<h3 class="sec">Trade voyages</h3><p class="hint">Send a merchant ship abroad. It sails home with profit, if fate allows: pirates and storms can sink it. Ships available: <b>${room}</b> of ${shipsMax()}. A shipyard and a harbor fort give you more ships, and the fort halves the risk. Sending a ship doesn't use a royal action.</p>`;
+    for (const v of G.voyages) body += `<p class="meta">⛵ A ship is sailing to ${VOYAGES[v.dest].name}: home in ${v.left} month${v.left === 1 ? '' : 's'}.</p>`;
+    for (const [k, V] of Object.entries(VOYAGES)) {
+      const risk = Math.round(V.risk * (G.built.navy ? 50 : 100)), can = room > 0 && G.st.m >= V.cost;
+      body += `<div class="item"><div class="item-h"><b>${V.name}</b><span class="tag">${V.months} month${V.months > 1 ? 's' : ''}</span><span class="tag ${risk >= 20 ? 'sev3' : risk >= 10 ? 'sev2' : 'ok'}">${risk}% risk</span></div><p>${V.desc}</p>
+        <p class="meta">Costs ${V.cost}, brings back ${V.min}–${V.max} gold.</p><div class="acts"><button class="act" data-act="voyage" data-id="${k}" ${can ? '' : 'disabled'}>Send a ship for ${V.cost} gold</button></div></div>`;
+    }
+    body += `<h3 class="sec">Businesses</h3>`;
+    for (const [k, Bz] of Object.entries(BUSINESSES)) {
+      const lvl = G.biz[k] || 0, cost = bizUpCost(k, lvl), can = lvl < 3 && G.ap > 0 && G.st.m >= cost;
+      body += `<div class="item${Bz.dark ? ' darkitem' : ''}${k === focusId ? ' focus' : ''}"><div class="item-h"><b>${Bz.name}</b>${Bz.eq ? `<span class="tag">Q${Bz.eq}</span>` : ''}${lvl ? `<span class="tag ok">Level ${lvl}</span>` : ''}</div><p>${Bz.desc}</p>
+        <p class="meta">${lvl ? `Earning +${Bz.base * lvl} gold a month.` : `Would earn +${Bz.base} gold a month.`}${lvl < 3 ? ` Next level: +${Bz.base * (lvl + 1)} a month.` : ''}</p>
+        ${lvl < 3 ? `<div class="acts"><button class="act" data-act="biz" data-id="${k}" ${can ? '' : 'disabled'}>${lvl ? `Expand to level ${lvl + 1}` : 'Open'} for ${cost} gold</button></div>` : '<p class="meta ok">Fully grown.</p>'}</div>`;
+    }
+    body += `<h3 class="sec">Royal treasures</h3><p class="hint">Sell off the castle's valuables for quick gold, once each and free of actions. Some things carry memories, and selling them has a price.</p>`;
+    for (const [k, T] of Object.entries(TREASURES)) {
+      body += `<div class="item${T.tag === 'dark' ? ' darkitem' : ''}"><div class="item-h"><b>${T.name}</b>${G.sold[k] ? '<span class="tag">Sold</span>' : `<span class="tag ok">+${T.gold} gold</span>`}</div><p>${T.desc}</p>
+        ${G.sold[k] ? '' : `<div class="acts"><button class="act" data-act="sell" data-id="${k}">Sell it</button></div>`}</div>`;
+    }
+  } else if (tab === 'laws') {
+    const active = Object.values(G.laws).filter(Boolean).length;
+    body = `<p class="hint">Up to three laws can be in force. Enacting or repealing a law costs one royal action. Laws work every month they stay in force.</p>`;
+    for (const [k, L] of Object.entries(LAWS)) {
+      const on = !!G.laws[k], blocked = L.needs && !G.built[L.needs];
+      const can = G.ap > 0 && !blocked && (on || active < 3);
+      body += `<div class="item${L.tag === 'dark' ? ' darkitem' : ''}"><div class="item-h"><b>${L.name}</b>${L.eq ? `<span class="tag">Q${L.eq}</span>` : ''}${on ? '<span class="tag ok">In force</span>' : ''}</div><p>${L.desc}</p>
+        <div class="acts"><button class="act" data-act="law" data-id="${k}" ${can ? '' : 'disabled'}>${on ? 'Repeal' : 'Enact'}</button></div></div>`;
+    }
+  } else if (tab === 'advisors') {
+    body = `<p class="hint">Advisors react to how you rule. Choose one as your right hand for their help. If an advisor's loyalty falls too low, they turn against you. (Question 11: nobody can face fate entirely alone.)</p>`;
+    for (const [k, A] of Object.entries(ADVISORS)) {
+      const gone = G.gone[k], loy = Math.round(G.adv[k]), isRight = G.right === k;
+      body += `<div class="item adv"><canvas width="88" height="88" data-portrait="${A.who}"></canvas><div><div class="item-h"><b>${A.name}</b>${isRight ? '<span class="tag ok">Right hand</span>' : ''}${gone ? '<span class="tag sev3">Left the court</span>' : ''}</div>
+        ${gone ? '' : `<div class="loy"><span>Loyalty</span><span class="mini"><i style="width:${loy}%;background:${loy < 25 ? '#a33b4a' : '#5b8f63'}"></i></span><b>${loy}</b></div>`}
+        <p>${A.perk}</p><p class="meta">${A.likes}</p>
+        ${gone || isRight ? '' : `<div class="acts"><button class="act" data-act="appoint" data-id="${k}" ${G.ap > 0 ? '' : 'disabled'}>Make right hand</button></div>`}</div></div>`;
+    }
+  } else if (tab === 'petitions') {
+    body = `<p class="hint">Townspeople bring small requests. Answering is free; ignoring them until the month ends costs a little Heart. You can also click the speech bubbles over the houses.</p>`;
+    if (!G.petitions.length) body += '<p class="empty">No one is waiting at the gate.</p>';
+    for (const p of G.petitions) {
+      const T = PETITIONS[p.tpl];
+      body += `<div class="item${p.id === focusId ? ' focus' : ''}"><p>${T.text}</p><div class="acts"><button class="act" data-act="pet" data-id="${p.id}" data-i="a">${T.a.label}</button><button class="act" data-act="pet" data-id="${p.id}" data-i="b">${T.b.label}</button></div></div>`;
+    }
+  }
+  d.innerHTML = `<div class="desk-top"><h2>The royal desk</h2><div class="res"><span>Royal actions <span class="dots">${dots(G.ap, D().ap)}</span></span><span>Hearings <span class="dots">${dots(G.slots, Math.max(G.slots, 1 + (G.built.courthouse ? 1 : 0) + (G.right === 'horatio' ? 1 : 0)))}</span></span></div></div>
+    ${G.st.m < 15 ? `<p class="meta warn">The treasury is nearly empty (${Math.round(G.st.m)}). If it is still at zero when the month ends, the city goes bankrupt.</p>` : ''}${G.threat >= 75 ? `<p class="meta warn">Norway's threat is ${Math.round(G.threat)}. At 100, they invade.</p>` : ''}
+    <div class="tabs" id="tabsrow" role="tablist">${TABS.map(([k, n]) => `<button role="tab" id="tab-${k}" aria-selected="${k === tab}" class="tabb${k === tab ? ' on' : ''}" data-tab="${k}">${n}${badge[k] ? ` <span class="badge">${badge[k]}</span>` : ''}</button>`).join('')}</div>
+    <div class="tabbody">${body}</div><div id="deskMsg" class="deskmsg" role="status" aria-live="polite"></div>
+    <button class="primary" id="endMonthBtn">End the month</button>`;
+  d.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { G.deskTab = b.dataset.tab; renderDesk(); }));
+  d.querySelectorAll('[data-act]').forEach(b => b.addEventListener('click', () => deskAct(b.dataset.act, b.dataset.id, b.dataset.i)));
+  d.querySelectorAll('canvas[data-portrait]').forEach(c => drawPortrait(c, c.dataset.portrait));
+  $('endMonthBtn').addEventListener('click', endMonth);
+  if (focusId != null) { const f = d.querySelector('.focus'); if (f) f.scrollIntoView({ block: 'nearest' }); }
+}
+function deskMsg(text, ch, th) { const m = $('deskMsg'); if (m) m.innerHTML = `<p>${text}</p><div class="deltas">${deltaHTML(ch || {}, th)}</div>`; }
+function deskAct(act, id, which) {
+  let msg = '', ch = {}, th = 0;
+  if (act === 'hear') {
+    const c = G.docket.find(c => c.id === +id); if (!c || !G.slots) return;
+    G.slots--; c.status = 'hearing'; c.left = c.sev >= 3 ? 2 : 1; G.heardFully++;
+    react({ patient: true, tag: 'good' }); sound.quill();
+    msg = `The court begins hearing "${c.name}". A verdict in ${c.left} month${c.left === 1 ? '' : 's'}.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you ordered a full hearing for "${c.name}".`);
+  } else if (act === 'rule') {
+    const c = G.docket.find(c => c.id === +id); if (!c) return;
+    const chance = G.built.spytower ? 1 : 0.55 + (G.right === 'polonius' ? 0.2 : 0);
+    const right = Math.random() < chance;
+    if (right) { ch = applyFx({ j: 2 * c.sev, o: 1 }); G.quickRight++; msg = `You ruled on "${c.name}" on the spot${G.built.spytower ? ', with your spies whispering the truth' : ''}. You got it right.`; }
+    else { ch = applyFx({ j: -3 * c.sev, h: -2, o: -2 }); G.quickWrong++; msg = `You ruled on "${c.name}" on the spot, and got it wrong. The wrong person was punished.`; }
+    G.docket = G.docket.filter(x => x !== c); react({ quick: true }); right ? sound.good() : sound.dark();
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you ruled on "${c.name}" on the spot, and ${right ? 'got it right' : 'got it wrong'}.`);
+  } else if (act === 'dismiss') {
+    const c = G.docket.find(c => c.id === +id); if (!c) return;
+    ch = applyFx({ j: -2, o: -1 }); G.dismissed++; G.docket = G.docket.filter(x => x !== c); react({ tag: 'dark' }); sound.quill();
+    msg = `You dismissed "${c.name}". The people involved will remember.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you dismissed "${c.name}" without a hearing.`);
+  } else if (act === 'build') {
+    const B = BUILDINGS[id]; if (!B || G.ap <= 0 || G.st.m < B.cost || G.built[id] || G.building[id]) return;
+    G.ap--; ch = applyFx({ m: -B.cost }); G.building[id] = B.months; sound.build();
+    if (B.dark) react({ tag: 'dark' });
+    msg = `Work begins on the ${B.name.toLowerCase()}. Ready in ${B.months} month${B.months > 1 ? 's' : ''}.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you began building the ${B.name.toLowerCase()}.`);
+  } else if (act === 'grain') {
+    const price = seasonOf(G.turn) === 'winter' ? 12 : 8; if (G.st.m < price || G.food >= foodCap()) return;
+    ch = applyFx({ m: -price }); G.food = Math.min(foodCap(), G.food + 10); sound.quill(); msg = `Merchants deliver 10 grain to the city stores.`;
+  } else if (act === 'voyage') {
+    const V = VOYAGES[id]; if (!V || G.voyages.length >= shipsMax() || G.st.m < V.cost) return;
+    ch = applyFx({ m: -V.cost }); G.voyages.push({ id: ++G.vid, dest: id, left: V.months, sent: G.turn }); sound.quill();
+    msg = `A merchant ship sets sail for ${V.name}. Home in ${V.months} month${V.months > 1 ? 's' : ''}, if fate allows.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you sent a trading ship to ${V.name}.`);
+  } else if (act === 'sell') {
+    const T = TREASURES[id]; if (!T || G.sold[id]) return;
+    G.sold[id] = true; ch = applyFx(Object.assign({ m: T.gold }, T.fx)); G.treasureGold += T.gold;
+    if (T.adv) for (const k in T.adv) if (!G.gone[k]) G.adv[k] = clamp(G.adv[k] + T.adv[k]);
+    react({ tag: T.tag, grief: T.grief }); sound.chaChing ? sound.chaChing() : sound.quill();
+    msg = `You sold ${T.name.charAt(0).toLowerCase() + T.name.slice(1)} for ${T.gold} gold.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you sold ${T.name.charAt(0).toLowerCase() + T.name.slice(1)} for ${T.gold} gold.`);
+  } else if (act === 'biz') {
+    const Bz = BUSINESSES[id], lvl = G.biz[id] || 0, cost = bizUpCost(id, lvl); if (!Bz || lvl >= 3 || G.ap <= 0 || G.st.m < cost) return;
+    G.ap--; ch = applyFx({ m: -cost }); G.biz[id] = lvl + 1; G.bizOpened = G.bizOpened || {}; if (!lvl) G.bizOpened[id] = performance.now();
+    if (Bz.dark) react({ tag: 'dark' }); sound.build();
+    msg = lvl ? `The ${Bz.name.toLowerCase()} grows to level ${lvl + 1}. It will earn ${Bz.base * (lvl + 1)} gold a month.` : `The ${Bz.name.toLowerCase()} opens its doors. It will earn ${Bz.base} gold a month.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you ${lvl ? `expanded the ${Bz.name.toLowerCase()} to level ${lvl + 1}` : `opened a ${Bz.name.toLowerCase()}`}.`);
+  } else if (act === 'law') {
+    const L = LAWS[id]; if (!L || G.ap <= 0) return;
+    G.ap--; G.laws[id] = !G.laws[id]; sound.quill();
+    if (G.laws[id]) { react({ grief: L.grief, tag: L.tag }); msg = `${L.name} is now the law of Elsinore.`; } else msg = `${L.name} is repealed.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you ${G.laws[id] ? 'enacted' : 'repealed'} the law "${L.name}".`);
+  } else if (act === 'appoint') {
+    if (G.ap <= 0 || G.gone[id]) return;
+    G.ap--; G.right = id; G.adv[id] = clamp(G.adv[id] + 8); G.slots = Math.max(G.slots, 0) + (id === 'horatio' ? 1 : 0); G.helped++; sound.good();
+    msg = `${ADVISORS[id].name} is now your right hand.`;
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: you made ${ADVISORS[id].name} your right hand.`);
+  } else if (act === 'pet') {
+    const p = G.petitions.find(p => p.id === +id); if (!p) return;
+    const T = PETITIONS[p.tpl], o = T[which];
+    ch = applyFx(o.fx); if (o.threat) th = addThreat(o.threat); if (o.flag) G.flags[o.flag] = true; if (o.gift) giveGift(o.gift);
+    if (o.gamble) { if (Math.random() < 0.3) { Object.assign(ch, applyFx({ m: 15 })); o._won = true; } else o._won = false; }
+    if (o.addCase) newCase(o.addCase);
+    react(o); G.petitionsAnswered++; G.petitions = G.petitions.filter(x => x !== p);
+    o.tag === 'good' ? sound.good() : o.tag === 'dark' ? sound.dark() : sound.quill();
+    msg = `“${o.label}”` + (o.gamble ? (o._won ? ' The crew strikes a chest of old coins!' : ' The crew digs all week and finds nothing but rocks.') : '') + (o.gift ? ` A new ${(BUSINESSES[o.gift] || BUILDINGS[o.gift]).name.toLowerCase()} opens.` : '');
+    G.log.push(`${MONTHS[monthOf(G.turn)]}: a petition. ${T.text} You answered: "${o.label}"`);
+  }
+  updateMeters(ch); renderDesk(); deskMsg(msg, ch, th);
+  checkCollapse();
+}
+
+/* ---------------- End of month ---------------- */
+function checkCollapse(monthEnd) {
+  const S = G.st; let why = null;
+  if (S.o <= 0) why = 'revolt'; else if (S.m <= 0 && monthEnd) why = 'bankrupt'; else if (S.s <= 0) why = 'rotten'; else if (S.p <= 0) why = 'empty';
+  if (why) { finish(why); return true; }
+  return false;
+}
+function endMonth() {
+  if (G.phase === 'end') return;
+  $('decree').hidden = true; G.phase = 'upkeep';
+  const S = G.st, B = G.built, before = { ...S }, notes = [], beforeThreat = G.threat;
+  for (const k in B) if (BUILDINGS[k]) applyFx(BUILDINGS[k].up);
+  for (const k in G.building) { if (--G.building[k] <= 0) { delete G.building[k]; B[k] = performance.now(); notes.push(`The ${BUILDINGS[k].name.toLowerCase()} is finished.`); G.log.push(`${MONTHS[monthOf(G.turn)]}: the ${BUILDINGS[k].name.toLowerCase()} was finished.`); } }
+  for (const k in G.laws) if (G.laws[k]) { applyFx(LAWS[k].fx); if (LAWS[k].threat) addThreat(LAWS[k].threat); G.lawMonths[k] = (G.lawMonths[k] || 0) + 1; }
+  for (const v of G.voyages) {
+    if (--v.left > 0) continue;
+    const V = VOYAGES[v.dest], piratesNow = G.fates[G.fates.length - 1] === 2, stormNow = G.fates[G.fates.length - 1] === 4;
+    const risk = V.risk * (G.built.navy ? 0.5 : 1) * (piratesNow || stormNow ? 2 : 1);
+    v.done = true;
+    if (Math.random() < risk) { applyFx({ g: 3, m: 0 }); G.shipsLost++; notes.push(`The ship from ${V.name} was lost at sea${piratesNow ? ' to pirates' : stormNow ? ' in the storm' : ''}.`); G.log.push(`${MONTHS[monthOf(G.turn)]}: your ship returning from ${V.name} was lost at sea.`); }
+    else {
+      const gold = Math.round(V.min + Math.random() * (V.max - V.min)) + (G.biz.shipyard || 0) * 2;
+      S.m = clampM(S.m + gold); G.tradeEarned += gold; if (V.food) G.food = Math.min(foodCap(), G.food + V.food); if (V.fx) applyFx(V.fx); if (V.threat) addThreat(V.threat);
+      notes.push(`Your ship returns from ${V.name} with ${gold} gold of trade.`); G.log.push(`${MONTHS[monthOf(G.turn)]}: your ship returned from ${V.name} with ${gold} gold.`); sound.chaChing && sound.chaChing();
+    }
+  }
+  G.voyages = G.voyages.filter(v => !v.done);
+  for (const k in G.biz) { const Bz = BUSINESSES[k], l = G.biz[k]; let earn = Bz.base * l; if (k === 'fishmarket' && G.fates[G.fates.length - 1] === 2 && !B.navy) earn = 0; S.m = clampM(S.m + earn); G.bizEarned += earn; const fx = {}; for (const q in Bz.fx) fx[q] = Bz.fx[q] * l; applyFx(fx); if (Bz.threat) addThreat(Bz.threat * l); }
+  if (G.right && !G.gone[G.right]) {
+    ({ horatio: () => {}, polonius: () => applyFx({ o: 2, s: -1 }), gertrude: () => applyFx({ g: -2, h: 1 }), laertes: () => { applyFx({ o: 1 }); addThreat(-3); } })[G.right]();
+    G.adv[G.right] = clamp(G.adv[G.right] + 1);
+  }
+  S.g = clamp(S.g - 3); if (S.b > 0) S.b = clamp(S.b + 1.5);
+  S.j = clamp(S.j - D().jDecay - (S.s < 40 ? 1 : 0));
+  { const fb = foodBreakdown(); G.food += fb.net; if (G.food > foodCap()) G.food = foodCap();
+    if (G.food <= 0) { G.food = 0; G.hungerMonths++; applyFx({ p: -3, h: -5, o: -4 }); notes.unshift('The city goes hungry. The food stores are empty.'); G.log.push(`${MONTHS[monthOf(G.turn)]}: the food ran out and the city went hungry.`); } }
+  if (Math.random() < 0.45) {
+    const m = monthOf(G.turn), pool = CITY_EVENTS.filter(ev => (!ev.months || ev.months.includes(m)) && !G.events.includes(ev.name));
+    if (pool.length) { const ev = pick(pool); G.events.push(ev.name);
+      if (ev.fx) applyFx(ev.fx, Object.entries(ev.fx).reduce((a, [k, v]) => a + (k === 'g' || k === 'b' ? -v : v), 0) < 0 ? D().bad : 1); if (ev.food) G.food = Math.max(0, Math.min(foodCap(), G.food + ev.food * (ev.food < 0 && B.granary ? 0.5 : 1))); if (ev.threat) addThreat(ev.threat);
+      if (ev.adv) for (const k in ev.adv) if (!G.gone[k]) G.adv[k] = clamp(G.adv[k] + ev.adv[k]);
+      if (ev.delay) for (const v of G.voyages) v.left += ev.delay;
+      notes.push(`${ev.name}. ${ev.text}`); G.log.push(`${MONTHS[monthOf(G.turn)]}: ${ev.name.toLowerCase()}. ${ev.text}`); } }
+  S.h = clamp(S.h + 1 - Math.max(0, S.g - 45) * 0.1 - S.b * 0.05 + (S.j > 65 ? 1 : 0));
+  S.m = clampM(S.m + S.p / 12 * D().tax - 1 - (G.debt || 0) - (B.walls ? 1 : 0) - (seasonOf(G.turn) === 'winter' ? 1 : 0));
+  S.o = clamp(S.o + (S.h < 25 ? -4 : 0) + (S.j < 30 ? -3 : 0) + (S.j > 70 ? 2 : 0));
+  S.p = clamp(S.p + (S.h > 60 && S.m > 30 ? 2 : 0) - (S.g > 70 ? 2 : 0));
+  for (const c of G.docket) {
+    if (c.status === 'hearing') {
+      if (--c.left <= 0) { applyFx(c.fx || { j: 2 * c.sev + 1, h: 1 }); c.done = true; notes.push(c.text || `Verdict: "${c.name}" was judged fairly.`); G.log.push(`Justice served after a full hearing: ${c.text || `"${c.name}" was judged fairly.`}`); }
+    } else {
+      c.patience--; S.j = clamp(S.j - 0.5 * c.sev);
+      if (c.patience <= 0) { applyFx({ o: -5, s: -2, j: -3 }); c.done = true; G.expired++; notes.push(`Justice delayed: the people in "${c.name}" took justice into their own hands.`); G.log.push(`${MONTHS[monthOf(G.turn)]}: justice delayed. The people in "${c.name}" gave up waiting and took revenge themselves.`); }
+    }
+  }
+  G.docket = G.docket.filter(c => !c.done);
+  if (G.petitions.length) { S.h = clamp(S.h - G.petitions.length); G.log.push(`${MONTHS[monthOf(G.turn)]}: ${G.petitions.length} petition${G.petitions.length > 1 ? 's went' : ' went'} unanswered.`); G.petitions = []; }
+  addThreat((G.treaty ? D().threat / 2 : D().threat) - (B.walls ? 2 : 0) + (G.bribed ? 2 : 0));
+  for (const k of Object.keys(ADVISORS)) {
+    if (!G.gone[k] && G.adv[k] < 15) {
+      const bt = BETRAYALS[k]; applyFx(bt.fx); if (bt.threat) addThreat(bt.threat); G.gone[k] = true; G.betrayals.push(ADVISORS[k].name);
+      if (G.right === k) G.right = null; if (k === 'horatio') G.flags.ally = false;
+      notes.unshift(bt.text); G.log.push(`${MONTHS[monthOf(G.turn)]}: ${bt.text}`); sound.dark();
+    }
+  }
+  const ch = {}; for (const k in S) { const d = Math.round(S[k] - before[k]); if (d) ch[k] = d; }
+  updateMeters(ch);
+  if (checkCollapse(true)) return;
+  if (G.threat >= 100) {
+    const defense = G.st.o * 0.5 + (B.walls ? 30 : 0) + (B.navy ? 10 : 0) + (G.right === 'laertes' ? 10 : 0) + (G.treaty ? 15 : 0) + Math.random() * 30;
+    if (defense >= 60) { G.threat = 35; applyFx({ p: -4, o: 4 }); G.repelled++; notes.unshift('Norway invaded, and the city held! Fortinbras pulls back across the border.'); G.log.push(`${MONTHS[monthOf(G.turn)]}: Norway invaded, and the city held.`); sound.bell(); updateMeters(); }
+    else { finish('conquered'); return; }
+  }
+  G.turn++; G.ap = D().ap; G.slots = 1 + (B.courthouse ? 1 : 0) + (G.right === 'horatio' ? 1 : 0);
+  spawnCases((Math.random() < 0.45 ? 2 : 1) + (Math.random() < D().caseExtra ? 1 : 0)); spawnPetitions(2); updateMeters(); setWhen();
+  showBanner(MONTHS[monthOf(G.turn)], notes.length ? notes[0] : ({ winter: 'Snow settles on the rooftops.', spring: 'The ice breaks in the harbor.', summer: 'Long light over the Sound.', autumn: 'The leaves turn over Elsinore.' })[seasonOf(G.turn)], notes.length ? 3600 : 1800);
+  if (notes.length > 1) setTimeout(() => showBanner(MONTHS[monthOf(G.turn)], notes[1], 2600), 3700);
+  setTimeout(beginTurn, reduceMotion ? 300 : (notes.length ? 2800 : 1500));
+}
+document.addEventListener('keydown', e => {
+  if (!G) return;
+  if (G.phase === 'decide' && ['1', '2', '3'].includes(e.key)) { const b = document.querySelector(`.choice[data-i="${+e.key - 1}"]`); if (b) b.click(); }
+});
+
+/* ---------------- Endings ---------------- */
+function finish(collapse) {
+  if (G.phase === 'end') return;
+  G.phase = 'end';
+  const S = G.st;
+  let title, epi;
+  if (collapse === 'revolt') { title = 'Driven from Elsinore'; epi = 'Order collapsed. The people stormed the castle and you fled the city by night. Fortinbras rode in a week later and was greeted as a savior.'; }
+  else if (collapse === 'bankrupt') { title = 'The empty treasury'; epi = 'The coffers ran dry. Soldiers went unpaid, bridges fell, and Norway bought Denmark for the price of its debts.'; }
+  else if (collapse === 'rotten') { title = 'Something is rotten'; epi = 'Your soul gave out before your reign did. You became the very thing Hamlet died fighting: a ruler who poisons, spies and lies.'; }
+  else if (collapse === 'empty') { title = 'A city of ghosts'; epi = 'The people left one by one, until only the ghost on the battlements remained.'; }
+  else if (collapse === 'conquered') { title = 'Fortinbras takes the crown'; epi = 'Norway\'s army broke through. As at the end of the play, a foreign prince walks into the throne room and claims Denmark. "This quarry cries on havoc."'; }
+  else if (S.s < 30) { title = 'The new Claudius'; epi = 'You kept the city running, but you did it with spies, poison and bribes. Elsinore is orderly and afraid.'; }
+  else if (allGoals(S)) { title = 'The just and healing crown'; epi = 'Elsinore is fairer, kinder and lighter than the city you inherited. Grief was honored, the guilty were tried, and the good in you won out.'; }
+  else if (S.b >= 25) { title = 'The smiling mask'; epi = 'The festivals were loud and the bells were silent. Underneath, the city never mourned, and the grief is still waiting.'; }
+  else if (S.g >= 65 || S.h < 25) { title = 'The city of endless mourning'; epi = 'Black banners still hang from every window. Grief that was never turned into anything else has become the city itself.'; }
+  else if (S.j < 35) { title = 'Justice delayed'; epi = 'Cases went unheard and quick rulings went wrong. The people stopped expecting fairness from the crown.'; }
+  else { title = 'An uncertain peace'; epi = 'Elsinore survives, neither healed nor broken. Your reign was a mix of wise choices and hard ones, like most reigns are.'; }
+  const pl = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+  const q1 = `Justice ended at ${Math.round(S.j)}. You held ${pl(G.heardFully, 'full hearing')}, ruled on the spot ${pl(G.quickRight + G.quickWrong, 'time')} (${G.quickRight} right, ${G.quickWrong} wrong), dismissed ${pl(G.dismissed, 'case')}, and ${pl(G.expired, 'case')} ran out of patience while waiting.${G.lawMonths.opencourt ? ` Open court was the law for ${pl(G.lawMonths.opencourt, 'month')}.` : ''} `
+    + (G.expired >= 3 ? 'Waiting too long had a cost: when justice is slow, people take it into their own hands, just as Laertes did.' : G.quickWrong > G.heardFully ? 'Speed won over fairness. Quick rulings felt like justice, but too many were wrong.' : S.j >= 60 ? 'In your Elsinore, justice was attainable, but only through patience, proof and enough courtrooms to hear everyone in time.' : 'Justice was hard to reach, as it is in Hamlet, where the truth only comes out when almost everyone is dead.');
+  const q5 = `Grief ended at ${Math.round(S.g)}, buried grief at ${Math.round(S.b)}, and the city's heart at ${Math.round(S.h)}. You let people grieve together ${pl(G.grievedTogether, 'time')} and pressured them to move on ${pl(G.pressured, 'time')}.${G.lawMonths.bells ? ` The mourning bells rang for ${pl(G.lawMonths.bells, 'month')}.` : ''}${G.lawMonths.festival ? ` Festival days lasted ${pl(G.lawMonths.festival, 'month')}.` : ''}${['memorial', 'chapel', 'hospital', 'theater'].filter(k => G.built[k]).length ? ` You built places to grieve: ${['memorial', 'chapel', 'hospital', 'theater'].filter(k => G.built[k]).map(k => BUILDINGS[k].name.toLowerCase()).join(', ')}.` : ''}${G.used.buried ? ' Buried grief came back as riots, just as "foul deeds will rise."' : ''} `
+    + (G.grievedTogether > G.pressured ? 'Grief became positive when it was shared and given time. It turned negative when it was hidden or rushed.' : 'Like Claudius calling Hamlet\'s mourning "unmanly grief," pushing people to move on didn\'t end their sorrow. It only made it quieter and more dangerous.');
+  const q11 = `Your soul ended at ${Math.round(S.s)}. You made ${pl(G.good, 'choice')} from your better side and ${G.dark} from your darker side. Fate rolled ${G.fates.join(', ')}.${G.ghostUsed ? ' Once, you begged the ghost to change your fate, and paid with your soul.' : ''} You accepted help ${pl(G.helped, 'time')}${G.right ? `, and ${ADVISORS[G.right].name} stood beside you as your right hand` : ''}.${G.betrayals.length ? ` ${G.betrayals.join(' and ')} turned against you.` : ''}${G.repelled ? ' When Norway invaded, the city held.' : ''} `
+    + (G.tradeEarned || G.treasureGold ? `Trade voyages brought in ${G.tradeEarned} gold${G.shipsLost ? ` (fate sank ${G.shipsLost} ship${G.shipsLost > 1 ? 's' : ''})` : ''}${G.treasureGold ? `, and you sold ${G.treasureGold} gold worth of royal treasures` : ''}. ` : '')
+    + (Object.keys(G.biz).length ? `Your businesses earned ${Math.round(G.bizEarned)} gold${['lender', 'mine'].filter(k => G.biz[k]).length ? `, but the ${['lender', 'mine'].filter(k => G.biz[k]).map(k => BUSINESSES[k].name.toLowerCase()).join(' and ')} made money from other people's suffering` : ''}. ` : '')
+    + (G.good > G.dark ? 'The struggle between good and evil was real, but your good side usually won.' : 'The easy, dark choice won more often than not, the same slide that turned Claudius from a brother into a murderer.')
+    + (G.right || G.flags.ally || G.helped >= 2 ? ' When fate dealt you more than you could handle alone, you let others help, which Hamlet only learned at the very end.' : ' You mostly faced fate alone, like Hamlet, who confided in almost no one.');
+  const e = $('ending'); e.hidden = false; $('decree').hidden = true; $('fate').hidden = true;
+  e.innerHTML = `<div class="sheet"><h2>${title}</h2><p class="epi">${epi}</p>
+    <div class="goals">${GOALS.map(gl => `<span class="${gl.test(S) && !collapse ? 'ok' : ''}">${gl.test(S) && !collapse ? '✓' : '✗'} ${gl.label}</span>`).join('')}<span class="${!collapse ? 'ok' : ''}">${!collapse ? '✓' : '✗'} Survived all ${G.months} months</span></div>
+    <p class="q">${collapse ? 'Your reign ended early.' : `Difficulty: ${D().name}. You met ${GOALS.filter(gl => gl.test(S)).length} of 4 goals.${allGoals(S) ? ` You beat the game on ${D().name}!` : ' Meet all four to beat the game.'}`}</p>
+    <div class="final">${STATS.map(st => `<div>${st.name}: <b>${Math.round(S[st.k])}</b></div>`).join('')}<div>Grief: <b>${Math.round(S.g)}</b></div><div>Norway: <b>${Math.round(G.threat)}</b></div></div>
+    <h3>Is justice attainable in the real world?</h3><p class="q">Question 1: How, or why not? When should justice be gained? Is there a timeline?</p><p>${q1}</p>
+    <h3>When is grief a positive thing?</h3><p class="q">Question 5: When does it become negative? How long should we grieve? How can we approach grief together?</p><p>${q5}</p>
+    <h3>The good and evil within us, and fate</h3><p class="q">Question 11: How do we deal with conflicting parts of ourselves? How does fate put us in situations we can't handle alone?</p><p>${q11}</p>
+    <h3>The chronicle of your reign</h3><ol class="chron">${G.log.map(l => `<li>${l.replace(/</g, '&lt;')}</li>`).join('')}</ol>
+    <button class="primary" id="againBtn">Rule again</button><button class="ghost-btn" id="copyBtn">Copy the chronicle</button></div>`;
+  $('againBtn').addEventListener('click', () => { e.hidden = true; $('title').hidden = false; G = null; updateMeters(); setWhen(); $('rulerName').focus(); });
+  $('copyBtn').addEventListener('click', async () => {
+    const txt = `${title}\n${epi}\n\nQuestion 1: ${q1}\n\nQuestion 5: ${q5}\n\nQuestion 11: ${q11}\n\nChronicle:\n${G.log.map((l, i) => `${i + 1}. ${l}`).join('\n')}`;
+    let ok = false; try { await navigator.clipboard.writeText(txt); ok = true; } catch (_) {}
+    $('copyBtn').textContent = ok ? 'Copied' : 'Copy failed: select the text instead';
+  });
+  sound.bell(); e.scrollTop = 0; $('againBtn').focus({ preventScroll: true });
+}
+
+/* ---------------- The city painting ---------------- */
+const cv = $('city'), ctx = cv.getContext('2d');
+function fit() { const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); const w = Math.round(r.width * dpr), h = Math.round(r.height * dpr); if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; } ctx.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0); }
+const lerp = (a, b, t) => a + (b - a) * t;
+function rgbOf(c) { if (c[0] === '#') { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; } return c.match(/\d+/g).slice(0, 3).map(Number); }
+function mix(c1, c2, t) { const a = rgbOf(c1), b = rgbOf(c2); return `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(lerp(a[2], b[2], t))})`; }
+const SLOTS = { memorial: [585, 664], courthouse: [470, 664], hospital: [360, 600], theater: [1015, 610], chapel: [205, 640], spytower: [770, 520], library: [690, 604], council: [905, 664], navy: [70, 560], granary: [1205, 670], market: [790, 664], breadhall: [1120, 604], walls: [640, 470] };
+const R = seeded(7), HOUSES = [];
+for (const row of [{ y: 528, x0: 320, x1: 820, n: 12 }, { y: 600, x0: 270, x1: 1260, n: 18 }, { y: 676, x0: 0, x1: 1280, n: 20 }]) {
+  for (let i = 0; i < row.n; i++) {
+    const x = row.x0 + (row.x1 - row.x0) * (i + R() * 0.4) / row.n, w = 34 + R() * 26, hgt = 40 + R() * 34;
+    if (Object.values(SLOTS).some(([sx, sy]) => Math.abs(sx - x) < 62 && Math.abs(sy - row.y) < 50)) continue;
+    HOUSES.push({ x, y: row.y, w, h: hgt, wall: pick(['#e7dcc2', '#d9b98b', '#c98f5f', '#f0e6d2', '#b9a27a', '#d7c7a3']), roof: pick(['#8e3b2e', '#7a2f25', '#5a3a2e', '#9a4a32', '#3f4a52']), seed: R() });
+  }
+}
+HOUSES.sort((a, b) => a.y - b.y);
+const BIZ_SPOTS = (() => { const fr = HOUSES.filter(h => h.y >= 560).sort((a, b) => a.x - b.x), keys = Object.keys(BUSINESSES), out = {};
+  keys.forEach((k, i) => { out[k] = fr[Math.min(fr.length - 1, Math.round(i * (fr.length - 1) / (keys.length - 1)))]; }); return out; })();
+function drawBizIcon(g, icon, x, y) {
+  switch (icon) {
+    case 'bread': g.fillStyle = '#c98f5f'; g.beginPath(); g.ellipse(x, y, 7, 4, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#8a5a30'; g.fillRect(x - 3, y - 2, 1, 4); g.fillRect(x + 1, y - 2, 1, 4); break;
+    case 'fish': g.fillStyle = '#5b8fb0'; g.beginPath(); g.ellipse(x - 1, y, 6, 3, 0, 0, Math.PI * 2); g.fill(); g.beginPath(); g.moveTo(x + 4, y); g.lineTo(x + 8, y - 3); g.lineTo(x + 8, y + 3); g.fill(); break;
+    case 'cloth': g.fillStyle = '#9d7fc9'; g.fillRect(x - 6, y - 4, 12, 8); g.fillStyle = '#d8c9ef'; g.fillRect(x - 6, y - 1, 12, 2); break;
+    case 'mug': g.fillStyle = '#e0b84a'; g.fillRect(x - 4, y - 4, 7, 8); g.fillStyle = '#fff6dd'; g.fillRect(x - 4, y - 5, 7, 2); g.strokeStyle = '#e0b84a'; g.lineWidth = 1.5; g.beginPath(); g.arc(x + 4, y, 2.5, -1.4, 1.4); g.stroke(); break;
+    case 'inn': g.fillStyle = '#f6cf7a'; g.beginPath(); for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + i * 4 * Math.PI / 5; g.lineTo(x + Math.cos(a) * 5, y + Math.sin(a) * 5); } g.fill(); break;
+    case 'anvil': g.fillStyle = '#c9ced1'; g.fillRect(x - 6, y - 3, 12, 3); g.fillRect(x - 2, y, 4, 3); g.fillRect(x - 4, y + 3, 8, 2); break;
+    case 'book': g.fillStyle = '#f3ead6'; g.fillRect(x - 6, y - 4, 12, 8); g.fillStyle = '#2c3554'; g.fillRect(x - 0.5, y - 4, 1, 8); break;
+    case 'ship': g.fillStyle = '#f3ead6'; g.beginPath(); g.moveTo(x, y - 5); g.lineTo(x + 5, y + 1); g.lineTo(x, y + 1); g.fill(); g.fillStyle = '#8a5a30'; g.fillRect(x - 6, y + 1, 12, 3); break;
+    case 'coin': g.fillStyle = '#e8b04a'; g.beginPath(); g.arc(x, y, 5, 0, Math.PI * 2); g.fill(); g.fillStyle = '#8a6a1f'; g.fillRect(x - 0.5, y - 3, 1, 6); break;
+    case 'wheat': g.strokeStyle = '#d6b34a'; g.lineWidth = 1.5; for (const dx of [-4, 0, 4]) { g.beginPath(); g.moveTo(x + dx, y + 5); g.lineTo(x + dx, y - 4); g.stroke(); g.fillStyle = '#e8c76f'; g.beginPath(); g.ellipse(x + dx, y - 4, 1.8, 3, 0, 0, Math.PI * 2); g.fill(); } break;
+    case 'pick': g.strokeStyle = '#d4d4d4'; g.lineWidth = 2; g.beginPath(); g.moveTo(x - 6, y - 3); g.quadraticCurveTo(x, y - 6, x + 6, y - 3); g.stroke(); g.strokeStyle = '#8a5a30'; g.beginPath(); g.moveTo(x, y - 5); g.lineTo(x, y + 5); g.stroke(); break;
+  }
+}
+function drawFields(g, t) {
+  if (!G) return;
+  const season = seasonOf(G.turn), lean = G.food < 15;
+  const col = lean ? '#8a7350' : { spring: '#8fbf5a', summer: '#a9b84a', autumn: '#d9b34a', winter: '#e8ecee' }[season];
+  const n = 3 + Math.min(4, G.biz.farm ? G.biz.farm * 2 : 0);
+  for (let i = 0; i < n; i++) {
+    const x = 640 + i * 44, y = 486 - i * 3;
+    g.fillStyle = i % 2 ? col : mix(col, '#5a6b3a', 0.25); g.beginPath(); g.moveTo(x, y); g.lineTo(x + 40, y - 4); g.lineTo(x + 46, y + 14); g.lineTo(x + 6, y + 18); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(0,0,0,0.12)'; g.lineWidth = 1; for (let k = 1; k < 4; k++) { g.beginPath(); g.moveTo(x + k * 1.5, y + k * 4.5); g.lineTo(x + 40 + k * 1.5, y - 4 + k * 4.5); g.stroke(); }
+  }
+}
+function drawVoyages(g, t) {
+  if (!G) return;
+  G.voyages.forEach((v, i) => {
+    const V = VOYAGES[v.dest], prog = 1 - v.left / V.months, x = 260 + ((t * 0.01 + i * 180 + prog * 300) % 560), y = 372 + (i % 2) * 6;
+    g.fillStyle = '#3a2a1e'; g.fillRect(x - 7, y, 14, 2.5); g.fillStyle = '#efe6d2'; g.beginPath(); g.moveTo(x, y - 10); g.lineTo(x + 6, y - 1); g.lineTo(x, y - 1); g.fill();
+  });
+}
+function drawBusinesses(g, t) {
+  if (!G) return;
+  for (const k in G.biz) {
+    const h = BIZ_SPOTS[k]; if (!h) continue; const Bz = BUSINESSES[k], lvl = G.biz[k];
+    const opened = G.bizOpened && G.bizOpened[k], pop = opened ? clamp((performance.now() - opened) / 600, 0, 1) : 1;
+    const x = h.x, y = h.y, w = h.w;
+    g.save(); g.globalAlpha = pop;
+    for (let i = 0; i < 6; i++) { g.fillStyle = i % 2 ? '#f3ead6' : Bz.color; g.fillRect(x - w / 2 + i * w / 6, y - 26, w / 6 + 0.5, 6); }
+    g.fillStyle = 'rgba(0,0,0,0.15)'; g.fillRect(x - w / 2, y - 20, w, 2);
+    g.fillStyle = '#5a3a24'; g.fillRect(x + w / 2 - 2, y - h.h + 6, 14, 2); g.fillRect(x + w / 2 + 10, y - h.h + 6, 1, 4);
+    const sx = x + w / 2 + 11, sy = y - h.h + 18, sw = Math.sin(t * 0.003 + x) * 0.08;
+    g.save(); g.translate(sx, sy - 8); g.rotate(sw); g.fillStyle = '#efe6cf'; g.fillRect(-11, 2, 22, 15); g.strokeStyle = Bz.color; g.lineWidth = 2; g.strokeRect(-11, 2, 22, 15); drawBizIcon(g, Bz.icon, 0, 9.5); g.restore();
+    g.fillStyle = '#e8b04a'; for (let i = 0; i < lvl; i++) g.fillRect(sx - 7 + i * 6, sy + 12, 4, 4);
+    if (lvl >= 2) { g.fillStyle = '#8a5a30'; g.fillRect(x - w / 2 - 12, y - 10, 10, 10); g.fillStyle = '#a8763f'; g.fillRect(x - w / 2 - 10, y - 18, 8, 8); }
+    if (lvl >= 3) { g.fillStyle = '#6b4a2e'; g.fillRect(x - w / 2 - 24, y - 8, 10, 8); }
+    g.restore();
+  }
+}
+const CLOUDS = Array.from({ length: 9 }, (_, i) => ({ x: i * 160 + R() * 120, y: 40 + R() * 160, s: 0.6 + R() * 0.9, v: 0.08 + R() * 0.15 }));
+const STARS = Array.from({ length: 90 }, () => ({ x: R() * W, y: R() * 300, a: R() }));
+let drops = [], walkers = Array.from({ length: 40 }, (_, i) => ({ x: R() * W, lane: i % 2, v: 0.25 + R() * 0.5, c: pick(['#3b2f2a', '#5a2a2a', '#2a3b4a', '#4a4a2a', '#6a4a2a']) }));
+const crows = Array.from({ length: 7 }, (_, i) => ({ a: i / 7 * Math.PI * 2, r: 60 + i * 9, v: 0.006 + i * 0.001 }));
+
+function S() { return G ? G.st : { j: 50, h: 45, g: 55, b: 0, s: 55, o: 60, m: 55, p: 55 }; }
+function drawSky(g, t, st, season) {
+  const mood = clamp((st.h - st.g * 0.5 + 45) / 100, 0, 1), dark = clamp((45 - st.s) / 45, 0, 1);
+  const top = mix(mix('#3b4a5a', '#3f7fb8', mood), '#2b1f3a', dark * 0.7), mid = mix(mix('#7d8a94', '#e9b97a', mood), '#5b3f6e', dark * 0.6), low = mix(mix('#a8b0b4', '#f6dca0', mood), '#7a5a7e', dark * 0.5);
+  const sky = g.createLinearGradient(0, 0, 0, 380); sky.addColorStop(0, top); sky.addColorStop(0.6, mid); sky.addColorStop(1, low); g.fillStyle = sky; g.fillRect(0, 0, W, 400);
+  if (mood < 0.35) for (const s of STARS) { g.fillStyle = `rgba(255,255,255,${(0.15 + s.a * 0.4) * (0.35 - mood) * 2.5})`; g.fillRect(s.x, s.y, 1.5, 1.5); }
+  const sx = 260, sy = 150 + (1 - mood) * 140; const sg = g.createRadialGradient(sx, sy, 6, sx, sy, 140); sg.addColorStop(0, `rgba(255,236,190,${0.25 + mood * 0.5})`); sg.addColorStop(1, 'rgba(255,236,190,0)'); g.fillStyle = sg; g.fillRect(sx - 140, sy - 140, 280, 280);
+  g.fillStyle = `rgba(255,240,205,${0.5 + mood * 0.5})`; g.beginPath(); g.arc(sx, sy, 34, 0, Math.PI * 2); g.fill();
+  if (st.s > 70) { g.save(); g.globalAlpha = (st.s - 70) / 60; for (let i = 0; i < 6; i++) { const a = -0.3 + i * 0.12 + Math.sin(t * 0.0003 + i) * 0.02; g.fillStyle = 'rgba(255,230,160,0.12)'; g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx + Math.cos(a) * 1400, sy + Math.sin(a) * 1400 + 200); g.lineTo(sx + Math.cos(a + 0.05) * 1400, sy + Math.sin(a + 0.05) * 1400 + 200); g.fill(); } g.restore(); }
+  const cloudiness = clamp((st.g - 30) / 60, 0.15, 1) + (G && G.weatherBoost ? 0.4 : 0);
+  for (const c of CLOUDS) {
+    c.x += c.v * (reduceMotion ? 0 : 1); if (c.x > W + 160) c.x = -200;
+    g.fillStyle = `rgba(${Math.round(lerp(250, 90, cloudiness))},${Math.round(lerp(248, 95, cloudiness))},${Math.round(lerp(240, 110, cloudiness))},${0.35 + cloudiness * 0.45})`;
+    for (let k = 0; k < 4; k++) { g.beginPath(); g.ellipse(c.x + k * 34 * c.s, c.y + Math.sin(k) * 8, 46 * c.s, 20 * c.s, 0, 0, Math.PI * 2); g.fill(); }
+  }
+}
+function drawSea(g, t, st) {
+  const sea = g.createLinearGradient(0, 380, 0, 600); sea.addColorStop(0, '#5b7d93'); sea.addColorStop(1, '#2c4a5e'); g.fillStyle = sea; g.fillRect(0, 380, W, 240);
+  g.fillStyle = 'rgba(255,255,255,0.18)';
+  for (let i = 0; i < 7; i++) { const y = 400 + i * 22; for (let x = ((t * 0.02 * (1 + i * 0.15)) % 80) - 80; x < W; x += 80) g.fillRect(x, y + Math.sin((x + t * 0.05) * 0.02) * 2, 28, 1.5); }
+  g.fillStyle = '#3e5a3a'; g.beginPath(); g.moveTo(0, 392); g.quadraticCurveTo(120, 372, 240, 392); g.lineTo(0, 392); g.fill();
+  const ships = Math.min(7, Math.round(st.m / 22) + (G && G.biz.shipyard ? G.biz.shipyard : 0) + (G && G.biz.fishmarket ? 1 : 0));
+  for (let i = 0; i < ships; i++) {
+    const x = 70 + i * 62 + Math.sin(t * 0.0006 + i) * 6, y = 470 + (i % 2) * 26 + Math.sin(t * 0.002 + i) * 2;
+    g.fillStyle = '#4a2f1e'; g.beginPath(); g.moveTo(x - 22, y); g.lineTo(x + 22, y); g.lineTo(x + 16, y + 9); g.lineTo(x - 16, y + 9); g.fill();
+    g.fillStyle = '#5a3a24'; g.fillRect(x - 1, y - 34, 2, 34); g.fillStyle = '#efe6d2'; g.beginPath(); g.moveTo(x + 2, y - 32); g.quadraticCurveTo(x + 18, y - 18, x + 2, y - 4); g.fill();
+    g.fillStyle = '#b8963e'; g.fillRect(x - 3, y - 38, 10, 4);
+  }
+}
+function drawCastle(g, t, st) {
+  g.fillStyle = '#4f6b4a'; g.beginPath(); g.moveTo(640, 480); g.quadraticCurveTo(780, 400, 1280, 400); g.lineTo(1280, 520); g.lineTo(640, 520); g.fill();
+  const wall = mix('#cbbd9d', '#8f8299', clamp((50 - st.s) / 50, 0, 1) * 0.6), copper = '#5f9e8f';
+  g.fillStyle = wall; g.fillRect(830, 350, 270, 80); g.fillStyle = 'rgba(0,0,0,0.08)'; for (let x = 836; x < 1095; x += 18) g.fillRect(x, 352, 2, 76);
+  const tower = (x, y, w, h, spire) => { g.fillStyle = wall; g.fillRect(x, y, w, h); g.fillStyle = copper; g.beginPath(); g.moveTo(x - 4, y); g.lineTo(x + w / 2, y - spire); g.lineTo(x + w + 4, y); g.fill(); g.fillStyle = '#3e6f63'; g.fillRect(x + w / 2 - 1, y - spire - 10, 2, 10); };
+  tower(820, 300, 40, 130, 70); tower(1070, 310, 40, 120, 60); tower(950, 270, 46, 160, 90); tower(890, 320, 30, 110, 50);
+  g.fillStyle = '#2b2f36'; for (const [x, y] of [[835, 330], [962, 300], [1082, 336], [900, 345]]) { g.fillRect(x, y, 6, 10); }
+  const lit = clamp(st.p / 100, 0.2, 1); g.fillStyle = `rgba(255,214,140,${0.5 + lit * 0.5})`; for (let i = 0; i < 8; i++) g.fillRect(850 + i * 30, 392, 6, 10);
+  const fx = 973, fy = 170; g.fillStyle = '#3a3a3a'; g.fillRect(fx, fy, 2, 18);
+  const wave = Math.sin(t * 0.004) * 3; g.fillStyle = st.j > 60 ? '#d6a33a' : st.j < 35 ? '#6b6b6b' : '#a33b4a';
+  g.beginPath(); g.moveTo(fx + 2, fy); g.quadraticCurveTo(fx + 20, fy + 4 + wave, fx + 38, fy + wave); g.lineTo(fx + 38, fy + 18 + wave); g.quadraticCurveTo(fx + 20, fy + 22 + wave, fx + 2, fy + 18); g.fill();
+  g.strokeStyle = st.j < 35 ? '#3a3a3a' : '#2a231b'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(fx + 20, fy + 4); g.lineTo(fx + 20, fy + 15); g.moveTo(fx + 12, fy + 7); g.lineTo(fx + 28, fy + (st.j < 35 ? 11 : 7)); g.stroke();
+  if (st.o < 35 && G) {
+    for (let i = 0; i < 9; i++) { const x = 760 + i * 14, y = 470; g.fillStyle = '#2b2b2b'; g.fillRect(x, y - 12, 4, 12); g.fillStyle = '#5b3a1e'; g.fillRect(x + 4, y - 22, 1.5, 12); flame(g, x + 5, y - 22, 0.6, t + i * 40); }
+  }
+}
+function flame(g, x, y, s, t) { const f = Math.sin(t * 0.02) * 2; g.fillStyle = '#f97316'; g.beginPath(); g.ellipse(x, y - 5 * s + f * 0.3, 4 * s, 7 * s, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#fde68a'; g.beginPath(); g.ellipse(x, y - 4 * s, 2 * s, 4 * s, 0, 0, Math.PI * 2); g.fill(); }
+function drawHouse(g, h, t, st, idx, total, season) {
+  const alive = idx < total;
+  const { x, y, w, h: hh } = h;
+  if (!alive) { g.fillStyle = 'rgba(70,60,50,0.55)'; g.fillRect(x - w / 2, y - 10, w, 10); g.fillStyle = 'rgba(90,80,70,0.6)'; g.fillRect(x - w / 2 + 4, y - 22, 6, 12); return; }
+  g.fillStyle = h.wall; g.fillRect(x - w / 2, y - hh, w, hh);
+  g.fillStyle = 'rgba(60,40,30,0.35)'; g.fillRect(x - w / 2, y - hh * 0.55, w, 2); for (let k = 1; k < 3; k++) g.fillRect(x - w / 2 + w * k / 3, y - hh, 2, hh);
+  g.fillStyle = season === 'winter' ? '#eef2f4' : h.roof; g.beginPath(); g.moveTo(x - w / 2 - 4, y - hh); g.lineTo(x, y - hh - w * 0.55); g.lineTo(x + w / 2 + 4, y - hh); g.fill();
+  if (season === 'winter') { g.fillStyle = h.roof; g.fillRect(x - w / 2 - 4, y - hh, w + 8, 3); }
+  g.fillStyle = '#3a2a20'; g.fillRect(x - 5, y - 16, 10, 16);
+  const lightOn = h.seed < st.h / 100 + 0.15;
+  g.fillStyle = lightOn ? '#f6cf7a' : '#3c4650'; g.fillRect(x - w / 2 + 6, y - hh + 8, 7, 9); g.fillRect(x + w / 2 - 13, y - hh + 8, 7, 9);
+  if (st.g > 50 && h.seed > 0.55) { g.fillStyle = '#16161a'; g.beginPath(); g.moveTo(x - w / 2 + 3, y - hh + 2); g.lineTo(x - w / 2 + 15, y - hh + 2); g.lineTo(x - w / 2 + 9, y - hh + 22); g.fill(); }
+  if (st.o < 30 && h.seed > 0.82) { flame(g, x, y - hh - 6, 1.6, t + h.seed * 999); g.fillStyle = 'rgba(40,40,40,0.35)'; for (let k = 0; k < 4; k++) { const ph = ((t * 0.03 + k * 25 + h.seed * 100) % 100); g.beginPath(); g.arc(x + Math.sin(ph * 0.1) * 6, y - hh - 12 - ph, 6 + ph * 0.1, 0, Math.PI * 2); g.fill(); } }
+}
+function rise(key) { if (!G || !G.built[key]) return 0; return clamp((performance.now() - G.built[key]) / 1200, 0, 1); }
+function withRise(g, key, x, y, fn) { const k = rise(key); if (!k) return; g.save(); g.beginPath(); g.rect(x - 120, y - 200 * k, 240, 200 * k + 6); g.clip(); fn(); g.restore(); if (k < 1) { g.fillStyle = 'rgba(160,140,110,0.5)'; for (let i = 0; i < 5; i++) g.fillRect(x - 40 + Math.random() * 80, y - 4 - Math.random() * 10, 4, 4); } }
+function drawBuildings(g, t, st) {
+  const B = G ? G.built : {};
+  { const [x, y] = SLOTS.courthouse; g.fillStyle = '#d8d2c2'; g.fillRect(x - 40, y - 56, 80, 56); g.fillStyle = '#b9b19c'; for (let i = 0; i < 5; i++) g.fillRect(x - 34 + i * 16, y - 50, 6, 50); g.fillStyle = '#9a917c'; g.beginPath(); g.moveTo(x - 46, y - 56); g.lineTo(x, y - 80); g.lineTo(x + 46, y - 56); g.fill();
+    const glow = st.j > 60; g.fillStyle = glow ? '#e8b04a' : '#5d5a52'; g.fillRect(x - 1, y - 76, 2, 12); g.fillRect(x - 10, y - 74, 20, 2); g.beginPath(); g.arc(x - 9, y - 70, 3, 0, Math.PI); g.arc(x + 9, y - 70, 3, 0, Math.PI); g.fill();
+    if (glow) { const gr = g.createRadialGradient(x, y - 70, 2, x, y - 70, 40); gr.addColorStop(0, 'rgba(232,176,74,0.5)'); gr.addColorStop(1, 'rgba(232,176,74,0)'); g.fillStyle = gr; g.fillRect(x - 40, y - 110, 80, 80); } }
+  if (B.memorial) withRise(g, 'memorial', ...SLOTS.memorial, () => { const [x, y] = SLOTS.memorial; g.fillStyle = '#5c7f4f'; g.beginPath(); g.ellipse(x, y - 4, 56, 12, 0, 0, Math.PI * 2); g.fill();
+    for (const dx of [-40, 40]) { g.fillStyle = '#4a3a2a'; g.fillRect(x + dx - 2, y - 30, 4, 26); g.fillStyle = '#3f6b3a'; g.beginPath(); g.arc(x + dx, y - 36, 14, 0, Math.PI * 2); g.fill(); }
+    g.fillStyle = '#9aa0a2'; g.fillRect(x - 6, y - 40, 12, 34); g.beginPath(); g.arc(x, y - 46, 7, 0, Math.PI * 2); g.fill(); g.fillStyle = '#d4a52c'; g.fillRect(x - 6, y - 54, 12, 3);
+    for (let i = 0; i < 6; i++) { g.fillStyle = ['#e7a6c0', '#f3e59a', '#c7d9ef'][i % 3]; g.beginPath(); g.arc(x - 30 + i * 12, y - 6, 3, 0, Math.PI * 2); g.fill(); }
+    if (st.g > 20) for (let i = 0; i < 4; i++) flame(g, x - 18 + i * 12, y - 8, 0.5, t + i * 80); });
+  if (B.hospital) withRise(g, 'hospital', ...SLOTS.hospital, () => { const [x, y] = SLOTS.hospital; g.fillStyle = '#efe9dc'; g.fillRect(x - 46, y - 52, 92, 52); g.fillStyle = '#6f8f9f'; g.beginPath(); g.moveTo(x - 50, y - 52); g.lineTo(x, y - 74); g.lineTo(x + 50, y - 52); g.fill(); g.fillStyle = '#a33b4a'; g.fillRect(x - 3, y - 46, 6, 18); g.fillRect(x - 9, y - 40, 18, 6); g.fillStyle = '#f6cf7a'; for (const dx of [-30, 24]) g.fillRect(x + dx, y - 40, 8, 10); });
+  if (B.theater) withRise(g, 'theater', ...SLOTS.theater, () => { const [x, y] = SLOTS.theater; g.fillStyle = '#e9e0c9'; g.beginPath(); g.ellipse(x, y - 30, 52, 30, 0, Math.PI, 0); g.lineTo(x + 52, y); g.lineTo(x - 52, y); g.fill(); g.fillStyle = '#6b4a2e'; for (let i = 0; i < 7; i++) g.fillRect(x - 48 + i * 16, y - 34, 3, 34); g.fillStyle = '#b9a76d'; g.beginPath(); g.ellipse(x, y - 58, 50, 6, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#5a3a24'; g.fillRect(x - 1, y - 88, 2, 30); g.fillStyle = '#a33b4a'; g.fillRect(x + 1, y - 88, 16, 10); });
+  if (B.chapel) withRise(g, 'chapel', ...SLOTS.chapel, () => { const [x, y] = SLOTS.chapel; g.fillStyle = '#ddd4c0'; g.fillRect(x - 30, y - 46, 60, 46); g.fillStyle = '#5a4a3e'; g.beginPath(); g.moveTo(x - 34, y - 46); g.lineTo(x, y - 66); g.lineTo(x + 34, y - 46); g.fill(); g.fillStyle = '#ddd4c0'; g.fillRect(x - 8, y - 96, 16, 34); g.fillStyle = '#5f9e8f'; g.beginPath(); g.moveTo(x - 10, y - 96); g.lineTo(x, y - 124); g.lineTo(x + 10, y - 96); g.fill(); g.fillStyle = '#f6cf7a'; g.beginPath(); g.arc(x, y - 30, 8, Math.PI, 0); g.fillRect(x - 8, y - 30, 16, 14); g.fill(); });
+  if (B.spytower) withRise(g, 'spytower', ...SLOTS.spytower, () => { const [x, y] = SLOTS.spytower; g.fillStyle = '#2b2533'; g.fillRect(x - 12, y - 120, 24, 120); g.beginPath(); g.moveTo(x - 16, y - 120); g.lineTo(x, y - 156); g.lineTo(x + 16, y - 120); g.fill(); g.fillStyle = '#b48ad8'; g.beginPath(); g.ellipse(x, y - 100, 7, 4, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#2b2533'; g.beginPath(); g.arc(x + Math.sin(t * 0.002) * 3, y - 100, 2.2, 0, Math.PI * 2); g.fill(); });
+  if (B.library) withRise(g, 'library', ...SLOTS.library, () => { const [x, y] = SLOTS.library; g.fillStyle = '#c9b48f'; g.fillRect(x - 42, y - 58, 84, 58); g.fillStyle = '#7a3b2e'; g.beginPath(); g.moveTo(x - 46, y - 58); g.lineTo(x, y - 82); g.lineTo(x + 46, y - 58); g.fill(); g.fillStyle = '#f6cf7a'; for (let i = 0; i < 4; i++) g.fillRect(x - 34 + i * 20, y - 48, 10, 16); g.fillStyle = '#2a3b5a'; g.fillRect(x - 8, y - 22, 16, 22); });
+  if (B.council) withRise(g, 'council', ...SLOTS.council, () => { const [x, y] = SLOTS.council; g.fillStyle = '#d7cdb6'; g.fillRect(x - 40, y - 50, 80, 50); g.fillStyle = '#2c3554'; g.beginPath(); g.moveTo(x - 44, y - 50); g.lineTo(x, y - 72); g.lineTo(x + 44, y - 50); g.fill(); g.fillStyle = '#2c3554'; g.fillRect(x - 20, y - 46, 12, 24); g.fillRect(x + 8, y - 46, 12, 24); g.fillStyle = '#e8b04a'; g.fillRect(x - 17, y - 40, 6, 6); g.fillRect(x + 11, y - 40, 6, 6); });
+  if (B.navy) withRise(g, 'navy', ...SLOTS.navy, () => { const [x, y] = SLOTS.navy; g.fillStyle = '#8f8a80'; g.beginPath(); g.arc(x, y, 34, Math.PI, 0); g.fill(); g.fillRect(x - 34, y, 68, 10); g.fillStyle = '#6a665e'; for (let i = 0; i < 5; i++) g.fillRect(x - 30 + i * 14, y - 40, 8, 8); g.fillStyle = '#2a2a2a'; g.fillRect(x - 20, y - 14, 10, 6); g.fillRect(x + 10, y - 14, 10, 6); });
+}
+function drawWalls(g) {
+  if (!G || !G.built.walls) return; const k = rise('walls');
+  g.fillStyle = '#a49a85'; g.fillRect(300, 478 - 20 * k, 980, 20 * k); g.fillStyle = '#8c826e'; for (let x = 300; x < 1280; x += 30) g.fillRect(x, 472 - 20 * k, 16, 7 * k);
+}
+function drawGround(g, t, st, season) {
+  const grass = { winter: '#cfd8dc', spring: '#7aa35a', summer: '#6f9a4f', autumn: '#a8863f' }[season];
+  g.fillStyle = mix(grass.startsWith('#') ? grass : '#7aa35a', '#5e5a6e', clamp((50 - st.s) / 50, 0, 1) * 0.5); g.beginPath(); g.moveTo(240, 520); g.quadraticCurveTo(500, 470, 900, 500); g.lineTo(1280, 500); g.lineTo(1280, 720); g.lineTo(0, 720); g.lineTo(0, 620); g.quadraticCurveTo(120, 560, 240, 520); g.fill();
+  g.fillStyle = '#6b5a45'; g.fillRect(0, 548, 300, 8); for (let x = 10; x < 300; x += 30) g.fillRect(x, 548, 4, 40);
+  g.fillStyle = season === 'winter' ? '#d9dee0' : '#b9a78a'; g.fillRect(0, 684, W, 36); g.fillStyle = 'rgba(0,0,0,0.08)'; for (let x = 0; x < W; x += 40) g.fillRect(x, 684, 2, 36);
+}
+function drawWalkers(g, t, st) {
+  const n = Math.round(st.p / 100 * walkers.length), speed = 0.4 + st.h / 100;
+  for (let i = 0; i < n; i++) { const w = walkers[i]; if (!reduceMotion) w.x += w.v * speed * (w.lane ? -1 : 1); if (w.x > W + 10) w.x = -10; if (w.x < -10) w.x = W + 10;
+    const y = w.lane ? 700 : 712, bob = Math.abs(Math.sin(t * 0.01 + i)) * 1.5; g.fillStyle = st.g > 55 ? '#1d1d22' : w.c; g.fillRect(w.x - 2, y - 11 - bob, 5, 9); g.fillStyle = '#e1c3a5'; g.fillRect(w.x - 1.5, y - 15 - bob, 4, 4); g.fillStyle = '#2a231b'; g.fillRect(w.x - 2, y - 2, 2, 3); g.fillRect(w.x + 1, y - 2, 2, 3); }
+}
+function drawWeather(g, t, st, season) {
+  const rainy = st.g > 60 || (G && G.weatherBoost);
+  if (season === 'winter' || rainy) {
+    const snow = season === 'winter', count = snow ? 90 : Math.round(60 + st.g);
+    while (drops.length < count) drops.push({ x: Math.random() * W, y: Math.random() * H, v: snow ? 0.6 + Math.random() : 6 + Math.random() * 4 });
+    drops.length = count;
+    g.fillStyle = snow ? 'rgba(255,255,255,0.85)' : 'rgba(200,215,230,0.45)';
+    for (const d of drops) { if (!reduceMotion) { d.y += d.v; d.x += snow ? Math.sin((d.y + t * 0.05) * 0.02) * 0.4 : -1; } if (d.y > H) { d.y = -10; d.x = Math.random() * W; } if (snow) g.fillRect(d.x, d.y, 2.5, 2.5); else g.fillRect(d.x, d.y, 1, 9); }
+  } else drops.length = 0;
+  if (st.s < 40) { const a = (40 - st.s) / 70; const fog = g.createLinearGradient(0, 430, 0, 720); fog.addColorStop(0, `rgba(80,40,110,0)`); fog.addColorStop(0.5, `rgba(80,40,110,${a})`); fog.addColorStop(1, `rgba(40,20,60,${a})`); g.fillStyle = fog; g.fillRect(0, 430, W, 290); }
+  if (st.s < 35) for (const c of crows) { c.a += c.v * (reduceMotion ? 0 : 1); const x = 970 + Math.cos(c.a) * c.r * 1.6, y = 230 + Math.sin(c.a) * c.r * 0.5, f = Math.sin(t * 0.02 + c.r) * 3; g.strokeStyle = '#141018'; g.lineWidth = 2; g.beginPath(); g.moveTo(x - 7, y - f); g.lineTo(x, y); g.lineTo(x + 7, y - f); g.stroke(); }
+  if (st.s > 72) for (let i = 0; i < 4; i++) { const x = (t * (0.05 + i * 0.01) + i * 300) % (W + 60) - 30, y = 120 + i * 30 + Math.sin(t * 0.003 + i) * 10, f = Math.sin(t * 0.03 + i) * 3; g.strokeStyle = '#fbfaf5'; g.lineWidth = 2; g.beginPath(); g.moveTo(x - 6, y - f); g.lineTo(x, y); g.lineTo(x + 6, y - f); g.stroke(); }
+  if (season === 'autumn' && !reduceMotion) for (let i = 0; i < 10; i++) { const x = (t * 0.04 + i * 137) % W, y = (t * 0.03 + i * 71) % 300 + 380; g.fillStyle = i % 2 ? '#c2722e' : '#d9a441'; g.fillRect(x, y, 4, 3); }
+}
+function render(t) {
+  fit(); const g = ctx, st = S(), season = G ? seasonOf(G.turn) : 'spring';
+  drawSky(g, t, st, season); drawSea(g, t, st); drawVoyages(g, t); drawCastle(g, t, st); drawGhostWalk(g, t); drawArmy(g, t); drawGround(g, t, st, season); drawFields(g, t);
+  const total = Math.round(HOUSES.length * clamp(0.35 + st.p / 100 * 0.7, 0, 1));
+  const order = HOUSES.map((h, i) => [h, i]).sort((a, b) => a[0].seed - b[0].seed); const aliveSet = new Set(order.slice(0, total).map(p => p[1]));
+  let bi = 0; const backs = HOUSES.filter(h => h.y < 560), fronts = HOUSES.filter(h => h.y >= 560);
+  drawWalls(g);
+  for (const h of backs) drawHouse(g, h, t, st, aliveSet.has(HOUSES.indexOf(h)) ? 0 : 1, 1, season);
+  drawBuildings(g, t, st); drawExtraBuildings(g, t, st); drawScaffolds(g, t); drawQueue(g, t);
+  for (const h of fronts) drawHouse(g, h, t, st, aliveSet.has(HOUSES.indexOf(h)) ? 0 : 1, 1, season);
+  drawBusinesses(g, t); drawWalkers(g, t, st); drawPetitions(g, t); drawWeather(g, t, st, season);
+  requestAnimationFrame(render);
+}
+function drawScaffolds(g, t) {
+  if (!G) return;
+  for (const k in G.building) {
+    const s = SLOTS[k]; if (!s) continue; const [x, y] = s, total = BUILDINGS[k].months, done = 1 - G.building[k] / (total + 1);
+    const h = 30 + 40 * done;
+    g.strokeStyle = '#7a5a34'; g.lineWidth = 3;
+    for (const dx of [-36, -12, 12, 36]) { g.beginPath(); g.moveTo(x + dx, y); g.lineTo(x + dx, y - h); g.stroke(); }
+    for (let yy = y - 14; yy > y - h; yy -= 16) { g.beginPath(); g.moveTo(x - 40, yy); g.lineTo(x + 40, yy); g.stroke(); }
+    g.lineWidth = 1.5; g.beginPath(); g.moveTo(x - 36, y); g.lineTo(x + 12, y - h); g.moveTo(x + 36, y); g.lineTo(x - 12, y - h); g.stroke();
+    g.fillStyle = '#c9b48f'; g.fillRect(x - 30, y - h * 0.5, 60, h * 0.5);
+    const bob = Math.abs(Math.sin(t * 0.008)) * 3; g.fillStyle = '#3b2f2a'; g.fillRect(x + 18, y - h - 8 - bob, 4, 8); g.fillStyle = '#e1c3a5'; g.fillRect(x + 18, y - h - 12 - bob, 4, 4);
+  }
+}
+function drawExtraBuildings(g, t, st) {
+  const B = G ? G.built : {};
+  if (B.granary) withRise(g, 'granary', ...SLOTS.granary, () => { const [x, y] = SLOTS.granary; g.fillStyle = '#b5874f'; g.fillRect(x - 30, y - 46, 60, 46); g.fillStyle = '#6b3f22'; g.beginPath(); g.moveTo(x - 34, y - 46); g.lineTo(x, y - 72); g.lineTo(x + 34, y - 46); g.fill(); g.fillStyle = '#e8c76f'; g.fillRect(x - 10, y - 30, 20, 30); g.fillStyle = '#6b3f22'; g.fillRect(x - 1, y - 30, 2, 30); });
+  if (B.market) withRise(g, 'market', ...SLOTS.market, () => { const [x, y] = SLOTS.market; for (let i = 0; i < 3; i++) { const sx = x - 36 + i * 36; g.fillStyle = '#6b4a2e'; g.fillRect(sx - 14, y - 22, 3, 22); g.fillRect(sx + 11, y - 22, 3, 22); g.fillStyle = ['#a33b4a', '#2f6b8f', '#d6a33a'][i]; g.fillRect(sx - 16, y - 30, 32, 9); g.fillStyle = '#f3ead6'; for (let k = 0; k < 4; k++) g.fillRect(sx - 16 + k * 8, y - 30, 4, 9); g.fillStyle = ['#e07b39', '#9bbf5a', '#e8c76f'][i]; g.fillRect(sx - 10, y - 14, 20, 6); } });
+  if (B.breadhall) withRise(g, 'breadhall', ...SLOTS.breadhall, () => { const [x, y] = SLOTS.breadhall; g.fillStyle = '#e2cfa5'; g.fillRect(x - 36, y - 44, 72, 44); g.fillStyle = '#8e3b2e'; g.beginPath(); g.moveTo(x - 40, y - 44); g.lineTo(x, y - 64); g.lineTo(x + 40, y - 44); g.fill(); g.fillStyle = '#5a3a24'; g.fillRect(x + 18, y - 76, 8, 20); g.fillStyle = 'rgba(220,220,220,0.5)'; for (let k = 0; k < 3; k++) { const ph = (t * 0.03 + k * 30) % 90; g.beginPath(); g.arc(x + 22 + Math.sin(ph * 0.1) * 4, y - 80 - ph, 4 + ph * 0.08, 0, Math.PI * 2); g.fill(); } g.fillStyle = '#c98f5f'; g.beginPath(); g.ellipse(x - 12, y - 22, 9, 6, 0, 0, Math.PI * 2); g.fill(); });
+  if (B.courthouse) { const [x, y] = SLOTS.courthouse, k = rise('courthouse'); g.fillStyle = '#e8e2d2'; g.beginPath(); g.arc(x, y - 82, 22 * k, Math.PI, 0); g.fill(); g.fillStyle = '#d6a33a'; g.fillRect(x - 2, y - 82 - 30 * k, 4, 8 * k); }
+}
+function drawArmy(g, t) {
+  if (!G || G.threat < 25) return;
+  const n = Math.min(7, Math.floor((G.threat - 15) / 12));
+  for (let i = 0; i < n; i++) {
+    const x = 1150 + (i % 4) * 32 - (i >= 4 ? 16 : 0), y = 420 - (i >= 4 ? 14 : 0);
+    g.fillStyle = i % 2 ? '#e7e0cf' : '#c9c0aa'; g.beginPath(); g.moveTo(x - 12, y); g.lineTo(x, y - 18); g.lineTo(x + 12, y); g.fill();
+    g.fillStyle = '#3a3a3a'; g.fillRect(x - 1, y - 24, 2, 7);
+    g.fillStyle = '#2f5aa0'; g.fillRect(x + 1, y - 24, 8, 5); g.fillStyle = '#d6d6d6'; g.fillRect(x + 4, y - 24, 1.5, 5);
+  }
+  if (G.threat > 70) for (let i = 0; i < 3; i++) flame(g, 1160 + i * 40, 428, 0.7, t + i * 90);
+}
+function drawQueue(g, t) {
+  if (!G) return; const n = Math.min(8, G.docket.filter(c => c.status === 'waiting').length * 2);
+  const [x, y] = SLOTS.courthouse;
+  for (let i = 0; i < n; i++) { const px = x + 48 + i * 9, bob = Math.sin(t * 0.004 + i) * 0.8; g.fillStyle = ['#5a2a2a', '#2a3b4a', '#4a4a2a', '#3b2f2a'][i % 4]; g.fillRect(px - 2, y - 11 + bob, 5, 9); g.fillStyle = '#e1c3a5'; g.fillRect(px - 1.5, y - 15 + bob, 4, 4); }
+}
+function drawPetitions(g, t) {
+  if (!G) return;
+  for (const p of G.petitions) {
+    const bob = reduceMotion ? 0 : Math.sin(t * 0.005 + p.id) * 3, x = p.x, y = p.y + bob;
+    g.fillStyle = '#ebe5d3'; g.strokeStyle = '#8e2433'; g.lineWidth = 2;
+    g.beginPath(); g.ellipse(x, y, 14, 12, 0, 0, Math.PI * 2); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(x - 4, y + 10); g.lineTo(x, y + 18); g.lineTo(x + 3, y + 10); g.fill();
+    g.fillStyle = '#8e2433'; g.fillRect(x - 1.5, y - 7, 3, 9); g.fillRect(x - 1.5, y + 4, 3, 3);
+  }
+}
+function drawGhostWalk(g, t) {
+  if (!G || G.ghostUsed || G.st.g < 30) return;
+  const x = 840 + ((t * 0.02) % 240), y = 350;
+  g.save(); g.globalAlpha = 0.35 + Math.sin(t * 0.003) * 0.15; g.fillStyle = '#d9e6ec';
+  g.fillRect(x - 3, y - 20, 7, 16); g.beginPath(); g.arc(x, y - 23, 4, 0, Math.PI * 2); g.fill(); g.fillRect(x - 4, y - 28, 9, 3);
+  g.restore();
+}
+cv.addEventListener('click', e => {
+  if (!G || G.phase === 'end') return;
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * W, y = (e.clientY - r.top) / r.height * H;
+  const p = G.petitions.find(p => Math.hypot(p.x - x, p.y - y) < 22);
+  if (p && (G.phase === 'desk')) { G.deskTab = 'petitions'; renderDesk(p.id); return; }
+  if (G.phase === 'desk') for (const [k, s] of Object.entries(SLOTS)) if (BUILDINGS[k] && Math.hypot(s[0] - x, s[1] - 40 - y) < 45) { G.deskTab = 'build'; renderDesk(k); return; }
+});
+cv.addEventListener('mousemove', e => {
+  if (!G || G.phase !== 'desk') { cv.style.cursor = 'default'; return; }
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * W, y = (e.clientY - r.top) / r.height * H;
+  cv.style.cursor = G.petitions.some(p => Math.hypot(p.x - x, p.y - y) < 22) ? 'pointer' : 'default';
+});
+
+requestAnimationFrame(render);
+updateMeters();
+</script>
+</body>
+</html>
