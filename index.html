@@ -189,6 +189,11 @@ button { font: inherit; cursor: pointer; touch-action: manipulation; }
   .title ol { display: none; }
   .ending { position: fixed; z-index: 20; }
 }
+.meter.low .lab span:first-child { color: #c0392b; font-weight: 700; }
+.meter.low .fill { animation: lowpulse .9s ease-in-out infinite alternate; }
+@keyframes lowpulse { to { opacity: .4; } }
+.rec { display: block; margin-top: 4px; opacity: .85; font-size: .92em; }
+@media (prefers-reduced-motion: reduce) { .meter.low .fill { animation: none; } }
 @media (prefers-reduced-motion: reduce) { .fate .rolling svg { animation: none; } .meter .fill, .meter .sub > div { transition: none; } }
 </style>
 </head>
@@ -256,7 +261,7 @@ button { font: inherit; cursor: pointer; touch-action: manipulation; }
   </div></div>
 
   <div class="help">
-    <div><h4>Each month</h4><p>Fate rolls a 12-sided die. A character from <i>Hamlet</i> brings you a problem (press 1, 2 or 3). Then, at the royal desk, you hear court cases, build, pass laws, choose advisors and answer petitions before ending the month.</p></div>
+    <div><h4>Each month</h4><p>Fate rolls a 12-sided die. A character from <i>Hamlet</i> brings you a problem (press 1, 2 or 3). Then, at the royal desk (press 1 to 6 to switch tabs), you hear court cases, build, pass laws, choose advisors and answer petitions before ending the month.</p></div>
     <div><h4>Read the city</h4><p>Rain and black banners mean grief, purple fog and crows mean corruption, golden light means a good soul, fires mean disorder, ships mean wealth. A line forms outside the courthouse when cases wait, and Norway's tents appear on the hills as their threat grows.</p></div>
     <div><h4>Losing the city</h4><p>Your reign ends early if order, the treasury, the soul or the people fall to zero, or if Norway's threat reaches 100 and their invasion breaks through. Advisors you neglect may turn against you.</p></div>
   </div>
@@ -329,7 +334,7 @@ function newGame(name) {
     ap: Df.ap, slots: 1, log: [], fates: [], flags: {}, good: 0, dark: 0, neutral: 0, helped: 0,
     heardFully: 0, quickRight: 0, quickWrong: 0, expired: 0, dismissed: 0, grievedTogether: 0, pressured: 0, ghostUsed: false, betrayals: [], repelled: 0,
     deck: shuffle(Object.keys(DILEMMAS).sort(() => Math.random() - 0.5).slice(0, Df.dilemmas).concat(['spies', 'apothecary', 'ophelia', 'laertes', 'graves', 'friends', 'steward', 'landcase', 'bells', 'thief', 'taxman', 'horatio', 'pirates', 'library',
-      'wittenberg', 'oldnorway', 'rites', 'hecuba', 'antic', 'recorder', 'closet', 'pirateprisoner', 'quarantine', 'conscience', 'sparrow', 'drinking', 'lender', 'mousetrap', 'france', 'letters', 'gravemaker', 'bonnet'])),
+      'wittenberg', 'oldnorway', 'rites', 'hecuba', 'antic', 'recorder', 'closet', 'pirateprisoner', 'quarantine', 'conscience', 'sparrow', 'drinking', 'lender', 'mousetrap', 'france', 'letters', 'gravemaker', 'bonnet', 'yorick', 'commission', 'honorguard', 'tobe', 'frailty', 'ownself', 'method', 'rotten', 'cruelkind'])),
     biz: {}, caseUsed: new Set(), petUsed: new Set(), bizEarned: 0, voyages: [], vid: 0, sold: {}, tradeEarned: 0, shipsLost: 0, treasureGold: 0, food: 40, followups: [], hungerMonths: 0, events: [],
     used: {}, trigger: [], weatherBoost: 0, deskTab: 'court', petitionsAnswered: 0
   };
@@ -338,7 +343,7 @@ function newGame(name) {
 function updateMeters(flash) {
   for (const st of STATS) {
     const v = Math.round(G ? G.st[st.k] : 50);
-    $('v-' + st.k).textContent = v; $('f-' + st.k).style.width = Math.min(100, v) + '%';
+    $('m-' + st.k).classList.toggle('low', !!G && v <= 20); $('v-' + st.k).textContent = v; $('f-' + st.k).style.width = Math.min(100, v) + '%';
     if (flash && flash[st.k]) { const el = $('m-' + st.k); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 900); }
   }
   $('f-g').style.width = (G ? G.st.g : 60) + '%';
@@ -958,6 +963,82 @@ const DILEMMAS = {
     ] }
 };
 Object.assign(CARDS, DILEMMAS);
+Object.assign(CARDS, {
+  tobe: { who: 'conscience', speaker: 'Your council', title: 'To act, or not to act',
+    text: 'The sea wall is cracking. Half your council says repair it now, the other half says study it more. Every month of delay is a gamble.',
+    quote: ["The native hue of resolution is sicklied o'er with the pale cast of thought.", 'Hamlet, Act 3, Scene 1'],
+    options: [
+      { label: 'Decide now and begin repairs with what you know.', fx: { m: -6, p: 3 }, tag: 'neutral', quick: true, out: 'Work starts at once. A few stones are laid in the wrong place, but the wall holds.' },
+      { label: 'Send engineers for a one-month survey, then build.', fx: { s: 2 }, tag: 'good', patient: true, pending: { name: 'The surveyed sea wall', turns: 1, fx: { p: 4, o: 2 }, text: 'The survey finds the real weak point. The wall is fixed once and properly.' }, out: 'The engineers go out with ropes and measuring chains.' },
+      { label: 'Keep debating. Surely it will hold another winter.', fx: { o: -3, p: -4 }, tag: 'dark', out: 'The argument is lively, and the crack gets wider.' }
+    ] },
+  frailty: { who: 'gertrude', speaker: 'The women of the market', title: 'Frailty, thy name is woman',
+    text: 'The women who run half the stalls in Elsinore ask for a seat in the market council. Some lords scoff that they are too soft for trade.',
+    quote: ['Frailty, thy name is woman!', 'Hamlet, Act 1, Scene 2'],
+    options: [
+      { label: 'Grant them a full seat, equal to the guild masters.', fx: { j: 5, h: 3, o: -2 }, tag: 'good', out: 'The council is louder and the accounts are suddenly cleaner.' },
+      { label: 'Grant a seat on trade disputes only.', fx: { j: 2, o: 1 }, tag: 'neutral', out: 'A half-step. Some are grateful, some are patient, and some are not.' },
+      { label: 'Refuse, citing tradition.', fx: { o: 2, j: -4, h: -3 }, tag: 'dark', out: 'The lords nod. The stalls keep running anyway, without anyone asking permission.' }
+    ] },
+  ownself: { who: 'noble', speaker: 'A young nobleman', title: 'To thine own self be true',
+    text: 'A young lord refuses to take over his family\'s estate and wants to become a physician instead. His father demands you order him home.',
+    quote: ['This above all: to thine own self be true.', 'Polonius, Act 1, Scene 3'],
+    options: [
+      { label: 'Let him study. A family name is not a sentence.', fx: { s: 3, h: 2, o: -2 }, tag: 'good', out: 'His father storms out. A year later the city has a new physician.' },
+      { label: 'Order him home. Duty to family comes first.', fx: { o: 3, s: -3, h: -2 }, tag: 'dark', out: 'He goes, silent. The estate is well run by a man who hates it.' },
+      { label: 'Broker a deal: two years on the estate, then he decides.', fx: { s: 1, o: 1 }, tag: 'neutral', patient: true, out: 'Neither man is happy, and both are still talking.' }
+    ] },
+  method: { who: 'soldier', speaker: 'A ragged man in the square', title: 'Method in the madness',
+    text: 'A man screams in the market that the grain scales are rigged and the weights are false. Everyone says he is mad. He has been saying it for a month.',
+    quote: ['Though this be madness, yet there is method in\'t.', 'Polonius, Act 2, Scene 2'],
+    options: [
+      { label: 'Send an inspector to check the scales.', fx: { j: 2 }, tag: 'good', pending: { name: 'The rigged scales', turns: 1, fx: { j: 7, m: 4 }, text: 'Three merchants are caught with false weights. The ragged man is thanked and fed.' }, out: 'The inspector goes quietly, and the weights are weighed.' },
+      { label: 'Lock him up for disturbing the peace.', fx: { o: 2, j: -5, h: -2 }, tag: 'dark', out: 'The square is quiet again. The scales stay exactly as they were.' },
+      { label: 'Ignore him. A madman is a madman.', fx: { j: -2 }, tag: 'neutral', out: 'He is still shouting next week.' }
+    ] },
+  rotten: { who: 'guard', speaker: 'Marcellus, captain of the guard', title: 'Something is rotten',
+    text: 'Marcellus found that supply wagons leave the royal stores full and arrive at the barracks half empty. He does not know who is skimming.',
+    quote: ['Something is rotten in the state of Denmark.', 'Marcellus, Act 1, Scene 4'],
+    options: [
+      { label: 'Open a full audit, whoever it hurts.', fx: { m: -3, j: 3 }, tag: 'good', patient: true, pending: { name: 'The royal audit', turns: 2, fx: { m: 8, j: 6, s: 2 }, text: 'Three clerks and one lord are found skimming. The stores overflow again.' }, out: 'Quiet men with ledgers start asking questions.' },
+      { label: 'Replace the wagon drivers and hope it ends.', fx: { m: -2, o: 1 }, tag: 'neutral', out: 'The skimming stops for a week, then moves to a new route.' },
+      { label: 'Say nothing. Some rot you can live with.', fx: { s: -4, m: -4 }, tag: 'dark', out: 'The rot spreads. It always does.' }
+    ] },
+  cruelkind: { who: 'priest', speaker: 'The city\'s healers', title: 'Cruel only to be kind',
+    text: 'The tanners\' quarter is poisoning the river. Closing it ruins two hundred families, but the water downstream is killing children.',
+    quote: ['I must be cruel only to be kind.', 'Hamlet, Act 3, Scene 4'],
+    options: [
+      { label: 'Close the tanneries and pay the families a relief fund.', fx: { m: -8, h: 4, j: 3 }, tag: 'good', out: 'It costs a fortune. The river clears by spring, and no one starves.' },
+      { label: 'Close them with no relief. The law is the law.', fx: { h: -5, o: 2, p: 2 }, tag: 'dark', out: 'The children are safe. Two hundred families will remember how.' },
+      { label: 'Leave them open. The economy matters.', fx: { p: -6, h: -3 }, tag: 'dark', out: 'The tanners pay their taxes. The river keeps carrying what it carries.' }
+    ] }
+});
+Object.assign(CARDS, {
+  yorick: { who: 'gravedigger', speaker: 'The gravedigger', title: 'Alas, poor Yorick',
+    text: 'Workmen digging a new market foundation uncover the old court jester\'s skull. A crowd gathers, half laughing, half crying.',
+    quote: ['A fellow of infinite jest, of most excellent fancy.', 'Hamlet, Act 5, Scene 1'],
+    options: [
+      { label: 'Give Yorick a proper burial and let people share their memories of him.', fx: { g: -6, h: 4, m: -2 }, tag: 'good', grief: 'together', out: 'Old jokes are told at the graveside, and the laughter and tears come together.' },
+      { label: 'Display the skull in the theater as a reminder that all must die.', fx: { s: 3, h: -2 }, tag: 'neutral', out: 'Some find it wise. Others cross the street to avoid it.' },
+      { label: 'Toss it back in the pit. There is work to do.', fx: { b: 6, m: 2 }, tag: 'dark', grief: 'pressure', out: 'The digging goes on. The crowd leaves quietly, uneasy.' }
+    ] },
+  commission: { who: 'courtier', speaker: 'A nervous clerk', title: 'A sealed commission',
+    text: 'A letter bearing your royal seal orders a traveler arrested at once. You never wrote it.',
+    quote: ['An exact command... that on the supervise, no leisure bated, he should have his head off.', 'Hamlet, Act 5, Scene 2'],
+    options: [
+      { label: 'Hold the traveler safe and investigate who forged the seal.', fx: { s: 2 }, tag: 'good', pending: { name: 'The forged commission', turns: 2, fx: { j: 8, o: 2 }, text: 'The forger is found in your own chancery, and the traveler walks free.' }, out: 'The clerk is questioned. The seal is locked away.' },
+      { label: 'Obey the seal. Orders are orders.', fx: { o: 3, j: -6, s: -3 }, tag: 'dark', quick: true, out: 'The traveler is arrested. You will never know if he was guilty.' },
+      { label: 'Burn the letter and say nothing.', fx: { s: -1 }, tag: 'neutral', out: 'The forger is still out there, and now he knows you won\'t look for him.' }
+    ] },
+  honorguard: { who: 'fortinbras', speaker: 'Fortinbras\'s herald', title: 'Let four captains bear him',
+    text: 'Norway offers an honor guard for a day of remembrance of all who died this year, Danes and Norwegians alike.',
+    quote: ['Let four captains bear Hamlet, like a soldier, to the stage.', 'Fortinbras, Act 5, Scene 2'],
+    options: [
+      { label: 'Accept. Mourn together, side by side.', fx: { g: -5, h: 3, m: -3 }, threat: -8, help: true, tag: 'good', grief: 'together', out: 'Soldiers of two kingdoms carry the same coffin. Nobody says it, but the border feels a little smaller.' },
+      { label: 'Accept the honor, but keep their soldiers outside the walls.', fx: { g: -3 }, threat: -3, tag: 'neutral', out: 'A careful gesture, warmly received and quietly resented.' },
+      { label: 'Refuse. Danes will bury their own dead.', fx: { o: 1 }, threat: 6, tag: 'neutral', out: 'Pride is kept. The herald rides home unimpressed.' }
+    ] }
+});
 
 const GOALS = [
   { k: 'j', get label() { return `Justice ${D().goals.j}+`; }, test: S => S.j >= D().goals.j },
@@ -1015,7 +1096,7 @@ const PETITIONS = [
   { who: 'guard', text: 'A guard confesses he lied in court last month.', a: { label: 'Reopen the case.', fx: { j: 3, o: -1 }, tag: 'good' }, b: { label: 'Keep it quiet.', fx: { s: -3, j: -2 }, tag: 'dark' } },
   { who: 'scholar', text: 'A street preacher shouts that fate has already doomed the city.', a: { label: 'Let him speak.', fx: { o: -1, s: 1 }, tag: 'good' }, b: { label: 'Silence him.', fx: { o: 2, s: -2, h: -1 }, tag: 'dark' } }
 ];
-const FATE_GUARD = { 1: ['hospital', 'granary'], 2: ['navy'], 3: ['granary'], 4: ['granary'] };
+const FATE_GUARD = { 1: ['hospital', 'granary'], 2: ['navy'], 3: ['granary'], 4: ['granary', 'lighthouse'] };
 const PORTRAITS_MORE = {
   student: { skin: '#efd2b8', hair: '#6b4423', hat: 'scholar', robe: '#3b3f6b' },
   priest: { skin: '#e2c09f', hair: '#9a9a9a', hat: 'hood', robe: '#1d1d22' },
@@ -1039,6 +1120,23 @@ const BUSINESSES = {
   mine: { name: 'Silver mine', icon: 'pick', cost: 24, base: 7, color: '#9aa5a8', eq: 11, dark: true, desc: 'Rich but deadly work. People −0.7 and Soul −0.3 per level.', fx: { p: -0.7, s: -0.3 } }
 };
 BUSINESSES.farm = { name: 'Farmstead', icon: 'wheat', cost: 8, base: 1, color: '#9a8a3a', desc: 'Grows grain for the city. Food +3 and Treasury +1 per level.', fx: {} };
+Object.assign(BUILDINGS, {
+  fountain: { name: 'Town fountain', cost: 8, months: 1, eq: 5, desc: 'A place to gather, rest and talk. Heart +1.5 and Grief −1 a month.', up: { h: 1.5, g: -1 } },
+  orphanage: { name: 'Orphanage', cost: 12, months: 2, eq: 5, desc: 'A home for children who lost their parents. Heart +1.5, People +0.5, Grief −1, Treasury −1 a month.', up: { h: 1.5, p: 0.5, g: -1, m: -1 } },
+  school: { name: 'Town school', cost: 12, months: 2, eq: 1, desc: 'Children of every rank learn to read. Soul +1 and People +0.5 a month.', up: { s: 1, p: 0.5 } },
+  lighthouse: { name: 'Lighthouse', cost: 10, months: 1, desc: 'Guides ships home. Halves losses from storms. Treasury +1 and People +0.5 a month.', up: { m: 1, p: 0.5 } },
+  barracks: { name: 'Barracks', cost: 14, months: 2, desc: 'A trained garrison. Order +1.5 a month, Norway\'s threat −1 a month, Treasury −2.', up: { o: 1.5, m: -2 }, threat: -1 },
+  embassy: { name: 'Norwegian embassy', cost: 14, months: 2, eq: 11, desc: 'A house for talking instead of fighting. Norway\'s threat −3 and Treasury −1 a month.', up: { m: -1 }, threat: -3 },
+  gallows: { name: 'Gallows hill', cost: 6, months: 1, eq: 1, dark: true, desc: 'Fear keeps order. Order +3 a month, but Soul −2, Heart −1 and Justice −0.5.', up: { o: 3, s: -2, h: -1, j: -0.5 } }
+});
+Object.assign(BUSINESSES, {
+  chandler: { name: 'Chandlery', icon: 'candle', cost: 8, base: 2, color: '#d6a33a', eq: 5, desc: 'Candles for every window and every grave. Grief −0.3 per level.', fx: { g: -0.3 } },
+  apothecaryshop: { name: 'Herb shop', icon: 'flask', cost: 10, base: 2, color: '#5b8f63', desc: 'Honest remedies, no poisons. People +0.4 per level.', fx: { p: 0.4 } },
+  glassworks: { name: 'Glassworks', icon: 'glass', cost: 14, base: 4, color: '#4f9aa8', desc: 'Windows and bottles sold across the Baltic. Soul +0.2 per level.', fx: { s: 0.2 } },
+  stable: { name: 'Stables', icon: 'shoe', cost: 10, base: 3, color: '#6b4a2e', desc: 'Horses for riders and carts. Order +0.3 per level.', fx: { o: 0.3 } },
+  furtrader: { name: 'Fur trader', icon: 'fur', cost: 12, base: 4, color: '#8a6a4a', desc: 'Trades with the Norwegians. Norway\'s threat −1 per level.', fx: {}, threat: -1 },
+  tannery: { name: 'Tannery', icon: 'hide', cost: 8, base: 4, color: '#7a5a34', eq: 11, dark: true, desc: 'Cheap leather, terrible smell. People −0.4 and Heart −0.3 per level.', fx: { p: -0.4, h: -0.3 } }
+});
 const bizUpCost = (k, lvl) => Math.round(BUSINESSES[k].cost * (lvl === 0 ? 1 : lvl === 1 ? 1.5 : 2));
 function incomeBreakdown() {
   if (!G) return { taxes: 0, biz: 0, other: 0, total: 0 };
@@ -1083,6 +1181,59 @@ PETITIONS.push(
   { who: 'fortinbras', text: 'A Norwegian merchant wants to open a shop in Elsinore.', a: { label: 'Welcome him.', fx: { m: 2 }, threat: -3, tag: 'good' }, b: { label: 'No foreign shops.', fx: { o: 1 }, threat: 2, tag: 'neutral' } },
   { who: 'gertrude', text: 'A widow asks to keep wearing black at court, though the year of mourning is over.', a: { label: 'She may grieve as long as she needs.', fx: { h: 1, g: -1 }, grief: 'together', tag: 'good' }, b: { label: 'Court has rules.', fx: { b: 2 }, grief: 'pressure', tag: 'dark' } },
   { who: 'merchant', text: 'The innkeepers ask to stay open past curfew.', a: { label: 'Allow it.', fx: { h: 2, o: -2, m: 2 }, tag: 'neutral' }, b: { label: 'Rules are rules.', fx: { o: 1, h: -1 }, tag: 'neutral' } }
+);
+
+
+PETITIONS.push(
+  { who: 'merchant', text: 'A candlemaker says half the city is burning candles for the dead, and he cannot keep up. He needs a loan to open a proper shop.', a: { label: 'Lend him the money.', fx: { m: -5, g: -1, h: 1 }, gift: 'chandler', tag: 'good' }, b: { label: 'Let him manage on his own.', fx: {}, tag: 'neutral' } },
+  { who: 'healer', text: 'A herbalist wants to open a shop. She has no license but a long line of grateful patients.', a: { label: 'Grant the license.', fx: { m: -4, p: 1, j: 1 }, gift: 'apothecaryshop', tag: 'good' }, b: { label: 'Licenses are for guild members.', fx: { j: -1, p: -1 }, tag: 'dark' } },
+  { who: 'merchant', text: 'A glassblower from Venice wants to settle here and open a workshop.', a: { label: 'Welcome him and pay for the furnace.', fx: { m: -6, s: 1 }, gift: 'glassworks', tag: 'good' }, b: { label: 'Elsinore has enough foreigners.', fx: { o: 1 }, tag: 'neutral' } },
+  { who: 'soldier', text: 'A stable boy asks for the royal stables, since the king\'s old horses are going to waste.', a: { label: 'Let him run them as a business.', fx: { m: 2, o: 1 }, gift: 'stable', tag: 'good' }, b: { label: 'Sell the horses.', fx: { m: 5, h: -1 }, tag: 'neutral' } },
+  { who: 'fortinbras', text: 'A Norwegian fur trader offers to sell pelts to Elsinore, if you guarantee his safety.', a: { label: 'Guarantee it.', fx: { m: -3, p: 1 }, threat: -4, gift: 'furtrader', tag: 'good' }, b: { label: 'Not with Norway at the gate.', fx: { o: 1 }, threat: 2, tag: 'neutral' } },
+  { who: 'merchant', text: 'A tanner offers to pay a fee if you ignore the smell his workshop makes in the east quarter.', a: { label: 'Refuse. Neighbors come first.', fx: { p: 1, s: 1 }, tag: 'good' }, b: { label: 'Take the fee and let him work.', fx: { m: 4, p: -1, h: -1 }, gift: 'tannery', tag: 'dark' } },
+  { who: 'crowd', text: 'Neighbors ask for a fountain in the square so they can stop fetching water from the harbor.', a: { label: 'Build it.', fx: { m: -6, h: 2, g: -1 }, gift: 'fountain', tag: 'good' }, b: { label: 'Water is water.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'crowd', text: 'A matron says too many children now sleep in doorways. She has a house, but no money to run it.', a: { label: 'Fund her orphanage.', fx: { m: -8, h: 2, s: 2 }, gift: 'orphanage', tag: 'good' }, b: { label: 'Not my problem.', fx: { s: -2, h: -1 }, tag: 'dark' } },
+  { who: 'scholar', text: 'A schoolmaster offers to teach any child for a penny, if you give him a room.', a: { label: 'Give him a school.', fx: { m: -6, s: 1, p: 1 }, gift: 'school', tag: 'good' }, b: { label: 'A penny buys nothing.', fx: { s: -1 }, tag: 'neutral' } },
+  { who: 'captain', text: 'Two ships were lost on the rocks this month. Sailors say a lighthouse would have saved them.', a: { label: 'Fund a lighthouse.', fx: { m: -6, h: 1, p: 1 }, gift: 'lighthouse', tag: 'good' }, b: { label: 'The sea always wins.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'guard', text: 'The guards want proper barracks. They are sleeping in tents and drinking too much.', a: { label: 'Build the barracks.', fx: { m: -8, o: 2 }, gift: 'barracks', tag: 'neutral' }, b: { label: 'A little hardship keeps them sharp.', fx: { o: -1, h: -1 }, tag: 'neutral' } },
+  { who: 'fortinbras', text: 'A Norwegian envoy asks for a house in Elsinore where he can speak for his king.', a: { label: 'Give him an embassy.', fx: { m: -6, s: 1 }, threat: -6, gift: 'embassy', tag: 'good' }, b: { label: 'Spies, every one of them.', fx: { o: 1 }, threat: 3, tag: 'neutral' } },
+  { who: 'noble', text: 'A lord urges you to put up a gallows on the hill, so thieves can see what waits for them.', a: { label: 'Refuse. Terror is no justice.', fx: { j: 2, s: 2 }, tag: 'good' }, b: { label: 'Build it.', fx: { m: -3, o: 3, s: -3, j: -1 }, gift: 'gallows', tag: 'dark' } },
+  { who: 'crowd', text: 'A young shepherd says he saw a pale figure walking on the ramparts at night, and that it spoke his name.', a: { label: 'Listen to what he saw, and thank him.', fx: { h: 1, s: 1 }, tag: 'good' }, b: { label: 'Tell him to stay off the ramparts.', fx: { o: 1, h: -1 }, tag: 'neutral' } },
+  { who: 'priest', text: 'A priest asks for money to repair the church roof. He says the old king was buried under it.', a: { label: 'Pay for the roof.', fx: { m: -4, g: -2, h: 1 }, tag: 'good' }, b: { label: 'Let the church pay for its own roof.', fx: { s: -1 }, tag: 'neutral' } },
+  { who: 'priest', text: 'A priest says a woman who drowned must not be buried in holy ground. Her sister begs you to overrule him.', a: { label: 'Overrule him. Let her rest in the churchyard.', fx: { h: 3, g: -2, o: -1 }, grief: 'together', tag: 'good' }, b: { label: 'Church law is church law.', fx: { b: 3, h: -2 }, grief: 'pressure', tag: 'dark' } },
+  { who: 'gravedigger', text: 'The gravedigger found a skull while digging a new grave and now refuses to dig any more.', a: { label: 'Give him a week off.', fx: { m: -1, g: -1, s: 1 }, tag: 'good' }, b: { label: 'Order him back to work.', fx: { s: -1, o: 1 }, tag: 'neutral' } },
+  { who: 'courtier', text: 'A young courtier brags that he knows a secret about the queen, and offers to sell it to you.', a: { label: 'Throw him out of the room.', fx: { s: 2, h: 1 }, tag: 'good' }, b: { label: 'Buy the secret.', fx: { m: -4, s: -3 }, flag: 'secret', tag: 'dark' } },
+  { who: 'player', text: 'A traveling troupe asks to perform a play about a murdered king.', a: { label: 'Let them play. Truth plays well on stage.', fx: { h: 2, b: -2, o: -1 }, tag: 'good' }, b: { label: 'Not that one. Not this year.', fx: { b: 2, h: -1 }, tag: 'dark' } },
+  { who: 'player', text: 'The players ask for coin to buy new costumes before the winter season.', a: { label: 'Pay them.', fx: { m: -3, h: 2 }, tag: 'good' }, b: { label: 'Sell tickets instead.', fx: { m: 1, h: -1 }, tag: 'neutral' } },
+  { who: 'crowd', text: 'A baby was born the same night the old king died. The mother wants to name her Hamlet.', a: { label: 'Stand as godparent.', fx: { h: 2, g: -1 }, grief: 'together', tag: 'good' }, b: { label: 'Bad luck. Pick another name.', fx: { b: 1 }, grief: 'pressure', tag: 'neutral' } },
+  { who: 'crowd', text: 'A baker is giving away unsold bread to the poor. The guild says this ruins prices.', a: { label: 'Side with the baker.', fx: { h: 2, m: -1, s: 1 }, tag: 'good' }, b: { label: 'Side with the guild.', fx: { m: 2, h: -2 }, tag: 'neutral' } },
+  { who: 'merchant', text: 'A grain dealer is hoarding wheat to sell later at a higher price.', a: { label: 'Fine him and open his stores.', fx: { j: 2, h: 2, o: -1 }, tag: 'good' }, b: { label: 'Look away. Markets are markets.', fx: { m: 3, h: -2, j: -2 }, tag: 'dark' } },
+  { who: 'merchant', text: 'A trader offers you a rare cure from the East that he swears can end the plague.', a: { label: 'Have the healer test it first.', fx: { s: 1, p: 1 }, tag: 'good' }, b: { label: 'Buy a whole shipment.', fx: { m: -8, p: 3, s: -1 }, tag: 'neutral' } },
+  { who: 'captain', text: 'Pirates have sent word: pay a small tribute, and your ships will be left alone.', a: { label: 'Refuse. Fight them.', fx: { o: 1, s: 1 }, tag: 'good' }, b: { label: 'Pay the tribute.', fx: { m: -4, o: -1, s: -2 }, tag: 'dark' } },
+  { who: 'captain', text: 'A sailor claims he saw a sea serpent near the harbor. Fishermen refuse to go out.', a: { label: 'Send guards out to look.', fx: { m: -2, o: 1, p: 1 }, tag: 'neutral' }, b: { label: 'Tell them there is no such thing.', fx: { h: -1, p: -1 }, tag: 'neutral' } },
+  { who: 'soldier', text: 'A soldier back from the Polish wars cannot sleep and screams at night. His neighbors want him gone.', a: { label: 'Send a healer and protect him.', fx: { m: -3, h: 2, s: 2 }, tag: 'good' }, b: { label: 'Banish him from the city.', fx: { o: 1, h: -2, s: -2 }, tag: 'dark' } },
+  { who: 'soldier', text: 'A group of soldiers has not been paid in two months, and they are talking about leaving.', a: { label: 'Pay them what you owe.', fx: { m: -6, o: 2 }, tag: 'good' }, b: { label: 'Promise them it will come soon.', fx: { o: -2, s: -1 }, tag: 'neutral' } },
+  { who: 'guard', text: 'A pickpocket was caught stealing from a funeral crowd. The crowd wants him whipped.', a: { label: 'Fine him, and let him work it off.', fx: { j: 2, h: 1 }, tag: 'good' }, b: { label: 'Whip him in the square.', fx: { o: 2, h: -2, s: -2 }, tag: 'dark' } },
+  { who: 'guard', text: 'A guard asks for a day off to attend his mother\'s funeral. The captain refused.', a: { label: 'Grant it.', fx: { h: 1, g: -1, o: -1 }, grief: 'together', tag: 'good' }, b: { label: 'Duty first.', fx: { o: 1, b: 1 }, grief: 'pressure', tag: 'dark' } },
+  { who: 'gertrude', text: 'The queen asks you to forgive a maid who was caught reading her letters.', a: { label: 'Forgive her.', fx: { h: 2, j: -1 }, tag: 'neutral' }, b: { label: 'Let the law decide.', fx: { j: 2, h: -1 }, tag: 'neutral' } },
+  { who: 'friends', text: 'A man asks you to settle a debt his dead father owed to a neighbor. The neighbor has no proof.', a: { label: 'Forgive the debt.', fx: { h: 1, j: -1 }, tag: 'neutral' }, b: { label: 'Make the son pay.', fx: { j: 2, h: -1 }, tag: 'neutral' } },
+  { who: 'astrologer', text: 'An astrologer says the stars say you should delay all your decisions for a month.', a: { label: 'Thank him, and rule as usual.', fx: { s: 1 }, tag: 'good' }, b: { label: 'Wait for a better day.', fx: { s: -1, o: -1 }, tag: 'neutral' } },
+  { who: 'astrologer', text: 'An astrologer sells charms that supposedly keep the ghost away. People are buying them by the dozen.', a: { label: 'Tell the city it is a scam.', fx: { j: 2, h: -1 }, tag: 'good' }, b: { label: 'Tax the charms.', fx: { m: 3, s: -2 }, tag: 'dark' } },
+  { who: 'scholar', text: 'A scholar from Wittenberg asks for money to write a history of the Danish crown.', a: { label: 'Pay him, on the condition that it is honest.', fx: { m: -4, s: 2, j: 1 }, tag: 'good' }, b: { label: 'Pay him, if it flatters you.', fx: { m: -3, s: -3, h: -1 }, tag: 'dark' } },
+  { who: 'student', text: 'Students write a play mocking the court. They ask you not to shut it down.', a: { label: 'Attend the show.', fx: { h: 2, s: 2, o: -1 }, tag: 'good' }, b: { label: 'Close the school for a week.', fx: { o: 1, s: -2 }, tag: 'dark' } },
+  { who: 'noble', text: 'A noble asks to take over a poor widow\'s farm to \"make better use of it.\"', a: { label: 'Refuse him.', fx: { j: 2, h: 1, o: -1 }, tag: 'good' }, b: { label: 'Approve it.', fx: { m: 4, j: -3, h: -2 }, tag: 'dark' } },
+  { who: 'ophelia', text: 'A girl brings you flowers and asks you to remember her sister.', a: { label: 'Keep them, and say her name.', fx: { h: 2, g: -2 }, grief: 'together', tag: 'good' }, b: { label: 'Thank her and hurry on.', fx: { b: 2 }, grief: 'pressure', tag: 'dark' } },
+  { who: 'crowd', text: 'A mother says her son was one of the soldiers who died in the last battle. She asks for the soldiers\' names to be carved somewhere.', a: { label: 'Carve the names on the city gate.', fx: { m: -3, g: -3, h: 2 }, grief: 'together', tag: 'good' }, b: { label: 'Their names are not for stone.', fx: { b: 2 }, grief: 'pressure', tag: 'neutral' } },
+  { who: 'crowd', text: 'A stranger offers to buy the old king\'s armor from the castle and pay well for it.', a: { label: 'It is not for sale.', fx: { s: 2, g: -1 }, tag: 'good' }, b: { label: 'Sell it.', fx: { m: 8, s: -2, g: 2 }, tag: 'dark' } },
+  { who: 'crowd', text: 'A traveler arrives with the plague scars still on his face. The gatekeepers want to turn him away.', a: { label: 'Let him rest outside the gate, and feed him.', fx: { m: -2, h: 1, s: 1 }, tag: 'good' }, b: { label: 'Turn him away.', fx: { o: 1, s: -2, p: 1 }, tag: 'dark' } },
+  { who: 'friends', text: 'A band of travelers wants to hold a wake for a stranger who died in their camp.', a: { label: 'Let them use the square.', fx: { h: 1, g: -1 }, grief: 'together', tag: 'good' }, b: { label: 'Tell them to move on.', fx: { o: 1, h: -1 }, tag: 'neutral' } },
+  { who: 'merchant', text: 'The merchants\' guild asks for a new tax on foreign goods to keep their prices up.', a: { label: 'Approve the tax.', fx: { m: 4, p: -1 }, threat: 2, tag: 'neutral' }, b: { label: 'Keep trade free.', fx: { m: -1, p: 1 }, threat: -2, tag: 'neutral' } },
+  { who: 'merchant', text: 'A shopkeeper says the royal weights are rigged, and he can prove it.', a: { label: 'Check the weights.', fx: { j: 3, o: -1 }, tag: 'good' }, b: { label: 'He is a troublemaker.', fx: { j: -2, s: -1 }, tag: 'dark' } },
+  { who: 'osric', text: 'Osric offers to organize a grand tournament to cheer up the city. He wants the treasury to pay.', a: { label: 'Fund it.', fx: { m: -6, h: 3, o: -1 }, tag: 'neutral' }, b: { label: 'Now is not the time.', fx: { h: -1 }, tag: 'neutral' } },
+  { who: 'steward', text: 'The steward says the castle kitchen wastes enough food each month to feed fifty people.', a: { label: 'Send the extra to the poor.', fx: { h: 2, m: -1 }, tag: 'good' }, b: { label: 'Keep the surplus for feasts.', fx: { h: -1, s: -1 }, tag: 'neutral' } },
+  { who: 'laertes', text: 'Laertes asks you to pardon a friend who killed a man in a tavern fight.', a: { label: 'Deny the pardon.', fx: { j: 3 }, tag: 'good' }, b: { label: 'Grant it, for Laertes\'s sake.', fx: { j: -3, s: -2, o: 1 }, tag: 'dark' } },
+  { who: 'horatio', text: 'Horatio suggests opening the castle gardens to the public on Sundays.', a: { label: 'Open them.', fx: { h: 2, g: -1, o: -1 }, tag: 'good' }, b: { label: 'The gardens are royal.', fx: { o: 1 }, tag: 'neutral' } },
+  { who: 'polonius', text: 'Polonius advises: \"To thine own self be true. And also, read everyone\'s letters.\"', a: { label: 'Decline politely.', fx: { s: 2, j: 1 }, tag: 'good' }, b: { label: 'Allow it. A king needs information.', fx: { o: 2, s: -3 }, tag: 'dark' } }
 );
 
 
@@ -1157,7 +1308,7 @@ function react(o) {
 }
 function giveGift(k) {
   if (BUSINESSES[k]) { G.biz[k] = Math.max(1, G.biz[k] || 0); G.bizOpened = G.bizOpened || {}; G.bizOpened[k] = performance.now(); }
-  else if (BUILDINGS[k]) { G.built[k] = performance.now(); delete G.building[k]; }
+  else if (BUILDINGS[k]) { if (!G.built[k]) G.built[k] = performance.now(); delete G.building[k]; }
 }
 function newCase(tpl, extra) {
   const c = Object.assign({ id: ++G.cid, status: 'waiting', patience: Math.max(1, 2 + tpl.sev + (G.laws.opencourt ? 1 : 0) - D().patience) }, tpl, extra || {});
@@ -1180,10 +1331,11 @@ function spawnPetitions(n) {
 }
 
 /* ---------------- Month flow ---------------- */
+function getRec() { try { return JSON.parse(localStorage.getItem('elsinore-rec') || '{}'); } catch (e) { return {}; } }
 function renderDiffs() {
   $('diffs').innerHTML = Object.entries(DIFFS).map(([k, v]) => `<button class="diff" role="radio" aria-checked="${k === selDiff}" data-diff="${k}">${v.name}</button>`).join('');
   $('diffs').querySelectorAll('.diff').forEach(b => b.addEventListener('click', () => { selDiff = b.dataset.diff; try { localStorage.setItem('elsinore-diff', selDiff); } catch (e) {} renderDiffs(); renderGoals(); }));
-  $('wincard').innerHTML = `<b>${DIFFS[selDiff].name}:</b> ${DIFFS[selDiff].blurb}`;
+  $('wincard').innerHTML = `<b>${DIFFS[selDiff].name}:</b> ${DIFFS[selDiff].blurb}${(() => { const r = getRec()[selDiff]; return r ? `<span class="rec">Your record: ${r.wins} win${r.wins === 1 ? '' : 's'} in ${r.plays} reign${r.plays === 1 ? '' : 's'}, best ${r.best} of 4 goals.</span>` : ''; })()}`;
 }
 renderDiffs();
 function startGame() {
@@ -1521,7 +1673,7 @@ function endMonth() {
   if (G.phase === 'end') return;
   $('decree').hidden = true; G.phase = 'upkeep';
   const S = G.st, B = G.built, before = { ...S }, notes = [], beforeThreat = G.threat;
-  for (const k in B) if (BUILDINGS[k]) applyFx(BUILDINGS[k].up);
+  for (const k in B) if (BUILDINGS[k]) { applyFx(BUILDINGS[k].up); if (BUILDINGS[k].threat) addThreat(BUILDINGS[k].threat); }
   for (const k in G.building) { if (--G.building[k] <= 0) { delete G.building[k]; B[k] = performance.now(); notes.push(`The ${BUILDINGS[k].name.toLowerCase()} is finished.`); G.log.push(`${MONTHS[monthOf(G.turn)]}: the ${BUILDINGS[k].name.toLowerCase()} was finished.`); } }
   for (const k in G.laws) if (G.laws[k]) { applyFx(LAWS[k].fx); if (LAWS[k].threat) addThreat(LAWS[k].threat); G.lawMonths[k] = (G.lawMonths[k] || 0) + 1; }
   for (const v of G.voyages) {
@@ -1591,6 +1743,7 @@ function endMonth() {
 }
 document.addEventListener('keydown', e => {
   if (!G) return;
+  if (G.phase === 'desk' && /^[1-6]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey && !/INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '')) { G.deskTab = TABS[+e.key - 1][0]; renderDesk(); const t = $('tab-' + G.deskTab); if (t) t.focus({ preventScroll: true }); return; }
   if (G.phase === 'decide' && ['1', '2', '3'].includes(e.key)) { const b = document.querySelector(`.choice[data-i="${+e.key - 1}"]`); if (b) b.click(); }
 });
 
@@ -1621,6 +1774,7 @@ function finish(collapse) {
     + (Object.keys(G.biz).length ? `Your businesses earned ${Math.round(G.bizEarned)} gold${['lender', 'mine'].filter(k => G.biz[k]).length ? `, but the ${['lender', 'mine'].filter(k => G.biz[k]).map(k => BUSINESSES[k].name.toLowerCase()).join(' and ')} made money from other people's suffering` : ''}. ` : '')
     + (G.good > G.dark ? 'The struggle between good and evil was real, but your good side usually won.' : 'The easy, dark choice won more often than not, the same slide that turned Claudius from a brother into a murderer.')
     + (G.right || G.flags.ally || G.helped >= 2 ? ' When fate dealt you more than you could handle alone, you let others help, which Hamlet only learned at the very end.' : ' You mostly faced fate alone, like Hamlet, who confided in almost no one.');
+  { const all = getRec(), r = all[G.diff] || { plays: 0, wins: 0, best: 0 }; r.plays++; if (!collapse) { if (allGoals(S)) r.wins++; r.best = Math.max(r.best, GOALS.filter(gl => gl.test(S)).length); } all[G.diff] = r; try { localStorage.setItem('elsinore-rec', JSON.stringify(all)); } catch (_) {} }
   const e = $('ending'); e.hidden = false; $('decree').hidden = true; $('fate').hidden = true;
   e.innerHTML = `<div class="sheet"><h2>${title}</h2><p class="epi">${epi}</p>
     <div class="goals">${GOALS.map(gl => `<span class="${gl.test(S) && !collapse ? 'ok' : ''}">${gl.test(S) && !collapse ? '✓' : '✗'} ${gl.label}</span>`).join('')}<span class="${!collapse ? 'ok' : ''}">${!collapse ? '✓' : '✗'} Survived all ${G.months} months</span></div>
@@ -1631,7 +1785,7 @@ function finish(collapse) {
     <h3>The good and evil within us, and fate</h3><p class="q">Question 11: How do we deal with conflicting parts of ourselves? How does fate put us in situations we can't handle alone?</p><p>${q11}</p>
     <h3>The chronicle of your reign</h3><ol class="chron">${G.log.map(l => `<li>${l.replace(/</g, '&lt;')}</li>`).join('')}</ol>
     <button class="primary" id="againBtn">Rule again</button><button class="ghost-btn" id="copyBtn">Copy the chronicle</button></div>`;
-  $('againBtn').addEventListener('click', () => { e.hidden = true; $('title').hidden = false; G = null; updateMeters(); setWhen(); $('rulerName').focus(); });
+  $('againBtn').addEventListener('click', () => { renderDiffs(); e.hidden = true; $('title').hidden = false; G = null; updateMeters(); setWhen(); $('rulerName').focus(); });
   $('copyBtn').addEventListener('click', async () => {
     const txt = `${title}\n${epi}\n\nQuestion 1: ${q1}\n\nQuestion 5: ${q5}\n\nQuestion 11: ${q11}\n\nChronicle:\n${G.log.map((l, i) => `${i + 1}. ${l}`).join('\n')}`;
     let ok = false; try { await navigator.clipboard.writeText(txt); ok = true; } catch (_) {}
@@ -1646,7 +1800,7 @@ function fit() { const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.
 const lerp = (a, b, t) => a + (b - a) * t;
 function rgbOf(c) { if (c[0] === '#') { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; } return c.match(/\d+/g).slice(0, 3).map(Number); }
 function mix(c1, c2, t) { const a = rgbOf(c1), b = rgbOf(c2); return `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(lerp(a[2], b[2], t))})`; }
-const SLOTS = { memorial: [585, 664], courthouse: [470, 664], hospital: [360, 600], theater: [1015, 610], chapel: [205, 640], spytower: [770, 520], library: [690, 604], council: [905, 664], navy: [70, 560], granary: [1205, 670], market: [790, 664], breadhall: [1120, 604], walls: [640, 470] };
+const SLOTS = { memorial: [585, 664], courthouse: [470, 664], hospital: [360, 600], theater: [1015, 610], chapel: [205, 640], spytower: [770, 520], library: [690, 604], council: [905, 664], navy: [70, 560], granary: [1205, 670], market: [790, 664], breadhall: [1120, 604], walls: [640, 470], lighthouse: [175, 545], orphanage: [270, 590], school: [565, 588], fountain: [875, 598], barracks: [930, 548], gallows: [1040, 548], embassy: [1220, 590] };
 const R = seeded(7), HOUSES = [];
 for (const row of [{ y: 528, x0: 320, x1: 820, n: 12 }, { y: 600, x0: 270, x1: 1260, n: 18 }, { y: 676, x0: 0, x1: 1280, n: 20 }]) {
   for (let i = 0; i < row.n; i++) {
@@ -1670,6 +1824,12 @@ function drawBizIcon(g, icon, x, y) {
     case 'ship': g.fillStyle = '#f3ead6'; g.beginPath(); g.moveTo(x, y - 5); g.lineTo(x + 5, y + 1); g.lineTo(x, y + 1); g.fill(); g.fillStyle = '#8a5a30'; g.fillRect(x - 6, y + 1, 12, 3); break;
     case 'coin': g.fillStyle = '#e8b04a'; g.beginPath(); g.arc(x, y, 5, 0, Math.PI * 2); g.fill(); g.fillStyle = '#8a6a1f'; g.fillRect(x - 0.5, y - 3, 1, 6); break;
     case 'wheat': g.strokeStyle = '#d6b34a'; g.lineWidth = 1.5; for (const dx of [-4, 0, 4]) { g.beginPath(); g.moveTo(x + dx, y + 5); g.lineTo(x + dx, y - 4); g.stroke(); g.fillStyle = '#e8c76f'; g.beginPath(); g.ellipse(x + dx, y - 4, 1.8, 3, 0, 0, Math.PI * 2); g.fill(); } break;
+    case 'candle': g.fillStyle = '#f3ead6'; g.fillRect(x - 2, y - 2, 4, 8); g.fillStyle = '#f6a93a'; g.beginPath(); g.ellipse(x, y - 4, 2, 3, 0, 0, Math.PI * 2); g.fill(); break;
+    case 'flask': g.fillStyle = '#7fbf88'; g.beginPath(); g.moveTo(x - 2, y - 5); g.lineTo(x + 2, y - 5); g.lineTo(x + 2, y - 1); g.lineTo(x + 6, y + 5); g.lineTo(x - 6, y + 5); g.lineTo(x - 2, y - 1); g.fill(); break;
+    case 'glass': g.fillStyle = '#9fd6e0'; g.beginPath(); g.moveTo(x - 5, y - 5); g.lineTo(x + 5, y - 5); g.lineTo(x + 2, y + 1); g.lineTo(x + 2, y + 5); g.lineTo(x - 2, y + 5); g.lineTo(x - 2, y + 1); g.fill(); break;
+    case 'shoe': g.strokeStyle = '#c9ced1'; g.lineWidth = 2; g.beginPath(); g.arc(x, y, 5, Math.PI * 0.15, Math.PI * 0.85, true); g.stroke(); break;
+    case 'fur': g.fillStyle = '#b08a5a'; g.beginPath(); g.ellipse(x, y, 7, 4, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#e8d6b4'; g.fillRect(x - 5, y - 1, 10, 2); break;
+    case 'hide': g.fillStyle = '#a8763f'; g.beginPath(); g.moveTo(x - 6, y - 4); g.lineTo(x + 6, y - 4); g.lineTo(x + 4, y + 4); g.lineTo(x - 4, y + 4); g.fill(); break;
     case 'pick': g.strokeStyle = '#d4d4d4'; g.lineWidth = 2; g.beginPath(); g.moveTo(x - 6, y - 3); g.quadraticCurveTo(x, y - 6, x + 6, y - 3); g.stroke(); g.strokeStyle = '#8a5a30'; g.beginPath(); g.moveTo(x, y - 5); g.lineTo(x, y + 5); g.stroke(); break;
   }
 }
@@ -1831,7 +1991,7 @@ function render(t) {
   let bi = 0; const backs = HOUSES.filter(h => h.y < 560), fronts = HOUSES.filter(h => h.y >= 560);
   drawWalls(g);
   for (const h of backs) drawHouse(g, h, t, st, aliveSet.has(HOUSES.indexOf(h)) ? 0 : 1, 1, season);
-  drawBuildings(g, t, st); drawExtraBuildings(g, t, st); drawScaffolds(g, t); drawQueue(g, t);
+  drawBuildings(g, t, st); drawExtraBuildings(g, t, st); drawMoreBuildings(g, t, st); drawScaffolds(g, t); drawQueue(g, t);
   for (const h of fronts) drawHouse(g, h, t, st, aliveSet.has(HOUSES.indexOf(h)) ? 0 : 1, 1, season);
   drawBusinesses(g, t); drawWalkers(g, t, st); drawPetitions(g, t); drawWeather(g, t, st, season);
   requestAnimationFrame(render);
@@ -1848,6 +2008,16 @@ function drawScaffolds(g, t) {
     g.fillStyle = '#c9b48f'; g.fillRect(x - 30, y - h * 0.5, 60, h * 0.5);
     const bob = Math.abs(Math.sin(t * 0.008)) * 3; g.fillStyle = '#3b2f2a'; g.fillRect(x + 18, y - h - 8 - bob, 4, 8); g.fillStyle = '#e1c3a5'; g.fillRect(x + 18, y - h - 12 - bob, 4, 4);
   }
+}
+function drawMoreBuildings(g, t, st) {
+  const B = G ? G.built : {};
+  if (B.fountain) withRise(g, 'fountain', ...SLOTS.fountain, () => { const [x, y] = SLOTS.fountain; g.fillStyle = '#9aa0a2'; g.beginPath(); g.ellipse(x, y - 6, 34, 9, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#6fa6c4'; g.beginPath(); g.ellipse(x, y - 8, 28, 6, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#b9bfc1'; g.fillRect(x - 3, y - 30, 6, 22); g.fillStyle = '#9fd0e6'; for (let i = 0; i < 6; i++) { const ph = (t * 0.004 + i) % 1; g.beginPath(); g.arc(x + (i - 2.5) * 5 * ph, y - 32 + ph * ph * 22, 1.6, 0, Math.PI * 2); g.fill(); } });
+  if (B.orphanage) withRise(g, 'orphanage', ...SLOTS.orphanage, () => { const [x, y] = SLOTS.orphanage; g.fillStyle = '#e6d5b0'; g.fillRect(x - 34, y - 42, 68, 42); g.fillStyle = '#6f8f9f'; g.beginPath(); g.moveTo(x - 38, y - 42); g.lineTo(x, y - 64); g.lineTo(x + 38, y - 42); g.fill(); g.fillStyle = '#f6cf7a'; for (const dx of [-20, -4, 12]) g.fillRect(x + dx, y - 30, 8, 10); g.fillStyle = '#5a3a24'; g.fillRect(x + 24, y - 20, 8, 20); g.fillStyle = '#c9576b'; g.beginPath(); g.arc(x - 44, y - 6, 4, 0, Math.PI * 2); g.fill(); g.fillStyle = '#4f7d9c'; g.beginPath(); g.arc(x - 54, y - 5, 3.5, 0, Math.PI * 2); g.fill(); });
+  if (B.school) withRise(g, 'school', ...SLOTS.school, () => { const [x, y] = SLOTS.school; g.fillStyle = '#d7c7a3'; g.fillRect(x - 32, y - 40, 64, 40); g.fillStyle = '#3f4a52'; g.beginPath(); g.moveTo(x - 36, y - 40); g.lineTo(x, y - 60); g.lineTo(x + 36, y - 40); g.fill(); g.fillStyle = '#2c3554'; g.fillRect(x - 8, y - 22, 16, 22); g.fillStyle = '#f6cf7a'; g.fillRect(x - 24, y - 30, 8, 9); g.fillRect(x + 16, y - 30, 8, 9); g.fillStyle = '#d4a52c'; g.beginPath(); g.arc(x, y - 68, 5, 0, Math.PI * 2); g.fill(); g.fillRect(x - 1, y - 64, 2, 6); });
+  if (B.lighthouse) withRise(g, 'lighthouse', ...SLOTS.lighthouse, () => { const [x, y] = SLOTS.lighthouse; g.fillStyle = '#ece6d6'; g.beginPath(); g.moveTo(x - 14, y); g.lineTo(x - 8, y - 78); g.lineTo(x + 8, y - 78); g.lineTo(x + 14, y); g.fill(); g.fillStyle = '#a33b4a'; g.fillRect(x - 11, y - 52, 22, 10); g.fillRect(x - 9, y - 26, 18, 8); g.fillStyle = '#3f4a52'; g.fillRect(x - 12, y - 84, 24, 6); g.beginPath(); g.moveTo(x - 10, y - 96); g.lineTo(x, y - 106); g.lineTo(x + 10, y - 96); g.fill(); const lit = !G || st.h < 80; g.fillStyle = lit ? '#ffe9a6' : '#cdbf94'; g.fillRect(x - 7, y - 96, 14, 12); if (lit) { const sweep = Math.sin(t * 0.002); const gr = g.createRadialGradient(x, y - 90, 2, x, y - 90, 70); gr.addColorStop(0, 'rgba(255,233,166,0.55)'); gr.addColorStop(1, 'rgba(255,233,166,0)'); g.fillStyle = gr; g.fillRect(x - 70 + sweep * 10, y - 160, 140, 140); } });
+  if (B.barracks) withRise(g, 'barracks', ...SLOTS.barracks, () => { const [x, y] = SLOTS.barracks; g.fillStyle = '#8f8a80'; g.fillRect(x - 36, y - 40, 72, 40); g.fillStyle = '#6f6a60'; for (let i = 0; i < 5; i++) g.fillRect(x - 36 + i * 15, y - 46, 9, 7); g.fillStyle = '#2b2533'; g.fillRect(x - 7, y - 24, 14, 24); g.fillStyle = '#e8b04a'; g.fillRect(x - 26, y - 30, 5, 8); g.fillRect(x + 21, y - 30, 5, 8); g.fillStyle = '#5a3a24'; g.fillRect(x + 38, y - 68, 2, 30); g.fillStyle = '#7c1f2b'; g.fillRect(x + 40, y - 68 + Math.sin(t * 0.005) * 1, 14, 9); });
+  if (B.embassy) withRise(g, 'embassy', ...SLOTS.embassy, () => { const [x, y] = SLOTS.embassy; g.fillStyle = '#e9e0c9'; g.fillRect(x - 30, y - 46, 60, 46); g.fillStyle = '#7c2d12'; g.beginPath(); g.moveTo(x - 34, y - 46); g.lineTo(x, y - 62); g.lineTo(x + 34, y - 46); g.fill(); g.fillStyle = '#2c3554'; g.fillRect(x - 6, y - 24, 12, 24); g.fillStyle = '#f6cf7a'; g.fillRect(x - 22, y - 34, 8, 9); g.fillRect(x + 14, y - 34, 8, 9); g.fillStyle = '#5a3a24'; g.fillRect(x - 1, y - 90, 2, 30); const w = Math.sin(t * 0.005) * 2; g.fillStyle = '#2f5aa0'; g.fillRect(x + 1, y - 90, 18, 11 + w); g.fillStyle = '#e7e0cf'; g.fillRect(x + 5, y - 90, 3, 11 + w); g.fillRect(x + 1, y - 86, 18, 3); });
+  if (B.gallows) withRise(g, 'gallows', ...SLOTS.gallows, () => { const [x, y] = SLOTS.gallows; g.fillStyle = '#4a3a2a'; g.fillRect(x - 24, y - 6, 48, 6); g.fillRect(x - 14, y - 52, 5, 46); g.fillRect(x - 14, y - 52, 30, 5); g.strokeStyle = '#4a3a2a'; g.lineWidth = 2; g.beginPath(); g.moveTo(x - 14, y - 36); g.lineTo(x - 2, y - 47); g.stroke(); g.strokeStyle = '#c9b48f'; g.lineWidth = 1.5; const sw = Math.sin(t * 0.002) * 1.5; g.beginPath(); g.moveTo(x + 12, y - 47); g.lineTo(x + 12 + sw, y - 34); g.stroke(); g.beginPath(); g.ellipse(x + 12 + sw, y - 31, 3.5, 4, 0, 0, Math.PI * 2); g.stroke(); });
 }
 function drawExtraBuildings(g, t, st) {
   const B = G ? G.built : {};
